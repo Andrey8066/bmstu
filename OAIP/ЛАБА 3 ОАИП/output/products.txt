@@ -1,0 +1,6 @@
+moloko;2;1;
+bread;10;100;
+water;90;15;
+kolbasa;50;1;
+apple;2;500;
+coconut;30;20;

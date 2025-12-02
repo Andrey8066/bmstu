@@ -1,0 +1,21 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "g++ build active file",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-g3",
+                "-lpqxx",
+                "'/home/andrey/Documents/ОАИП СЕМИАРЫ/ЛАБА 4 ОАИП/1.cpp'",
+                "-o",
+                "'/home/andrey/Documents/ОАИП СЕМИАРЫ/ЛАБА 4 ОАИП/build/Debug/outDebug"
+            ],
+            "options": {
+                // "cwd": "/usr/bin"
+                "cwd": "${workspaceFolder}"
+            }
+        }
+    ],
+    "version": "2.0.0"
+}

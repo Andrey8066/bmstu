@@ -1,0 +1,341 @@
+\documentclass[a4paper]{extreport}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[T2A]{fontenc}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{array}
+\usepackage{cellspace}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{tocloft}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{minted}
+\setlength{\cellspacetoplimit}{20pt}
+\setlength{\cellspacebottomlimit}{20pt}
+
+\onehalfspacing
+
+\geometry{
+  a4paper,
+  left=30mm,
+  right=20mm,
+  top=20mm,
+  bottom=20mm
+}
+
+\setlength{\parindent}{1.25cm}
+
+\graphicspath{ {images/} }
+\captionsetup[figure]{
+  labelsep=period,
+  justification=centering
+}
+
+\renewcommand{\figurename}{Рисунок}
+\renewcommand{\contentsname}{Оглавление}
+
+\titleformat{\chapter}[block]{\huge\bfseries\centering}{}{1em}{}
+\titleformat{\section}[block]{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{\parskip}{-\parskip}
+\titlespacing*{\subsection}{0pt}{\parskip}{-\parskip}
+\titlespacing{\chapter}{0pt}{0pt}{0pt}
+
+\renewcommand{\cftbeforetoctitleskip}{-30pt}
+\renewcommand{\cftaftertoctitleskip}{-10pt}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{center}
+    \small
+    \underline{
+      \begin{minipage}{0.2\textwidth}
+        \centering
+        \includegraphics[width=3cm]{BMSTU logo}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.8\textwidth}
+        \begin{center}
+
+          \textbf{Министерство науки и высшего образования Российской Федерации
+            Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный технический университет имени Н.Э. Баумана национальный исследовательский университет»
+          (МГТУ им. Н.Э. Баумана)}
+        \end{center}
+      \end{minipage}
+
+    }
+
+    \vspace{7cm}
+    \Large
+    \textbf{Модульное домашнее задание} \\
+    ПО ДИСЦИПЛИНЕ "Модели динамических объектов"\\
+    Вариант 15.\\
+    \vspace{5cm}
+    \normalsize
+    \begin{tabular}{p{8cm}p{6cm}}
+      \textbf{Студент группы ИУ1-31Б} & Соин А. Д. \\
+      & «24» ноября 2025 г. \\
+      & \\
+      \textbf{Преподаватель} & Лобачев И. В. \\
+      & «\underline{\hspace{1.5cm}}»\underline{\hspace{2.5cm}}2025 г. \\
+    \end{tabular}
+    \vfill{\Large{Москва, 2025}}
+  \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\chapter{Часть 1.}
+\begin{figure}[H]
+  \includegraphics[width=\textwidth]{condition.png}
+\end{figure}
+\section{Решение}
+
+Запишем общий вид уравнения Лагранжа второго рода для динамики произвольного тела:
+\begin{equation}
+  \frac{d}{dt}(\frac{\partial L}{\partial \dot{q_i}}) - \frac{\partial L}{\partial{q_i}} = Q_i^n
+\end{equation}
+где:
+\begin{itemize}
+  \item $L = T - P$ - Лагранжиан;
+  \item $T$ - Кинетическая энергия системы;
+  \item $P$ - Потенциальная энергия системы;
+  \item $q_i$ - Обобщенные координаты;
+  \item $Q_i^n$ - Обобщенные силы.
+\end{itemize}
+
+Координаты :
+\begin{equation}
+  \begin{cases}
+    x = r \sin\theta \\
+    y = - r \cos \theta
+  \end{cases}
+\end{equation}
+
+\section{Кинетическая энергия системы}
+Проекции скоростей на оси :
+\begin{equation}
+  \begin{cases}
+    \dot x = \dot r \sin\theta  + r \dot \theta \cos \theta \\
+    \dot y = - \dot r \cos \theta + r \dot \theta \sin \theta
+  \end{cases}
+\end{equation}
+тогда полная скорость
+\begin{align}
+  v ^ 2 &= \dot x ^ 2 + \dot y  ^ 2 = (\dot r \sin\theta  + r \dot \theta \cos \theta) ^ 2 + (- \dot r \cos \theta + r \dot \theta \sin \theta)^2 = \\
+  &= \dot r ^ 2 \sin ^ 2 \theta + 2 r \dot r \dot \theta \sin \theta \cos \theta + r ^2 \dot \theta^2 \cos ^ 2 \theta +
+  \dot r ^ 2 \cos ^ 2 \theta - 2 r \dot r \dot \theta \sin \theta \cos \theta + r ^2 \dot \theta^2 \sin ^ 2 \theta = \\
+  &= \dot r ^ 2 + r^2 \dot \theta ^ 2
+  \label{eq:cineticEnergy}
+\end{align}
+
+Отсюда кинетическая энергия
+\begin{equation}
+  T = \frac{m v^2}{2} = \frac{m(\dot r ^ 2 + r^2 \dot \theta ^ 2)}{2}
+\end{equation}
+
+\section{Потенциальная энергия системы}
+Потенциальная энергия системы будет складываться из потенциальной энергии пружины и потенциальной энергии груза.
+Потенциальная энергия пружины:
+\begin{equation}
+  P_1 = \frac{k(r-r_0)^2}{2}
+\end{equation}
+
+Потенциальная энергия груза:
+\begin{equation}
+  P_2 = mgy = -mgr \cos\theta
+\end{equation}
+
+Потенциальная энергия системы:
+\begin{equation}
+  P = P_1 + P_2 = \frac{k(r-r_0)^2}{2} -mgr \cos\theta
+  \label{eq:potentialEnergy}
+\end{equation}
+
+\section{Лагранжиан системы}
+Из (\ref{eq:cineticEnergy}) и (\ref{eq:potentialEnergy}) найдем Лагранжиан системы:
+\begin{equation}
+  L = T - P = \frac{m(\dot r ^ 2 + r^2 \dot \theta ^ 2)}{2} - (\frac{k(r-r_0)^2}{2} -mgr \cos\theta) = \dot r ^ 2 \frac{m}{2} + r^2 \dot \theta ^ 2 \frac{m}{2} - \frac{k(r-r_0)^2}{2}  + mgr \cos\theta
+\end{equation}
+
+Найдем первые производные по $r$ и $\theta$:
+\begin{equation}
+  \begin{cases}
+    \frac{\partial L}{\partial r} = mr \dot \theta ^ 2 - k(r -r_0) + mg \cos\theta\\
+    \frac{\partial L}{\partial \theta} = - mgr \sin\theta
+  \end{cases}
+\end{equation}
+
+Найдем  производные по $\dot r$ и $\dot\theta$:
+\begin{equation}
+  \begin{cases}
+    \frac{\partial L}{\partial \dot r} = m \dot r \\
+    \frac{\partial L}{\partial \dot \theta} = m r^2\dot \theta
+  \end{cases}
+\end{equation}
+
+Продифференцируем полученные производные по $t$
+\begin{equation}
+  \begin{cases}
+    \frac{\partial}{\partial t}(\frac{\partial L}{\partial \dot r}) = 2 \ddot r \\
+    \frac{\partial}{\partial t}(\frac{\partial L}{\partial \dot \theta}) = 2mr\dot r \dot \theta + m r^2 \ddot \theta
+  \end{cases}
+\end{equation}
+
+Тогда уравнение Лагранжа имеет следующий вид:
+\begin{equation}
+  \begin{cases}
+    m \ddot r - ( mr \dot \theta ^ 2 - k(r -r_0) + mg \cos\theta) = 0 \\
+    2mr\dot r \dot \theta + m r^2 \ddot \theta - (- mgr \sin\theta) = 0
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+  \begin{cases}
+    \ddot r - r \dot \theta ^ 2 + \frac{k}{m}(r -r_0) - g \cos\theta = 0\\
+    2\dot r \dot \theta + r \ddot \theta + g\sin\theta = 0
+  \end{cases}
+\end{equation}
+
+\section{Вывод}
+
+Получена математическая модель пружинного маятника с использованием формализма механики Лагранжа. Модель является нелинейной и явной.
+
+\chapter{Часть 2.}
+
+Выполнить численное моделирование системы из ДЗ №1 с произвольными
+начальными условиями для каждой из обобщенных координат. Исследовать влияние
+изменения указанного параметра на 20\% в обе стороны от указанного значения на динамику
+системы. По результатам моделирования построить графики изменения обобщенных
+координат во времени, а также фазовый портрет системы. Вектор времени принять от 0 с
+шагом 0.01 секунды до того времени, когда система установится в колебаниях (2-3
+периода).
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{system.png}
+\end{figure}
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{Вариант} & \textbf{k} & \textbf{m} & \textbf{g} & \textbf{Параметр} \\ \hline
+    15               & 10         & 15         & 9.815      & k                 \\ \hline
+  \end{tabular}
+\end{table}
+
+\section{Решение}
+Выполним численное моделирование системы, для этого приведем уравнение к форме Коши, представленной в функции \textbf{difur}. Для решения системы используем функцию \textbf{ode45} реализующую метод Ранги-Кутты 4-5 порядка. Ниже приведен код в MATLAB,
+реализующий задачу:
+\begin{minted}{matlab}
+  function dX = difur(t, X)
+    global inputStruct;
+    k = inputStruct.k;
+    m = inputStruct.m;
+    g = inputStruct.g;
+    r0 = inputStruct.r0;
+
+    dX = zeros(4,1);
+
+    dX(1) = X(3);
+    dX(2) = X(4);
+    dX(3) = X(1) * X(4)^2 - k / m * (X(1) - r0) + g*cos(X(2));
+    dX(4) = -2 * X(3) * X(4) / (X(1)) - g*sin(X(2))/X(1);
+  end
+
+  global inputStruct;
+  inputStruct.k = 10;
+  inputStruct.m = 15;
+  inputStruct.g = 9.815;
+  inputStruct.r0 = 3;
+
+  func = @difur;
+  X0 = [5;pi/6;0;0];
+  t = 0:0.1:20;
+  [~,X1] = ode45(func,t,X0);
+  inputStruct.m = 12;
+  [~,X2] = ode45(func,t,X0);
+  inputStruct.m = 18;
+  [~,X3] = ode45(func,t,X0);
+
+  figure
+  subplot(2,1,1);
+  plot(t, X1(:, 1));
+  hold on;
+  plot(t, X2(:, 1));
+  hold on;
+  plot(t, X3(:, 1));
+  xlabel("Время, c");
+  ylabel("Радиус, м");
+  legend("m = 15", "m = 12", "m = 18");
+  grid("minor");
+
+  subplot(2,1,2);
+  plot(t, X1(:, 2));
+  hold on;
+  plot(t, X2(:, 2));
+  hold on;
+  plot(t, X3(:, 2));
+  xlabel("Время, c");
+  ylabel("Угол, радиан");
+  legend("m = 15", "m = 12", "m = 18");
+  grid("minor");
+
+  figure
+  subplot(2, 1, 1)
+  plot(X1(:, 1), X1(:, 3));
+  hold on;
+  plot(X2(:, 1), X2(:, 3));
+  hold on;
+  plot(X3(:, 1), X3(:, 3));
+  xlabel("Радиус, м");
+  ylabel("Радиальная скорость, м/c");
+  legend("m = 15","m = 12", "m = 18");
+
+  subplot(2, 1, 2)
+  plot(X1(:, 2), X1(:, 4));
+  hold on;
+  plot(X2(:, 2), X2(:, 4));
+  hold on;
+  plot(X3(:, 2), X3(:, 4));
+  xlabel("Угол, радиан");
+  ylabel("Угловая скорость, радиан/c");
+  legend("m = 15","m = 12", "m = 18");
+
+\end{minted}
+\section{Результаты моделирования}
+
+В результате получаем следующие графики зависимости
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{coords.jpg}
+  \end{center}
+  \caption{Зависимость координат от времени}
+\end{figure}
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=0.7\textwidth]{faze.jpg}
+  \end{center}
+  \caption{Зависимость скоростей от координат}
+\end{figure}
+
+\section{Вывод}
+Выполнено численное моделирование динамики маятника в среде MATLAB. Получены зависимости обобщённой координаты $\theta(t)$, её производной $\dot\theta(t)$, длина нити маятника $r(t)$ и радиальной скорости груза $\dot{r}(t)$ от времени. Построены фазовые портреты в плоскостях ($\theta$, $\dot\theta$) и ($r$, $\dot{r}$), позволяющие визуально оценить характер установившихся колебаний системы.
+
+Исследовано влияние изменения массы груза на 20 \% на колебания. При таком изменении форма графиков остается прежней, система демонстрирует устойчивые колебания, а траектории в фазовых плоскостях сохраняют аналогичный характер.Отличия проявляются лишь в величине амплитуды и частоте колебаний, но качественная динамика остаётся прежней. Таким образом, изменение параметра $m$ в диапазоне $\pm 20 \%$ не приводит к существенному изменению поведения системы и не нарушает её устойчивости.
+\end{document}

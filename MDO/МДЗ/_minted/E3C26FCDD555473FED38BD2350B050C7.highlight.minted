@@ -1,0 +1,76 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{  }\PYG{k}{function}\PYG{+w}{ }dX\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nf}{difur}\PYG{p}{(}t, X\PYG{p}{)}
+\PYG{+w}{    }\PYG{k}{global}\PYG{+w}{ }\PYG{n}{inputStruct}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{k}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{k}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{m}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{m}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{g}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{g}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{r0}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{r0}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{dX}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{dX}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{dX}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{dX}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{o}{\PYGZca{}}\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{k}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{n}{m}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{r0}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{n}{g}\PYG{o}{*}\PYG{n+nb}{cos}\PYG{p}{(}\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{dX}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{2}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{*}\PYG{+w}{ }\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{/}\PYG{+w}{ }\PYG{p}{(}\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{g}\PYG{o}{*}\PYG{n+nb}{sin}\PYG{p}{(}\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{)}\PYG{o}{/}\PYG{n}{X}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{k}{global}\PYG{+w}{ }\PYG{n}{inputStruct}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{k}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{10}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{m}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{15}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{g}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mf}{9.815}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{r0}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{func}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{@}\PYG{n}{difur}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{X0}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{l+m+mi}{5}\PYG{p}{;}\PYG{n+nb}{pi}\PYG{o}{/}\PYG{l+m+mi}{6}\PYG{p}{;}\PYG{l+m+mi}{0}\PYG{p}{;}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{t}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mf}{0.1}\PYG{p}{:}\PYG{l+m+mi}{20}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{p}{,}\PYG{n}{X1}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{ode45}\PYG{p}{(}\PYG{n}{func}\PYG{p}{,}\PYG{n}{t}\PYG{p}{,}\PYG{n}{X0}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{m}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{12}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{p}{,}\PYG{n}{X2}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{ode45}\PYG{p}{(}\PYG{n}{func}\PYG{p}{,}\PYG{n}{t}\PYG{p}{,}\PYG{n}{X0}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{inputStruct}\PYG{p}{.}\PYG{n}{m}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{18}\PYG{p}{;}
+\PYG{+w}{  }\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{p}{,}\PYG{n}{X3}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{ode45}\PYG{p}{(}\PYG{n}{func}\PYG{p}{,}\PYG{n}{t}\PYG{p}{,}\PYG{n}{X0}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{figure}
+\PYG{+w}{  }\PYG{l+s}{subplot(2,1,1)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X1}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X2}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X3}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{xlabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Время, c\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Радиус, м\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{legend}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}m = 15\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}m = 12\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}m = 18\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{grid}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}minor\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nb}{subplot}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X1}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X2}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X3}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{xlabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Время, c\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Угол, радиан\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{legend}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}m = 15\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}m = 12\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}m = 18\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{grid}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}minor\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{figure}
+\PYG{+w}{  }\PYG{l+s}{subplot(2,}\PYG{+w}{ }\PYG{l+s}{1,}\PYG{+w}{ }\PYG{l+s}{1)}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{X1}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X1}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{X2}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X2}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{X3}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X3}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{3}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{xlabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Радиус, м\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Радиальная скорость, м/c\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{legend}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}m = 15\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}m = 12\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}m = 18\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nb}{subplot}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{X1}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X1}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{X2}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X2}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{hold}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{plot}\PYG{p}{(}\PYG{n}{X3}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{)}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{X3}\PYG{p}{(}\PYG{p}{:}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{)}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{xlabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Угол, радиан\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylabel}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}Угловая скорость, радиан/c\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{legend}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}m = 15\PYGZdq{}}\PYG{p}{,}\PYG{l+s}{\PYGZdq{}m = 12\PYGZdq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZdq{}m = 18\PYGZdq{}}\PYG{p}{)}\PYG{p}{;}
+
+\end{MintedVerbatim}

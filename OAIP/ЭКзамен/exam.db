@@ -1,0 +1,539 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 16.3
+-- Dumped by pg_dump version 16.3
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: createorder(integer, integer[], integer[]); Type: PROCEDURE; Schema: public; Owner: postgres
+--
+
+CREATE PROCEDURE public.createorder(IN p_user_id integer, IN p_product_ids integer[], IN p_quantities integer[])
+    LANGUAGE plpgsql
+    AS $$  
+DECLARE  
+    v_total_price DECIMAL(10, 2) := 0;  
+    v_price DECIMAL(10, 2);  
+    v_stock_quantity INT;  
+BEGIN  
+    -- Начало транзакции  
+    BEGIN  
+        -- Вставка нового заказа  
+        INSERT INTO orders (user_id, status, total_price, order_date)  
+        VALUES (p_user_id, 'pending', 0, NOW());  
+  
+        -- Проверяем входные данные на равенство по длине  
+        IF array_length(p_product_ids, 1) IS NULL OR array_length(p_product_ids, 1) <> array_length(p_quantities, 1) THEN  
+            RAISE EXCEPTION 'Длина массивов product_ids и quantities должна быть одинаковой';  
+        END IF;  
+  
+        -- Цикл по элементам заказа  
+        FOR i IN 1..array_length(p_product_ids, 1) LOOP  
+            SELECT price, stock_quantity INTO v_price, v_stock_quantity  
+            FROM products WHERE product_id = p_product_ids[i];  
+  
+            -- Проверяем наличие товара на складе  
+            IF v_stock_quantity < p_quantities[i] THEN  
+                ROLLBACK; -- Откат транзакции в случае недостатка товара  
+                RAISE EXCEPTION 'Недостаточно товара на складе для продукта ID: %', p_product_ids[i];  
+            END IF;  
+  
+            -- Добавляем элемент заказа в таблицу order_items  
+            INSERT INTO order_items (order_id, product_id, quantity, price)  
+            VALUES (p_order_id, p_product_ids[i], p_quantities[i], v_price);  
+  
+            -- Обновляем общее количество на складе  
+            UPDATE products   
+            SET stock_quantity = stock_quantity - p_quantities[i]  
+            WHERE product_id = p_product_ids[i];  
+  
+            -- Увеличиваем итоговую цену заказа  
+            v_total_price := v_total_price + (v_price * p_quantities[i]);  
+        END LOOP;  
+  
+        -- Обновляем общую цену заказа  
+        UPDATE orders SET total_price = v_total_price WHERE order_id = p_order_id;  
+  
+        COMMIT; -- Фиксация транзакции  
+    EXCEPTION WHEN OTHERS THEN  
+        ROLLBACK; -- Откат при ошибке  
+        RAISE;  
+    END;  
+END;  
+$$;
+
+
+ALTER PROCEDURE public.createorder(IN p_user_id integer, IN p_product_ids integer[], IN p_quantities integer[]) OWNER TO postgres;
+
+--
+-- Name: getorderstatus(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getorderstatus(order_id integer) RETURNS text
+    LANGUAGE plpgsql
+    AS $$  
+DECLARE  
+    order_status TEXT;  
+BEGIN  
+    SELECT status INTO order_status  
+    FROM orders  
+    WHERE id = order_id;  
+  
+    -- Проверяем, если заказ не найден  
+    IF order_status IS NULL THEN  
+        RAISE EXCEPTION 'Order with ID % not found', order_id;  
+    END IF;  
+  
+    RETURN order_status;  
+END;  
+$$;
+
+
+ALTER FUNCTION public.getorderstatus(order_id integer) OWNER TO postgres;
+
+--
+-- Name: getuserordercount(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.getuserordercount(user_id integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$  
+DECLARE  
+    order_count INT;  
+BEGIN  
+    SELECT COUNT(*) INTO order_count  
+    FROM orders  
+    WHERE user_id = user_id;  
+  
+    RETURN order_count;  
+END;  
+$$;
+
+
+ALTER FUNCTION public.getuserordercount(user_id integer) OWNER TO postgres;
+
+--
+-- Name: recalculate_order_totals(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.recalculate_order_totals() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$  
+DECLARE  
+    v_total_price DECIMAL(10, 2);  
+BEGIN  
+    -- Пересчитываем общую цену для всех заказов, содержащих изменяемый продукт  
+    SELECT SUM(quantity * price) INTO v_total_price  
+    FROM order_items  
+    WHERE product_id = OLD.product_id;  
+  
+    -- Обновляем итоговую цену во всех связанных заказах  
+    UPDATE orders  
+    SET total_price = v_total_price  
+    WHERE order_id IN (SELECT order_id FROM order_items WHERE product_id = OLD.product_id);  
+  
+    RETURN NEW;  
+END;  
+$$;
+
+
+ALTER FUNCTION public.recalculate_order_totals() OWNER TO postgres;
+
+--
+-- Name: update_order_date(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.update_order_date() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$  
+BEGIN  
+    -- Обновление поля order_date на текущую дату  
+    NEW.order_date := NOW();  
+    RETURN NEW;  
+END;  
+$$;
+
+
+ALTER FUNCTION public.update_order_date() OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: order_items; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.order_items (
+    order_item_id integer NOT NULL,
+    order_id integer,
+    product_id integer,
+    quantity integer NOT NULL,
+    price numeric(10,2) NOT NULL,
+    CONSTRAINT order_items_price_check CHECK ((price >= (0)::numeric)),
+    CONSTRAINT order_items_quantity_check CHECK ((quantity > 0))
+);
+
+
+ALTER TABLE public.order_items OWNER TO postgres;
+
+--
+-- Name: order_items_order_item_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.order_items_order_item_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.order_items_order_item_id_seq OWNER TO postgres;
+
+--
+-- Name: order_items_order_item_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.order_items_order_item_id_seq OWNED BY public.order_items.order_item_id;
+
+
+--
+-- Name: orders; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.orders (
+    order_id integer NOT NULL,
+    user_id integer,
+    status character varying,
+    total_price numeric(10,2) NOT NULL,
+    order_date timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT orders_status_check CHECK (((status)::text = ANY ((ARRAY['pending'::character varying, 'completed'::character varying, 'canceled'::character varying, 'returned'::character varying])::text[]))),
+    CONSTRAINT orders_total_price_check CHECK ((total_price >= (0)::numeric))
+);
+
+
+ALTER TABLE public.orders OWNER TO postgres;
+
+--
+-- Name: orders_order_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.orders_order_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.orders_order_id_seq OWNER TO postgres;
+
+--
+-- Name: orders_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.orders_order_id_seq OWNED BY public.orders.order_id;
+
+
+--
+-- Name: products; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.products (
+    product_id integer NOT NULL,
+    name character varying NOT NULL,
+    price numeric(10,2) NOT NULL,
+    stock_quantity integer NOT NULL,
+    CONSTRAINT products_price_check CHECK ((price >= (0)::numeric)),
+    CONSTRAINT products_stock_quantity_check CHECK ((stock_quantity >= 0))
+);
+
+
+ALTER TABLE public.products OWNER TO postgres;
+
+--
+-- Name: products_product_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.products_product_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.products_product_id_seq OWNER TO postgres;
+
+--
+-- Name: products_product_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.products_product_id_seq OWNED BY public.products.product_id;
+
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    user_id integer NOT NULL,
+    name character varying NOT NULL,
+    email character varying NOT NULL,
+    role character varying,
+    password_hash character varying NOT NULL,
+    loyalty_level integer,
+    CONSTRAINT users_loyalty_level_check CHECK ((loyalty_level = ANY (ARRAY[0, 1]))),
+    CONSTRAINT users_role_check CHECK (((role)::text = ANY ((ARRAY['admin'::character varying, 'manager'::character varying, 'customer'::character varying])::text[])))
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.users_user_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.users_user_id_seq OWNER TO postgres;
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.users_user_id_seq OWNED BY public.users.user_id;
+
+
+--
+-- Name: order_items order_item_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_items ALTER COLUMN order_item_id SET DEFAULT nextval('public.order_items_order_item_id_seq'::regclass);
+
+
+--
+-- Name: orders order_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN order_id SET DEFAULT nextval('public.orders_order_id_seq'::regclass);
+
+
+--
+-- Name: products product_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products ALTER COLUMN product_id SET DEFAULT nextval('public.products_product_id_seq'::regclass);
+
+
+--
+-- Name: users user_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN user_id SET DEFAULT nextval('public.users_user_id_seq'::regclass);
+
+
+--
+-- Data for Name: order_items; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.order_items (order_item_id, order_id, product_id, quantity, price) FROM stdin;
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.orders (order_id, user_id, status, total_price, order_date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.products (product_id, name, price, stock_quantity) FROM stdin;
+2	1	1.00	1
+3	1	1.00	1
+4	1	1.00	1
+5	Яблоко	10.00	500
+6	Яблоко	10.00	500
+7	Яблоко	10.00	500
+8	Яблоко	10.00	500
+9	Яблоко	10.00	500
+10	1	1.00	1
+11	1	1.00	1
+12	1	1.00	1
+13	Морковка	10.00	1000
+14	Морковь	10.00	1000
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (user_id, name, email, role, password_hash, loyalty_level) FROM stdin;
+1	andrey	andrsoin@yandex.ru	admin	\\x59ada40988bd62418b45293fdca164f5127e0fab8cb2f8f38e83dc10f0c347d5	1
+4	maxim	maxim@yandex.ru	customer	\\x3ea87a56da3844b420ec2925ae922bc731ec16a4fc44dcbeafdad49b0e61d39c	\N
+5	ad	asd	customer	\\xf4bf9f7fcbedaba0392f108c59d8f4a38b3838efb64877380171b54475c2ade8	\N
+\.
+
+
+--
+-- Name: order_items_order_item_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.order_items_order_item_id_seq', 1, false);
+
+
+--
+-- Name: orders_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.orders_order_id_seq', 2, true);
+
+
+--
+-- Name: products_product_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.products_product_id_seq', 14, true);
+
+
+--
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.users_user_id_seq', 5, true);
+
+
+--
+-- Name: order_items order_items_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT order_items_pkey PRIMARY KEY (order_item_id);
+
+
+--
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY (order_id);
+
+
+--
+-- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.products
+    ADD CONSTRAINT products_pkey PRIMARY KEY (product_id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: products trg_recalculate_order_totals; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER trg_recalculate_order_totals AFTER UPDATE OF price ON public.products FOR EACH ROW WHEN ((old.price IS DISTINCT FROM new.price)) EXECUTE FUNCTION public.recalculate_order_totals();
+
+
+--
+-- Name: orders trg_update_order_date; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER trg_update_order_date BEFORE UPDATE OF status ON public.orders FOR EACH ROW WHEN (((old.status)::text IS DISTINCT FROM (new.status)::text)) EXECUTE FUNCTION public.update_order_date();
+
+
+--
+-- Name: order_items order_items_order_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT order_items_order_id_fkey FOREIGN KEY (order_id) REFERENCES public.orders(order_id) ON DELETE CASCADE;
+
+
+--
+-- Name: order_items order_items_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.order_items
+    ADD CONSTRAINT order_items_product_id_fkey FOREIGN KEY (product_id) REFERENCES public.products(product_id) ON DELETE CASCADE;
+
+
+--
+-- Name: orders orders_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
+
+
+--
+-- Name: TABLE order_items; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT SELECT ON TABLE public.order_items TO manager;
+GRANT INSERT,UPDATE ON TABLE public.order_items TO buyer;
+
+
+--
+-- Name: TABLE orders; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT SELECT,INSERT ON TABLE public.orders TO manager;
+GRANT SELECT,INSERT ON TABLE public.orders TO buyer;
+
+
+--
+-- Name: TABLE products; Type: ACL; Schema: public; Owner: postgres
+--
+
+GRANT SELECT,INSERT ON TABLE public.products TO manager;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

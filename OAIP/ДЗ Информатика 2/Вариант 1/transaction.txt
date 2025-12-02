@@ -1,0 +1,17 @@
+Обновление бюджета проекта:
+BEGIN TRANSACTION; UPDATE projects SET budget = 1200000 WHERE id=1; COMMIT; 
+
+Добавление сотрудника в проект:
+BEGIN TRANSACTION; INSERT INTO employee_projects (employee_id, project_id, role_in_project) VALUES(1, 1, 'Менеджер'); COMMIT;
+
+Удаление сотрудника из проекта: 
+BEGIN TRANSACTION; DELETE FROM employee_projects WHERE employee_id=1; DELETE FROM employees WHERE employee_id=1; COMMIT;
+
+Создание нового проекта:
+BEGIN TRANSACTION; INSERT INTO projects(id, name, budget) VALUES (1, 'Redesign', 1000000); INSERT INTO employee_projects(employee_id, project_id, role_in_project) VALUES (1, 1, 'Менеджер'); COMMIT;
+
+
+Удаление проекта:
+BEGIN TRANSACTION; DELETE FROM employee_projects WHERE project_id=1; DELETE FROM projects WHERE id=1; COMMIT;
+
+

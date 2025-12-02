@@ -1,0 +1,6 @@
+1. SELECT * FROM products where category_id=(SELECT id FROM categories WHERE category_name='Овощи');
+2. SELECT * FROM products WHERE quantity < 80;
+3. SELECT SUM(quantity_sold) FROM sales WHERE sale_date<'10/11/2024';
+4. UPDATE products SET quantity=((SELECT quantity FROM products WHERE id=1)-3) WHERE id=1;
+
+

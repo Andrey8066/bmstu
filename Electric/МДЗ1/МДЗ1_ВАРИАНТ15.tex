@@ -1,0 +1,315 @@
+\documentclass[a4paper, 14pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[T2A]{fontenc}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage[russian]{babel}
+\usepackage{indentfirst}
+\usepackage{setspace}
+\usepackage{float}
+\usepackage{array}
+\usepackage{cellspace}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{tocloft}
+\usepackage{amsmath}
+\usepackage{multicol}
+\setlength{\cellspacetoplimit}{20pt}
+\setlength{\cellspacebottomlimit}{20pt}
+
+\onehalfspacing
+
+\geometry{
+  a4paper,
+  left=30mm,
+  right=20mm,
+  top=20mm,
+  bottom=20mm
+}
+
+\setlength{\parindent}{1.25cm}
+
+\graphicspath{ {images/} }
+\captionsetup[figure]{
+  labelsep=period,
+  justification=centering
+}
+
+\renewcommand{\figurename}{Рисунок}
+\renewcommand{\contentsname}{Оглавление}
+
+\titleformat{\chapter}[block]{\huge\bfseries\centering}{}{1em}{}
+\titleformat{\section}[block]{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{\parskip}{-\parskip}
+\titlespacing*{\subsection}{0pt}{\parskip}{-\parskip}
+\titlespacing{\chapter}{0pt}{0pt}{0pt}
+
+\renewcommand{\cftbeforetoctitleskip}{-30pt}
+\renewcommand{\cftaftertoctitleskip}{-10pt}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{center}
+    \small
+    \underline{
+      \begin{minipage}{0.2\textwidth}
+        \centering
+        \includegraphics[width=3cm]{BMSTU logo}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.8\textwidth}
+        \begin{center}
+
+          \textbf{Министерство науки и высшего образования Российской Федерации
+            Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный технический университет имени Н.Э. Баумана национальный исследовательский университет»
+          (МГТУ им. Н.Э. Баумана)}
+        \end{center}
+      \end{minipage}
+
+    }
+
+    \vspace{7cm}
+    \Large
+    \textbf{Модульное домашнее задание №1} \\
+    ПО ДИСЦИПЛИНЕ "Электротехника"\\
+    \vspace{5cm}
+    \normalsize
+    \begin{tabular}{p{8cm}p{6cm}}
+      \textbf{Студент группы ИУ1-31Б} & Соин А. Д. \\
+      & «26» октября 2025 г. \\
+      & \\
+      \textbf{Преподаватель} & Васюков С. А. \\
+      & «\underline{\hspace{1.5cm}}»\underline{\hspace{2.5cm}}2025 г. \\
+    \end{tabular}
+    \vfill{\Large{Москва, 2025}}
+  \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Исходные данные}
+\begin{figure}[H]
+  \centering
+  \includegraphics{15.jpg}
+\end{figure}
+
+\section{Направления токов}
+\begin{figure}[H]
+  \centering
+  \includegraphics{15_current.jpg}
+\end{figure}
+
+\section{Направления токов}
+\begin{figure}[H]
+  \centering
+  \includegraphics{15_equivalent.jpg}
+\end{figure}
+
+\section{Эквивалентные сопротивления}
+\subsection{Перевод исходных величин в комплексную плоскость}
+\begin{itemize}
+  \item $Z_{R1} = R_1 = 40 $ Ом
+  \item $Z_{R6} = R_6 = 50$ Ом
+  \item $Z_{R2} = R_2 = 40 $ Ом
+  \item $Z_{L1} = \omega L_1 j = 50j$ Ом
+  \item $Z_{L2} = \omega L_2 j = 60 j$ Ом
+  \item $Z_{C3} = \frac{-j}{\omega C_2} = -20j$ Ом
+  \item $Z_{C4} = \frac{-j}{\omega C_4} = -50j$ Ом
+  \item $Z_{C6} = \frac{-j}{\omega C_6} = -50j$ Ом
+  \item $J_1 = -4$ А
+  \item $E_2 = -40 - 250j$ В
+  \item $E_5 = 400 - 600j$ В
+  \item $E_6 = -880 + 620j$ В
+\end{itemize}
+\subsection{Сопротивления в ветвях}
+\begin{itemize}
+  \item $Z_1 = Z_{R1} + Z_{L1} = 40 + 50j$ Ом
+  \item $Z_2 = Z_{R2} + Z_{L2} = 40 + 60j$ Ом
+  \item $Z_3 = Z_{C3} = - 20j$ Ом
+  \item $Z_4 = Z_{C4} = - 50j$ Ом
+  \item $Z_5 = 0$ Ом
+  \item $Z_6 = Z_{R6} + Z_{C6} = 50 - 50j$ Ом
+\end{itemize}
+
+\section{Направления токов на Эквивалентной схеме}
+\begin{figure}[H]
+  \centering
+  \includegraphics{15_equialent_sum_flow.png}
+\end{figure}
+\subsection{Токи в ветвях }
+\begin{equation}
+  \overline{I_{11}} = \overline{J_1} = -4
+  \label{eq:green}
+\end{equation}
+\begin{equation}
+  \overline{I_{22}}(Z_2 + Z_3 + Z_4) + \overline{I_{11}}(Z_2 + Z_3) - \overline{I_{33}}(Z_3) = \overline{E_2}
+  \label{eq:red}
+\end{equation}
+\begin{equation}
+  \overline{I_{33}}(Z_3 + Z_6) - \overline{I_{22}}Z_3 = \overline{E_5} + \overline{E_6}
+  \label{eq:blue}
+\end{equation}
+
+Рассмотрим (\ref{eq:green}):
+\[
+  \overline{I_{22}}(40 - 10j) - 4(40 + 40j) - \overline{I_{33}}(-20j) = -40 - 250j
+\]
+
+\begin{equation}
+  \overline{I_{22}}(40 -10j) - \overline{I_{33}}(-20j) = 120 - 90j
+  \label{eq:red_numbers}
+\end{equation}
+
+Рассмотрим (\ref{eq:blue}):
+\[
+  \overline{I_{33}}(50 - 70j) - \overline{I_{22}}(-20j) - (-4)(-20j)= (400 - 600j) + (-880 + 620j)
+\]
+\[
+  \overline{I_{33}}(50 - 70j) - \overline{I_{22}}(-20j) = -480 + 100j
+\]
+
+Отсюда $\overline{I_{22}} = 1 $ и $\overline{I_{33}} = -4 - 4j $
+\subsection{Токи в ветвях}
+\begin{itemize}
+  \item $\overline{I_1} = \overline{I_{11}}  = -4$
+  \item $\overline{I_2} = \overline{I_{11}} + \overline{I_{22}}  = -3 $
+  \item $\overline{I_3} = \overline{I_{11}} + \overline{I_{22}} - \overline{I_{33}} = -7 + 4j$
+  \item $\overline{I_4} = \overline{I_{22}}  = 1$
+  \item $\overline{I_5} = - \overline{I_{11}} + \overline{I_{33}}  = -4j$
+  \item  $\overline{I_6} = \overline{I_{33}} = -4 - 4j$
+\end{itemize}
+\subsection{Напряжение на источнике тока}
+Найдем напряжение на источние тока по 2-ому закону Кирхгофа
+\begin{equation}
+  \overline{I_1}Z_1 + \overline{I_2}Z_2 + \overline{I_3}Z_3 = \overline{E_2} - \overline{E_5} + U_j
+\end{equation}
+
+\begin{equation}
+  \overline{U_j} = (\overline{I_1}Z_1 + \overline{I_2}Z_2 + \overline{I_3}Z_3) + ( - \overline{E_2} + \overline{E_5}) = 240 - 750j
+\end{equation}
+\section{Метод узловых потенциалов}
+\begin{figure}[H]
+  \includegraphics{15_equialent_knot.png}
+\end{figure}
+Примем потенциал в точке \textbf{b} за 0 ($\phi_d = 0, \quad \phi_b = \overline{E5}$)
+Рассмотрим токи в ветвях:
+\begin{equation}
+  \begin{cases}
+    \overline{I_1} = \frac{\phi_{c}-\phi_{d}}{Z_1 + \infty} + \overline{J_1} \\
+    \overline{I_2} = \frac{\phi_{a}-\phi_{c} + E_2}{Z_2 + 0} \\
+    \overline{I_3} = \frac{\phi_{a}-\phi_{b}}{Z_3} \\
+    \overline{I_4} = \frac{\phi_{c}-\phi_{b}}{Z_4} \\
+    \overline{I_6} = \frac{\phi_{d}-\phi_{a} + E_6}{Z_6 + 0} \\
+  \end{cases}
+\end{equation}
+
+Рассмотрим узел \textbf{c}:
+\begin{equation*}
+  \overline{I_1} + \overline{I_4} - \overline{I_2} = 0
+\end{equation*}
+\begin{equation*}
+  \frac{\phi_{c}-\phi_{d}}{Z_1 + \infty} + \overline{J_1} + \frac{\phi_{c}-\phi_{b}}{Z_4} - \frac{\phi_{a}-\phi_{c} + E_2}{Z_2 + 0} = 0
+\end{equation*}
+
+\begin{equation}
+  \phi_{a} \frac{1}{Z_2 + 0} + \phi_{b} \frac{1}{Z_4} - \phi_{c}(\frac{1}{Z_1 + \infty} + \frac{1}{Z_4} + \frac{1}{Z_2 + 0})  + \phi_{d} \frac{1}{Z_1 + \infty} = \overline{J_1} + \frac{E_2}{Z_2 + 0}
+\end{equation}
+
+Рассмотрим узел \textbf{a}:
+\begin{equation*}
+  \overline{I_2} - \overline{I_3} - \overline{I_6} = 0
+\end{equation*}
+\begin{equation*}
+  \frac{\phi_{a}-\phi_{c} + E_2}{Z_2 + 0} - \frac{\phi_{a}-\phi_{b}}{Z_3} - \frac{\phi_{d}-\phi_{a} + E_6}{Z_6 + 0} = 0
+\end{equation*}
+
+\begin{equation}
+  \phi_{a} (\frac{1}{Z_3} + \frac{1}{Z_6-0} - \frac{1}{Z_2 + 0}) + \phi_{b} \frac{1}{Z_3} + \phi_{c} \frac{1}{Z_2 + 0}   + \phi_{d} \frac{1}{Z_6 + 0} = - \frac{E_2}{Z_2 + 0} + \frac{E_6}{Z_6 + 0}
+\end{equation}
+
+Получаем следующие уравнения:
+\begin{equation}
+  \begin{cases}
+    \phi_{a} \frac{1}{Z_2 + 0} + \phi_{b} \frac{1}{Z_4} - \phi_{c}(\frac{1}{Z_1 + \infty} + \frac{1}{Z_4} + \frac{1}{Z_2 + 0})  + \phi_{d} \frac{1}{Z_1 + \infty} = \overline{J_1} + \frac{E_2}{Z_2 + 0} \\
+    \phi_{a} (\frac{1}{Z_3} + \frac{1}{Z_6-0} - \frac{1}{Z_2 + 0}) + \phi_{b} \frac{1}{Z_3} + \phi_{c} \frac{1}{Z_2 + 0}   + \phi_{d} \frac{1}{Z_6 + 0} = - \frac{E_2}{Z_2 + 0} + \frac{E_6}{Z_6 + 0} \\
+    \phi_d = 0\\
+    \phi_b = \overline{E5}
+  \end{cases}
+\end{equation}
+
+\section{Метод эквивалентного генератора}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics{15_equialent_gen.png}
+\end{figure}
+
+Контурные токи
+\begin{equation}
+  \begin{cases}
+    \overline{I'_{22}} = \overline{J_{1}} = -4 \\
+    \overline{I'_{11}} = \frac{\overline{E_6}  + \overline{E_5} - \overline{I'_{22}} Z_6}{Z_6 + Z3} = \frac{ (400 - 600j) + (-880 + 620j) - (-4) (50-50j)}{(50 - 50j) + (-20j)} = \frac{-280 - 180j}{50 - 70j}
+  \end{cases}
+\end{equation}
+
+Отсюда
+
+\begin{equation}
+  \begin{cases}
+    \overline{I_{2}} = \overline{I'_{22}} = -4 \\
+    \overline{I_{3}} = \overline{I'_{11}} = - \frac{-280 - 180j}{50 - 70j} =  \frac{+280 + 180j}{50 - 70j} \\
+
+  \end{cases}
+\end{equation}
+
+Рссмотрим контур включающий ветви 2, 3 и разрыв $U_{bc}$, напрвление обхода по часовой стрелке
+\begin{equation}
+  U_{bc} + I_2 Z_2 + I_3 Z_3 = E_2
+\end{equation}
+
+\begin{equation}
+  U_{bc} = E_2 - I_2 Z_2 - I_3 Z_3 = (-40 - 250j) - (-4)(40 + 60j) - \frac{+280 +180j}{50 - 70j} (-20j) = \frac{1580 - 230i}{37}
+\end{equation}
+
+Эквивалентное сопротивление
+\begin{equation}
+  Z_{экв} = Z_2 + \frac{Z_3Z_6}{Z_3+Z_6} = (40+60j) + \frac{(-20j)(50-50j)}{(-20j)+ (50-50j)} = \frac{1580 + 1620j}{37}
+\end{equation}
+
+Найдем ток в вевти 4
+\begin{equation}
+  \overline{I_4} = \frac{U_{bc}}{Z_{экв}  + Z_4} = \frac{\frac{1580 - 230i}{37}}{\frac{1580 + 1620i}{37} + (-50j)} = 1 А
+\end{equation}
+
+\section{Проверка}
+
+В результате решения получены следующие токи:
+\begin{multicols}{2}
+
+  \raggedcolumns
+  \begin{itemize}
+    \item $\overline{I_1} = -4$
+    \item $\overline{I_2} = -3 $
+    \item $\overline{I_3} = -7 + 4j$
+    \item $\overline{I_4} = 1$
+    \item $\overline{I_5} = -4j$
+    \item $\overline{I_6} = -4 - 4j$
+  \end{itemize}
+
+  \begin{figure}[H]
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{check.png}
+    \end{center}
+  \end{figure}
+
+\end{multicols}
+\end{document}
