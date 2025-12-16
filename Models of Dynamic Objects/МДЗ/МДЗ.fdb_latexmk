@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1763999189.13881 "/home/andrey/Documents/BMSTU/MDO/МДЗ/МДЗ.tex" "МДЗ.pdf" "МДЗ" 1763999192.76338 0
+["pdflatex"] 1765809862.76617 "/home/andrey/Documents/BMSTU/Models of Dynamic Objects/МДЗ/МДЗ.tex" "МДЗ.pdf" "МДЗ" 1765809866.19291 0
   "/home/andrey/.texlive/texmf-var/fonts/tfm/lh/lh-t2a/labx0900.tfm" 1761204415.76321 3308 0e40fe47c68a93146385123973edfb65 ""
   "/home/andrey/.texlive/texmf-var/fonts/tfm/lh/lh-t2a/labx1000.tfm" 1758207154.23344 3300 6abb8e321227ead2a8e929e5abc72bd3 ""
   "/home/andrey/.texlive/texmf-var/fonts/tfm/lh/lh-t2a/labx1440.tfm" 1757865911.0497 3304 6a543c07045572737981351171e0505e ""
@@ -11,7 +11,7 @@
   "/home/andrey/.texlive/texmf-var/fonts/tfm/lh/lh-t2a/larm2074.tfm" 1757862603.20134 3264 03c2b9e4787a40d3b9c197c38b93b558 ""
   "/home/andrey/.texlive/texmf-var/fonts/tfm/lh/lh-t2a/larm2488.tfm" 1757864226.32071 3264 102508a989355317d27912fb22a38399 ""
   "/home/andrey/.texlive/texmf-var/fonts/tfm/lh/lh-t2a/latt1000.tfm" 1760869343.02358 1272 55f67101730a20777decd892fb4b4e3e ""
-  "/home/andrey/Documents/BMSTU/MDO/МДЗ/МДЗ.tex" 1763999188.75531 13086 3fb2fbc8a5f48a2604482419659d4cf8 ""
+  "/home/andrey/Documents/BMSTU/Models of Dynamic Objects/МДЗ/МДЗ.tex" 1765809862.18614 13086 3fb2fbc8a5f48a2604482419659d4cf8 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t2a.enc" 1755987285 3141 82d5616418ed8d5de703b3951bedecb4 ""
   "/usr/share/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1755987285 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "/usr/share/texmf-dist/fonts/tfm/jknappen/ec/tcrm1000.tfm" 1755987285 1536 e07581a4bb3136ece9eeb4c3ffab8233 ""
@@ -216,8 +216,8 @@
   "/usr/share/texmf-dist/tex/latex/xcolor/xcolor.sty" 1755987285 55384 b454dec21c2d9f45ec0b793f0995b992 ""
   "/usr/share/texmf-dist/tex/latex/xkeyval/xkeyval.sty" 1755987285 4937 4ce600ce9bd4ec84d0250eb6892fcf4f ""
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1755987285 42087 b0f9697c952c8f5a8eede4134282cb0d ""
-  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1757857933 5309334 cd5b34edbc1e1e42b4786ed8d99ed5fd ""
-  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1757857920 2088912 7f98f9ccf5eabd549a2e374c28e7b98c ""
+  "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1765354852 5309334 cd5b34edbc1e1e42b4786ed8d99ed5fd ""
+  "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1765354830 2088911 1f14ad4e2b9f8b6e16d6caaf9ade42a5 ""
   "_minted/E3C26FCDD555473FED38BD2350B050C7.highlight.minted" 1763667945.74068 9393 458b6113e544e21e0774e06870e20de5 ""
   "_minted/_A35BBD779E003A7421A35398B01FB38D.index.minted" 1763667946.17583 276 43491c79b940c7bd479ed95fb81d06c8 ""
   "_minted/default.style.minted" 1763664812.74069 6426 e1fb43a91491f41b33310478eee48cdb ""
@@ -226,9 +226,9 @@
   "images/coords.jpg" 1763667638.2441 151980 4b4f28c5130819f3be0137817d87d75a ""
   "images/faze.jpg" 1763667647.31687 111305 eec22d28695a98f92c69620457f3b194 ""
   "images/system.png" 1763997963.64663 42461 e308866145af1ac9fee8afd2b699f588 ""
-  "МДЗ.aux" 1763999192.48581 2125 679940152ef988085143eab35e097cb0 "pdflatex"
-  "МДЗ.tex" 1763999188.75531 13086 3fb2fbc8a5f48a2604482419659d4cf8 ""
-  "МДЗ.toc" 1763999192.48881 782 01c106b5854badcd7c4b123118ee7606 "pdflatex"
+  "МДЗ.aux" 1765809865.77511 2125 679940152ef988085143eab35e097cb0 "pdflatex"
+  "МДЗ.tex" 1765809862.18614 13086 3fb2fbc8a5f48a2604482419659d4cf8 ""
+  "МДЗ.toc" 1765809865.83911 782 01c106b5854badcd7c4b123118ee7606 "pdflatex"
   (generated)
   "МДЗ.aux"
   "МДЗ.log"

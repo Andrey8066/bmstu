@@ -1,7 +1,7 @@
-PWD /home/andrey/Documents/BMSTU/MDO/МДЗ
+PWD /home/andrey/Documents/BMSTU/Models of Dynamic Objects/МДЗ
 INPUT /usr/share/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/andrey/Documents/BMSTU/MDO/МДЗ/МДЗ.tex
+INPUT /home/andrey/Documents/BMSTU/Models of Dynamic Objects/МДЗ/МДЗ.tex
 OUTPUT МДЗ.log
 INPUT /usr/share/texmf-dist/tex/latex/extsizes/extreport.cls
 INPUT /usr/share/texmf-dist/tex/latex/extsizes/extreport.cls
