@@ -19,43 +19,43 @@ h3 = 0.25;
 
 p = 60 * 50 / nn;
 
-fprintf("Число пар полюсов: %.3f\n", p);
+fprintf("Число пар полюсов: %.4f\n", p);
 fprintf("Число пар полюсов: %.0f\n", p);
 
 n0 = 60 * 50 / floor(p);
-fprintf("скорость вращения магнитного поля: %.3f\n", n0);
+fprintf("скорость вращения магнитного поля: %.4f\n", n0);
 
 Mn = 9.55 * Pn * etan / nn;
-fprintf("Номинальный момент двигателя: %.3f\n", Mn);
+fprintf("Номинальный момент двигателя: %.4f\n", Mn);
 
 sn = (n0 - nn) / nn;
-fprintf("Скольжение в номинальном режиме: %.3f\n", sn);
+fprintf("Скольжение в номинальном режиме: %.4f\n", sn);
 
 Mmax = Mn * lambdak;
-fprintf("Максимальный момент двигателя: %.3f\n", Mmax);
+fprintf("Максимальный момент двигателя: %.4f\n", Mmax);
 
 skr = sn * (lambdak + sqrt(lambdak^2  - 1));
 nkr = n0 * (1 - skr);
-fprintf("Критическое скольжение: %.3f\n", skr);
-fprintf("Критическая скорость вращения: %.3f\n", nkr);
+fprintf("Критическое скольжение: %.4f\n", skr);
+fprintf("Критическая скорость вращения: %.4f\n", nkr);
 
 omega0 = 2 * pi / 60 * n0;
-fprintf("Угловая скорость вращения: %.3f\n", omega0);
+fprintf("Угловая скорость вращения: %.4f\n", omega0);
 
 R2 = Mn * omega0 * sn /(3 * I2n^2);
-fprintf("Активное сопротивление фазы обмотки: %.3f\n", R2);
+fprintf("Активное сопротивление фазы обмотки: %.4f\n", R2);
 
 Md = Mn * t;
-fprintf("Заданный момент нагрузки: %.3f\n", Md);
+fprintf("Заданный момент нагрузки: %.4f\n", Md);
 
 lambdad = Mmax/Md;
-fprintf("Коэффициент нагрузки: %.3f\n", lambdad);
+fprintf("Коэффициент нагрузки: %.4f\n", lambdad);
 
 
 sd = skr / (lambdad + sqrt(lambdad^2  - 1));
 nd = n0 * (1 - sd);
-fprintf("Скольжение для заданного момента: %.3f\n", sd);
-fprintf("скорость вращения для заданного момента: %.3f\n", nd);
+fprintf("Скольжение для заданного момента: %.4f\n", sd);
+fprintf("скорость вращения для заданного момента: %.4f\n", nd);
 
 
 S = sort([0:0.01:1 sd sn skr]);
@@ -72,20 +72,20 @@ grid on;
 legend("n(M)", "n(I2)");
 ylabel("Скорость вращения ротора n, об/мин");
 xlabel("Момент на валу М, Нм  Ток ротора I2, A");
-xline(Mn, '--k', 'M_н','HandleVisibility','off');
-xline(Mmax, '--k', 'M_{max}', 'HandleVisibility','off');
-xline(Md, '--k', 'M_D', 'HandleVisibility','off');
-xline(M(length(M)), '--k', 'M_{пуск}', 'HandleVisibility','off');
-xline(I2n, '--k', 'I_{2н}', 'HandleVisibility','off');
-xline(I2(find(M == Md, 1)), '--k', 'I_{2D}', 'HandleVisibility','off');
-xline(I2(find(N == nkr, 1)), '--k', 'I_{2кр}', 'HandleVisibility','off');
-xline(I2(length(I2)), '--k', 'I_{2пуск}', 'HandleVisibility','off');
+%xline(Mn, '--k', 'M_н','HandleVisibility','off');
+%xline(Mmax, '--k', 'M_{max}', 'HandleVisibility','off');
+%xline(Md, '--k', 'M_D', 'HandleVisibility','off');
+%xline(M(length(M)), '--k', 'M_{пуск}', 'HandleVisibility','off');
+%xline(I2n, '--k', 'I_{2н}', 'HandleVisibility','off');
+%xline(I2(find(M == Md, 1)), '--k', 'I_{2D}', 'HandleVisibility','off');
+%xline(I2(find(N == nkr, 1)), '--k', 'I_{2кр}', 'HandleVisibility','off');
+%xline(I2(length(I2)), '--k', 'I_{2пуск}', 'HandleVisibility','off');
 title("Естественная характеристика двигателя")
 
 
-T = table(S', N', M', I2', 'VariableNames', {'s','n','M','I2'});
+%T = table(S', N', M', I2', 'VariableNames', {'s','n','M','I2'});
 
-writetable(T, fullfile(folder, 'data1.csv'));
+%writetable(T, fullfile(folder, 'data1.csv'));
 
 fprintf("----------------------------------------------------------\n");
 
@@ -98,18 +98,18 @@ sddot = skrdot / (lambdaddot + sqrt(lambdaddot^2 - 1));
 nddot = n0*(1-sddot);
 kd = nddot/nd;
 
-fprintf("Уменьшенное напряжение : %.3f\n", U1dot);
-fprintf("Уменьшенный максимальный момент: %.3f\n", Mmaxdot);
-fprintf("Критическое скольжение: %.3f\n", skrdot);
-fprintf("Критическая скорость вращения: %.3f\n", nkrdot);
-fprintf("Коэффициент нагрузки: %.3f\n", lambdaddot);
-fprintf("Cкольжение при данном  моменте: %.3f\n", sddot);
-fprintf("Cкорость вращения при данном  моменте: %.3f\n", nddot);
-fprintf("Коэффициент регулирования: %.3f\n", kd);
+fprintf("Уменьшенное напряжение : %.4f\n", U1dot);
+fprintf("Уменьшенный максимальный момент: %.4f\n", Mmaxdot);
+fprintf("Критическое скольжение: %.4f\n", skrdot);
+fprintf("Критическая скорость вращения: %.4f\n", nkrdot);
+fprintf("Коэффициент нагрузки: %.4f\n", lambdaddot);
+fprintf("Cкольжение при данном  моменте: %.4f\n", sddot);
+fprintf("Cкорость вращения при данном  моменте: %.4f\n", nddot);
+fprintf("Коэффициент регулирования: %.4f\n", kd);
 
-Sdot = sort([0:0.01:1 sd skrdot]);
+Sdot = sort([0:0.01:1 sddot skrdot])
 Ndot = [n0*(1-Sdot)];
-Mdot = 2*Mmaxdot./(Sdot ./ skrdot + skrdot./Sdot);
+Mdot = 2*Mmaxdot./(Sdot ./ skrdot + skrdot./Sdot)
 %M = 2*Mmax./(Sdot ./ skr + skr./Sdot);
 
 
@@ -121,14 +121,14 @@ grid on;
 legend("Естественная характеристика n(M)", "Искуственная характеристика n(M`)");
 ylabel("Скорость вращения ротора n, об/мин");
 xlabel("Момент на валу М, Нм");
-xline(Mmax, '--k', 'M_{max}', 'HandleVisibility','off');
-xline(Mmaxdot, '--k', 'M`_{max}', 'HandleVisibility','off');
-xline(Md, '--k', 'M`_D = M_D', 'HandleVisibility','off');
+%xline(Mmax, '--k', 'M_{max}', 'HandleVisibility','off');
+%xline(Mmaxdot, '--k', 'M`_{max}', 'HandleVisibility','off');
+%xline(Md, '--k', 'M`_D = M_D', 'HandleVisibility','off');
 title("Естественная и искусственная механичесеие характеристики двигателя при изменении U1")
 
-T = table(Sdot', Ndot', Mdot', 'VariableNames', {'s`','n`','M`'});
+%T = table(Sdot', Ndot', Mdot', 'VariableNames', {'s`','n`','M`'});
 
-writetable(T, fullfile(folder, 'data2.csv'));
+%writetable(T, fullfile(folder, 'data2.csv'));
 fprintf("----------------------------------------------------------\n");
 
 
@@ -142,14 +142,14 @@ sddot = skrdot / (lambdaddot + sqrt(lambdaddot^2 - 1));
 nddot = n0*(1-sddot);
 kddot = nddot/nd;
 
-fprintf("Добавленое сопротивление : %.3f\n", R2dop);
-fprintf("Максимальный момент: %.3f\n", Mmaxdot);
-fprintf("Критическое скольжение: %.3f\n", skrdot);
-fprintf("Критическая скорость вращения: %.3f\n", nkrdot);
-fprintf("Коэффициент регулирования: %.3f\n", lambdaddot);
-fprintf("Скольжение для заданного момента: %.3f\n", sddot);
-fprintf("Скорость вращения: %.3f\n", nddot);
-fprintf("Коэффициент регулирования: %.3f\n", kddot);
+fprintf("Добавленое сопротивление : %.4f\n", R2dop);
+fprintf("Максимальный момент: %.4f\n", Mmaxdot);
+fprintf("Критическое скольжение: %.4f\n", skrdot);
+fprintf("Критическая скорость вращения: %.4f\n", nkrdot);
+fprintf("Коэффициент регулирования: %.4f\n", lambdaddot);
+fprintf("Скольжение для заданного момента: %.4f\n", sddot);
+fprintf("Скорость вращения: %.4f\n", nddot);
+fprintf("Коэффициент регулирования: %.4f\n", kddot);
 
 Sdot = sort([0:0.01:1 sddot skrdot]);
 Ndot = [n0*(1-Sdot)];
@@ -165,13 +165,13 @@ grid on;
 legend("Естественная характеристика n(M)", "Искуственная характеристика n(M`)");
 ylabel("Скорость вращения ротора n, об/мин");
 xlabel("Момент на валу М, Нм");
-xline(Mmax, '--k', 'M_{max} = M`_{max}', 'HandleVisibility','off');
-xline(Md, '--k', 'M`_D = M_D', 'HandleVisibility','off');
+%xline(Mmax, '--k', 'M_{max} = M`_{max}', 'HandleVisibility','off');
+%xline(Md, '--k', 'M`_D = M_D', 'HandleVisibility','off');
 title("Естественная и искусственная механичесеие характеристики двигателя при включении добавочного сопротивления R_{2доб}")
 
-T = table(Sdot', Ndot', Mdot', 'VariableNames', {'s`','n`','M`'});
+%T = table(Sdot', Ndot', Mdot', 'VariableNames', {'s`','n`','M`'});
 
-writetable(T, fullfile(folder, 'data3.csv'));
+%writetable(T, fullfile(folder, 'data3.csv'));
 
 fprintf("----------------------------------------------------------\n");
 
@@ -188,13 +188,13 @@ sddot = (n0dot - nddot)/n0dot;
 kddot = nddot/nd;
 Mmaxdot = Mmax;
 
-fprintf("Ччастота вращения магнитного поля: %.3f\n", n0dot);
-fprintf("Изменение частоты вращения магнитного поля: %.3f\n", deltan0);
-fprintf("Критическая скорость вращения: %.3f\n", nkrdot);
-fprintf("Критическое скольжение: %.3f\n", skrdot);
-fprintf("Скорость вращения: %.3f\n", nddot);
-fprintf("Скольжение для заданного момента: %.3f\n", sddot);
-fprintf("Коэффициент регулирования: %.3f\n", kddot);
+fprintf("Ччастота вращения магнитного поля: %.4f\n", n0dot);
+fprintf("Изменение частоты вращения магнитного поля: %.4f\n", deltan0);
+fprintf("Критическая скорость вращения: %.4f\n", nkrdot);
+fprintf("Критическое скольжение: %.4f\n", skrdot);
+fprintf("Скорость вращения: %.4f\n", nddot);
+fprintf("Скольжение для заданного момента: %.4f\n", sddot);
+fprintf("Коэффициент регулирования: %.4f\n", kddot);
 
 Sdot = sort([0:0.01:1 skrdot sddot]);
 Ndot = [n0dot*(1-Sdot)];
@@ -210,13 +210,13 @@ grid on;
 legend("Естественная характеристика n(M)", "Искуственная характеристика n(M`)");
 ylabel("Скорость вращения ротора n, об/мин");
 xlabel("Момент на валу М, Нм");
-xline(Mmax, '--k', 'M_{max} = M`_{max}', 'HandleVisibility','off');
-xline(Md, '--k', 'M`_D = M_D', 'HandleVisibility','off');
+%xline(Mmax, '--k', 'M_{max} = M`_{max}', 'HandleVisibility','off');
+%xline(Md, '--k', 'M`_D = M_D', 'HandleVisibility','off');
 title("Естественная и искусственная механичесеие характеристики двигателя при изменении частоты f и соотношения U_1/f_1 = const")
 
-T = table(Sdot', Ndot', Mdot', 'VariableNames', {'s`','n`','M`'});
+%T = table(Sdot', Ndot', Mdot', 'VariableNames', {'s`','n`','M`'});
 
-writetable(T, fullfile(folder, 'data4.csv'));
+%writetable(T, fullfile(folder, 'data4.csv'));
 
 fprintf("----------------------------------------------------------\n");
 
@@ -229,23 +229,23 @@ lambdat = Mmaxt/Mt;
 ste = skrte/(lambdat + sqrt(lambdat^2 - 1));
 nte = n0 * (1 - ste);
 
-fprintf("Тормозной момент: %.3f\n", Mt);
-fprintf("Скорость вращения при заданном тормозном моменте: %.3f\n", nt);
-fprintf("Максимальный тормозной момент: %.3f\n", Mmaxt);
-fprintf("Критическое скольжение при торможении: %.3f\n", skrte);
-fprintf("Коэффициент нагрузки при торможении: %.3f\n", lambdat);
-fprintf("Скольжении при торможении: %.3f\n", ste);
-fprintf("Скорость вращения при торможении: %.3f\n", nte);
+fprintf("Тормозной момент: %.4f\n", Mt);
+fprintf("Скорость вращения при заданном тормозном моменте: %.4f\n", nt);
+fprintf("Максимальный тормозной момент: %.4f\n", Mmaxt);
+fprintf("Критическое скольжение при торможении: %.4f\n", skrte);
+fprintf("Коэффициент нагрузки при торможении: %.4f\n", lambdat);
+fprintf("Скольжении при торможении: %.4f\n", ste);
+fprintf("Скорость вращения при торможении: %.4f\n", nte);
 
 st = (n0 - nt) / n0;
 R2dop = R2 * ( st/ste - 1);
 skrt = skrte * (R2 + R2dop)/R2;
 nkrt = n0*(1-skrt);
 
-fprintf("Скольжении необходимое для прохождения через точку: %.3f\n", st);
-fprintf("Требуемое добавочное сопротивдление: %.3f\n", R2dop);
-fprintf("Критическое скольжение при торможении: %.3f\n", skrt);
-fprintf("Критическая скорость при торможении: %.3f\n", nkrt);
+fprintf("Скольжении необходимое для прохождения через точку: %.4f\n", st);
+fprintf("Требуемое добавочное сопротивдление: %.4f\n", R2dop);
+fprintf("Критическое скольжение при торможении: %.4f\n", skrt);
+fprintf("Критическая скорость при торможении: %.4f\n", nkrt);
 
 
 
@@ -263,13 +263,13 @@ grid on;
 legend("Естественная характеристика n(M)", "Искуственная характеристика n(M`)");
 ylabel("Скорость вращения ротора n, об/мин");
 xlabel("Момент на валу М, Нм");
-xline(Mmaxt, '--k', 'M_{max} = M`_{maxt}', 'HandleVisibility','off');
-xline(Mt, '--k', 'Mt', 'HandleVisibility','off');
+%xline(Mmaxt, '--k', 'M_{max} = M`_{maxt}', 'HandleVisibility','off');
+%xline(Mt, '--k', 'Mt', 'HandleVisibility','off');
 title("Естественная и искусственная механичесеие характеристики двигателя при генераторном торможении")
 
-T = table(Sdot', Ndot', M', Mdot', 'VariableNames', {'s','n', 'M', 'M`'});
+%T = table(Sdot', Ndot', M', Mdot', 'VariableNames', {'s','n', 'M', 'M`'});
 
-writetable(T, fullfile(folder, 'data5.csv'));
+%writetable(T, fullfile(folder, 'data5.csv'));
 
 fprintf("----------------------------------------------------------\n");
 
@@ -284,13 +284,13 @@ skrt = st * (lambdat + sqrt(lambdat^2 - 1));
 nkrt = n0*(1-skrt);
 R2dop = R2 * ( skrt/skr - 1);
 
-fprintf("Тормозной момент: %.3f\n", Mt);
-fprintf("Скорость вращения при заданном тормозном моменте: %.3f\n", nt);
-fprintf("Скольжении при торможении: %.3f\n", st);
-fprintf("Коэффициент нагрузки при торможении: %.3f\n", lambdat);
-fprintf("Критическое скольжение при торможении: %.3f\n", skrt);
-fprintf("Критическая скорость при торможении: %.3f\n", nkrt);
-fprintf("Требуемое добавочное сопротивдление: %.3f\n", R2dop);
+fprintf("Тормозной момент: %.4f\n", Mt);
+fprintf("Скорость вращения при заданном тормозном моменте: %.4f\n", nt);
+fprintf("Скольжении при торможении: %.4f\n", st);
+fprintf("Коэффициент нагрузки при торможении: %.4f\n", lambdat);
+fprintf("Критическое скольжение при торможении: %.4f\n", skrt);
+fprintf("Критическая скорость при торможении: %.4f\n", nkrt);
+fprintf("Требуемое добавочное сопротивдление: %.4f\n", R2dop);
 
 
 
@@ -308,12 +308,12 @@ grid on;
 legend("Естественная характеристика n(M)", "Искуственная характеристика n(M`)");
 ylabel("Скорость вращения ротора n, об/мин");
 xlabel("Момент на валу М, Нм");
-xline(Mmax, '--k', 'M_{max} = M`_{maxt}', 'HandleVisibility','off');
-xline(Mt, '--k', 'Mt', 'HandleVisibility','off');
+%xline(Mmax, '--k', 'M_{max} = M`_{maxt}', 'HandleVisibility','off');
+%xline(Mt, '--k', 'Mt', 'HandleVisibility','off');
 title("Естественная и искусственная механичесеие характеристики двигателя при торможении противовключением")
 
-T = table(Sdot', Ndot', M', Mdot', 'VariableNames', {'s','n', 'M', 'M`'});
+%T = table(Sdot', Ndot', M', Mdot', 'VariableNames', {'s','n', 'M', 'M`'});
 
-writetable(T, fullfile(folder, 'data6.csv'));
+%writetable(T, fullfile(folder, 'data6.csv'));
 
 fprintf("----------------------------------------------------------\n");
