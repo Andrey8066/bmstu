@@ -765,8 +765,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S"
-      binary: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S"
+      source: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu"
+      binary: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: ""
@@ -777,10 +777,10 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S'
+        Change Dir: '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu'
         
-        Run Build Command(s): /home/andrey/.vscode-oss/extensions/kylinideteam.kylin-cmake-tools-0.0.4-universal/res/ninja/linux-x64/ninja -v cmTC_5522a
-        [1/2] /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+        Run Build Command(s): /home/andrey/.vscode-oss/extensions/kylinideteam.kylin-cmake-tools-0.0.4-universal/res/ninja/linux-x64/ninja -v cmTC_44585
+        [1/2] /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         clang version 21.1.6
         Target: x86_64-pc-linux-gnu
         Thread model: posix
@@ -792,7 +792,7 @@ events:
         Candidate multilib: 32;@m32
         Selected multilib: .;@m64
          (in-process)
-         "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb "-fdebug-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S" -v "-fcoverage-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S" -resource-dir /usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+         "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb "-fdebug-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu" -v "-fcoverage-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu" -resource-dir /usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp
         clang -cc1 version 21.1.6 based upon LLVM 21.1.6 default target x86_64-pc-linux-gnu
         ignoring nonexistent directory "/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include"
         ignoring nonexistent directory "/include"
@@ -805,7 +805,7 @@ events:
          /usr/local/include
          /usr/include
         End of search list.
-        [2/2] : && /usr/bin/clang++  -v -Wl,-v CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_5522a   && :
+        [2/2] : && /usr/bin/clang++  -v -Wl,-v CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_44585   && :
         clang version 21.1.6
         Target: x86_64-pc-linux-gnu
         Thread model: posix
@@ -816,7 +816,7 @@ events:
         Candidate multilib: .;@m64
         Candidate multilib: 32;@m32
         Selected multilib: .;@m64
-         "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_5522a /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o
+         "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_44585 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o
         GNU ld (GNU Binutils) 2.45.1
         
       exitCode: 0
@@ -856,10 +856,10 @@ events:
       Parsed CXX implicit link information:
         link line regex: [^( *|.*[/\\])(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\\]+-)?ld|collect2)[^/\\]*( |$)]
         linker tool regex: [^[ 	]*(->|"|[0-9]+>[ 	-]*Build:[ 	0-9]+ ms[ 	]*)?[ 	]*(([^"]*[/\\])?(ld[0-9]*(|\\.[a-rt-z][a-z]*|\\.s[a-np-z][a-z]*|\\.so[a-z]+)))("|,| |$)]
-        ignore line: [Change Dir: '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S']
+        ignore line: [Change Dir: '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu']
         ignore line: []
-        ignore line: [Run Build Command(s): /home/andrey/.vscode-oss/extensions/kylinideteam.kylin-cmake-tools-0.0.4-universal/res/ninja/linux-x64/ninja -v cmTC_5522a]
-        ignore line: [[1/2] /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [Run Build Command(s): /home/andrey/.vscode-oss/extensions/kylinideteam.kylin-cmake-tools-0.0.4-universal/res/ninja/linux-x64/ninja -v cmTC_44585]
+        ignore line: [[1/2] /usr/bin/clang++   -v -MD -MT CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -MF CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o.d -o CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [clang version 21.1.6]
         ignore line: [Target: x86_64-pc-linux-gnu]
         ignore line: [Thread model: posix]
@@ -874,7 +874,7 @@ events:
         ignore line: [Selected multilib: .]
         ignore line: [@m64]
         ignore line: [ (in-process)]
-        ignore line: [ "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb "-fdebug-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S" -v "-fcoverage-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-fbO63S" -resource-dir /usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+        ignore line: [ "/usr/bin/clang++" -cc1 -triple x86_64-pc-linux-gnu -emit-obj -disable-free -clear-ast-before-backend -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -pic-is-pie -mframe-pointer=all -fmath-errno -ffp-contract=on -fno-rounding-math -mconstructor-aliases -funwind-tables=2 -target-cpu x86-64 -tune-cpu generic -debugger-tuning=gdb "-fdebug-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu" -v "-fcoverage-compilation-dir=/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-8031Tu" -resource-dir /usr/lib/clang/21 -dependency-file CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o.d -MT CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -sys-header-deps -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1 -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/x86_64-pc-linux-gnu -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../include/c++/15.2.1/backward -internal-isystem /usr/lib/clang/21/include -internal-isystem /usr/local/include -internal-isystem /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include -internal-externc-isystem /include -internal-externc-isystem /usr/include -fdeprecated-macro -ferror-limit 19 -stack-protector 2 -fgnuc-version=4.2.1 -fskip-odr-check-in-gmf -fcxx-exceptions -fexceptions -faddrsig -D__GCC_HAVE_DWARF2_CFI_ASM=1 -o CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
         ignore line: [clang -cc1 version 21.1.6 based upon LLVM 21.1.6 default target x86_64-pc-linux-gnu]
         ignore line: [ignoring nonexistent directory "/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../x86_64-pc-linux-gnu/include"]
         ignore line: [ignoring nonexistent directory "/include"]
@@ -887,7 +887,7 @@ events:
         ignore line: [ /usr/local/include]
         ignore line: [ /usr/include]
         ignore line: [End of search list.]
-        ignore line: [[2/2] : && /usr/bin/clang++  -v -Wl -v CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_5522a   && :]
+        ignore line: [[2/2] : && /usr/bin/clang++  -v -Wl -v CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -o cmTC_44585   && :]
         ignore line: [clang version 21.1.6]
         ignore line: [Target: x86_64-pc-linux-gnu]
         ignore line: [Thread model: posix]
@@ -901,7 +901,7 @@ events:
         ignore line: [@m32]
         ignore line: [Selected multilib: .]
         ignore line: [@m64]
-        link line: [ "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_5522a /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o]
+        link line: [ "/usr/bin/ld" --hash-style=gnu --build-id --eh-frame-hdr -m elf_x86_64 -pie -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o cmTC_44585 /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1 -L/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64 -L/lib/../lib64 -L/usr/lib64 -L/lib -L/usr/lib -v CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtendS.o /usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crtn.o]
           arg [/usr/bin/ld] ==> ignore
           arg [--hash-style=gnu] ==> ignore
           arg [--build-id] ==> ignore
@@ -912,7 +912,7 @@ events:
           arg [-dynamic-linker] ==> ignore
           arg [/lib64/ld-linux-x86-64.so.2] ==> ignore
           arg [-o] ==> ignore
-          arg [cmTC_5522a] ==> ignore
+          arg [cmTC_44585] ==> ignore
           arg [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o] ==> obj [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/Scrt1.o]
           arg [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o] ==> obj [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib64/crti.o]
           arg [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o] ==> obj [/usr/bin/../lib64/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o]
@@ -923,7 +923,7 @@ events:
           arg [-L/lib] ==> dir [/lib]
           arg [-L/usr/lib] ==> dir [/usr/lib]
           arg [-v] ==> ignore
-          arg [CMakeFiles/cmTC_5522a.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+          arg [CMakeFiles/cmTC_44585.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
           arg [-lstdc++] ==> lib [stdc++]
           arg [-lm] ==> lib [m]
           arg [-lgcc_s] ==> lib [gcc_s]
@@ -972,8 +972,8 @@ events:
     checks:
       - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
     directories:
-      source: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-qVPlKf"
-      binary: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-qVPlKf"
+      source: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-FWdgSD"
+      binary: "/home/andrey/Documents/BMSTU/PRV/\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-FWdgSD"
     cmakeVariables:
       CMAKE_CXX_COMPILER_CLANG_SCAN_DEPS: "/usr/bin/clang-scan-deps"
       CMAKE_CXX_FLAGS: ""
@@ -983,11 +983,11 @@ events:
       variable: "CMAKE_HAVE_LIBC_PTHREAD"
       cached: true
       stdout: |
-        Change Dir: '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-qVPlKf'
+        Change Dir: '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-FWdgSD'
         
-        Run Build Command(s): /home/andrey/.vscode-oss/extensions/kylinideteam.kylin-cmake-tools-0.0.4-universal/res/ninja/linux-x64/ninja -v cmTC_93749
-        [1/2] /usr/bin/clang++ -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu++17 -MD -MT CMakeFiles/cmTC_93749.dir/src.cxx.o -MF CMakeFiles/cmTC_93749.dir/src.cxx.o.d -o CMakeFiles/cmTC_93749.dir/src.cxx.o -c '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-qVPlKf/src.cxx'
-        [2/2] : && /usr/bin/clang++   CMakeFiles/cmTC_93749.dir/src.cxx.o -o cmTC_93749   && :
+        Run Build Command(s): /home/andrey/.vscode-oss/extensions/kylinideteam.kylin-cmake-tools-0.0.4-universal/res/ninja/linux-x64/ninja -v cmTC_be507
+        [1/2] /usr/bin/clang++ -DCMAKE_HAVE_LIBC_PTHREAD  -std=gnu++17 -MD -MT CMakeFiles/cmTC_be507.dir/src.cxx.o -MF CMakeFiles/cmTC_be507.dir/src.cxx.o.d -o CMakeFiles/cmTC_be507.dir/src.cxx.o -c '/home/andrey/Documents/BMSTU/PRV/Лаборатторная работа 1/task2/build/CMakeFiles/CMakeScratch/TryCompile-FWdgSD/src.cxx'
+        [2/2] : && /usr/bin/clang++   CMakeFiles/cmTC_be507.dir/src.cxx.o -o cmTC_be507   && :
         
       exitCode: 0
 ...

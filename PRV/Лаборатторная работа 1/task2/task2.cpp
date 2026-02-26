@@ -61,13 +61,16 @@ int main() {
   vector<thread> threadsMutex;
   vector<thread> threadsAtomic;
 
-  timeProcces(M, N, bank);
-  timeProcces(M, N, bankMutex);
-  timeProcces(M, N, bankAtomic);
+  int timeBank = timeProcces(M, N, bank);
+  int timeBankMutex = timeProcces(M, N, bankMutex);
+  int timeBankAtomic = timeProcces(M, N, bankAtomic);
 
   bank.print();
+  cout << "Время выполнения bank: " << timeBank << endl;
   bankMutex.print();
+  cout << "Время выполнения bankMutex: " << timeBankMutex << endl;
   bankAtomic.print();
+  cout << "Время выполнения bankAtomic: " << timeBankAtomic << endl;
 
   return 0;
 }
