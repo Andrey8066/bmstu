@@ -12,4 +12,6 @@ public:
   double getAverage();
   void print();
   void addMark(Mark mark);
+  void addMark(std::string mSubject, double mGrade);
+  RecordBook getRecordBook();
 };

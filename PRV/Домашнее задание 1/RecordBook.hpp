@@ -19,4 +19,7 @@ public:
   void addMark(Mark mark);
   double getAverage();
   void print();
+  int getMarksQuantity();
+  int getNumber();
+  std::vector<std::shared_ptr<Mark>> getMarks();
 };
