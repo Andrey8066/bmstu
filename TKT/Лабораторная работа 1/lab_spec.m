@@ -1,5 +1,3 @@
-pkg load signal
-graphics_toolkit qt
 function [Xk, F] = lab_spectra(Xn, n, fd, param)
     Xn = Xn(:);
     switch param 
@@ -16,7 +14,8 @@ function [Xk, F] = lab_spectra(Xn, n, fd, param)
     end
     Xk = fft(Xn, n);
     Xk = abs(Xk(1:n/2+1));
-    Xk = Xk(:);
+    Xk = Xk/n;
+    Xk(2:end-1) = 2 * Xk(2:end-1);
     F = (0:n/2)' * (fd/n);
 
 end
@@ -24,14 +23,15 @@ end
 t_min = 0;
 t_max = 2;
 
-t = [0:0.01:2];
+t = [t_min:0.01:t_max];
 Xn = cos(2*pi*25*t)+5;
 
 [Xk , F] = lab_spectra(Xn, 200, 100, 'all');
-figure, plot(F, Xk);
+figure, plot(F, Xk, 'LineWidth', 2);
+grid on; 
 xlabel('Частота, Гц');
 ylabel('|X(f)|');
-grid on;
+
 
 
 N = [51, 201, 601];
@@ -39,7 +39,7 @@ N = [51, 201, 601];
 X = cell(length(N), 1);
 F = cell(length(N), 1);
 for i = 1:length(N)
-    t = [t_min:(t_max-t_min)/(N(i)-1):t_max];
+    t = [t_min:0.01:t_max];
     Xn = cos(2*pi*25*t)+5;
     fd = 1/(t(2)-t(1));
     [Xk , Fk] = lab_spectra(Xn, N(i), fd, 'all');
@@ -59,18 +59,20 @@ hold on;
 plot(F{3}, X{3}, 'LineWidth', 2);
 grid on;
 hold on;
-legend("N = 601");
+legend(sprintf('N = %d', N(1)), sprintf('N = %d', N(2)), sprintf('N = %d', N(3)));
 legend show;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
 
 T_max = [2, 10, 18];
 
 X = cell(length(T_max), 1);
 F = cell(length(T_max), 1);
-for i = 1:length(N)
+for i = 1:length(T_max)
     t = [t_min:0.01:T_max(i)];
     Xn = cos(2*pi*25*t)+5;
     fd = 1/(t(2)-t(1));
-    [Xk , Fk] = lab_spectra(Xn, (T_max(i)-t_min)/0.01, fd, 'all');
+    [Xk , Fk] = lab_spectra(Xn, length(t), fd, 'all');
     X{i} = Xk;
     F{i} = Fk;
 end
@@ -85,20 +87,20 @@ hold on;
 plot(F{3}, X{3}, 'LineWidth', 2);
 grid on;
 hold on;
-legend("t_max = 2", "t_max = 10", "t_max = 18");
+legend(sprintf('t_{max} = %d', T_max(1)), sprintf('t_{max} = %d', T_max(2)), sprintf('t_{max} = %d', T_max(3)));
 legend show;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
 
-
-
-Param = ['all', 'nomean'];
+Param = {'all', 'nomean'};
 
 X = cell(length(Param), 1);
 F = cell(length(Param), 1);
-for i = 1:length(N)
+for i = 1:length(Param)
     t = [t_min:0.01:t_max];
     Xn = cos(2*pi*25*t)+5;
     fd = 1/(t(2)-t(1));
-    [Xk , Fk] = lab_spectra(Xn, 200, fd, Param(i));
+    [Xk , Fk] = lab_spectra(Xn, length(t), fd, Param{i});
     X{i} = Xk;
     F{i} = Fk;
 end
@@ -112,5 +114,85 @@ grid on;
 hold on;
 legend("param = all", "param = nomean");
 legend show;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+
+
+
+
+Param = {'all', 'nowindow'};
+
+X = cell(length(Param), 1);
+F = cell(length(Param), 1);
+for i = 1:length(Param)
+    t = [t_min:0.01:t_max];
+    Xn = cos(2*pi*25*t)+5;
+    fd = 1/(t(2)-t(1));
+    [Xk , Fk] = lab_spectra(Xn, length(t), fd, Param{i});
+    X{i} = Xk;
+    F{i} = Fk;
+end
+
+figure;
+plot(F{1}, X{1}, 'LineWidth', 2);
+grid on;
+hold on;
+plot(F{2}, X{2}, 'LineWidth', 2);
+grid on;
+hold on;
+legend("param = all", "param = nowindow");
+legend show;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+
+
+
+freq = [10, 50, 100, 125, 200];
+
+X = cell(length(freq), 1);
+F = cell(length(freq), 1);
+t = [t_min:0.01:t_max];
+X0 = cos(2*pi*25*t)+5;
+[Xk0 , Fk0] = lab_spectra(X0, length(t), fd, 'all');
+for i = 1:length(freq)
+    Xn = cos(2*pi*freq(i)*t)+5;
+    fd = 1/(t(2)-t(1));
+    [Xk , Fk] = lab_spectra(Xn, length(t), fd, 'all');
+    X{i} = Xk;
+    F{i} = Fk;
+end
+
+figure;
+plot(F{1}, X{1}, Fk0, Xk0, 'LineWidth', 2);
+legend("f = 10", "f = 25");
+grid on;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+figure;
+plot(F{2}, X{2}, Fk0, Xk0, 'LineWidth', 2);
+legend("f = 50", "f = 25");
+grid on;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+figure;
+plot(F{3}, X{3}, Fk0, Xk0, 'LineWidth', 2);
+legend("f = 100", "f = 25");
+grid on;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+figure;
+plot(F{4}, X{4}, Fk0, Xk0, 'LineWidth', 2);
+legend("f = 125", "f = 25");
+grid on;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+figure;
+plot(F{5}, X{5}, Fk0, Xk0, 'LineWidth', 2);
+legend("f = 200", "f = 25");
+grid on;
+xlabel('Частота, Гц');
+ylabel('|X(f)|');
+
+
 
 

@@ -9,6 +9,7 @@
 
 using namespace std;
 
+// Функция используемая в потоках для взаимодействия с балансом
 template <typename T>
 void randomOperation(int n, int N, vector<long long> &control, T &bank) {
   mt19937 gen(random_device{}());
@@ -26,6 +27,7 @@ void randomOperation(int n, int N, vector<long long> &control, T &bank) {
   }
 }
 
+// Вычесление суммы в векторе
 long long getSum(vector<long long> &control) {
   long long res = 0;
   for (long long x : control) {
@@ -53,8 +55,9 @@ template <typename T> int timeProcces(int M, int N, T &bank) {
 
   auto time = chrono::duration_cast<chrono::microseconds>(end - start);
 
-  cout << "Операции заняли " << time.count() << endl;
-  cout << getSum(control) << endl;
+  cout << "\033[31mОперации заняли " << time.count() << endl;
+  cout << "Баланс счета " << bank.getBalance() << endl;
+  cout << "Ожидаемое изменение счета " << getSum(control) << "\033[0m" << endl;
 
   return time.count();
 }
