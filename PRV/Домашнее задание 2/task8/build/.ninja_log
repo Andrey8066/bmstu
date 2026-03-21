@@ -1,6 +1,0 @@
-# ninja log v7
-3	543	1773272976360822201	CMakeFiles/task8.dir/main.cpp.o	e0fa449ea425050a
-2	419	1773272976357945393	CMakeFiles/task8.dir/MultithreadingSimulator.cpp.o	8f19a56af42a8582
-3	772	1773273036504908881	CMakeFiles/task8.dir/VirtualThread.cpp.o	52eb9b80ac92486a
-2	905	1773272816946894632	CMakeFiles/task8.dir/Task.cpp.o	9c0a7ae18ee23007
-772	912	1773273037273895862	task8	145b8f0ffeed7f5
