@@ -1,7 +1,7 @@
 function [x_min, y_min, k] = dihotom(func, a, b, e)
 
     k = 0;
-    delta = 0.4 * e;
+    delta = e;
 
     while abs(b-a)  > e
 
