@@ -1,0 +1,246 @@
+\documentclass[a4paper, 14pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{array}
+\usepackage{cellspace}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{tocloft}
+\usepackage{amsmath}
+\usepackage{multicol}
+\setlength{\cellspacetoplimit}{20pt}
+\setlength{\cellspacebottomlimit}{20pt}
+
+\onehalfspacing
+
+\geometry{
+  a4paper,
+  left=30mm,
+  right=20mm,
+  top=20mm,
+  bottom=20mm
+}
+
+\setlength{\parindent}{1.25cm}
+
+\graphicspath{ {images/} }
+\captionsetup[figure]{
+  labelsep=period,
+  justification=centering
+}
+
+\renewcommand{\figurename}{Рисунок}
+\renewcommand{\contentsname}{Оглавление}
+
+\titleformat{\section}[block]{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{\parskip}{-\parskip}
+\titlespacing*{\subsection}{0pt}{\parskip}{-\parskip}
+
+\renewcommand{\cftbeforetoctitleskip}{-30pt}
+\renewcommand{\cftaftertoctitleskip}{-10pt}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{center}
+    \small
+    \underline{
+      \begin{minipage}{0.2\textwidth}
+        \centering
+        \includegraphics[width=3cm]{BMSTU logo}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.8\textwidth}
+        \begin{center}
+
+          \textbf{Министерство науки и высшего образования Российской Федерации
+            Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный технический университет имени Н.Э. Баумана национальный исследовательский университет»
+          (МГТУ им. Н.Э. Баумана)}
+        \end{center}
+      \end{minipage}
+
+    }
+
+    \vspace{7cm}
+    \Large
+    \textbf{Модульное домашнее задание №1} \\
+    Расчет вторичного источника электропитания с\\
+    индуктивно-емкостным фильтром
+    \\
+    \vspace{5cm}
+    \normalsize
+    \begin{tabular}{p{8cm}p{6cm}}
+      \textbf{Студент группы ИУ1-31Б} & Соин А. Д. \\
+      & «26» октября 2025 г. \\
+      & \\
+      \textbf{Преподаватель} & Васюков С. А. \\
+      & «\underline{\hspace{1.5cm}}»\underline{\hspace{2.5cm}}2025 г. \\
+    \end{tabular}
+    \vfill{\Large{Москва, 2025}}
+  \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Исходные данные}
+\begin{center}
+  Вариант №12
+\end{center}
+\begin{table}[H]
+  \centering
+  \resizebox{\textwidth}{!}{
+    \begin{tabular}{|l|l|l|l|l|l|l|l|l|}
+      \hline
+      \textbf{Сетевое напряжение $U_1$, В} &
+      \textbf{Частота $f$, Гц} &
+      \textbf{Выпрямленное напряжение $U_\text{н}$, В} &
+      \textbf{Ток $I_\text{н}$, A} &
+      \textbf{$I_\text{н,min}$} &
+      \textbf{Коэфф. пульсаций $k_\text{p}$} &
+      \textbf{Сталь} &
+      \textbf{Магнитопровод} &
+      \textbf{Схема} \\ \hline
+      36 & 50 & 10 & 1.5 & 1.2 & 1.5 & Э42 & броневой & Трехфазная мостовая \\ \hline
+    \end{tabular}
+  }
+\end{table}
+
+\section{Ход работы}
+
+Рассчитаем вторичный источник электропитапитания. Режим работы- продолжительный, нагрузка – активная.
+Изобразим схему источника электропитания, включающую трансформатор, вентильную группу (диоды), фильтр и нагрузку.
+Рассчитаем основные параметры полупроводникового диода для выбранных схемы и фильтры.
+
+\section{Приближенный расчет диода}
+
+Для расчета используем формулы из таблицы 2 для схемы Ларионова.
+
+Номинальное напряжение: $U_\text{н} = 10 \text{В}$.
+
+Напряжение холостого хода примем равным 1.1 $U_\text{н}$: $U_\text{хх} = 1.1 \cdot U_\text{н}  = 1.1 \cdot 10 = 11 \text{В}$.
+
+Число фаз выпрямления: $p = 6$.
+
+Среднее значение тока диода: $I_\text{н ср} = 0.33 \cdot I_\text{н} = 0.33 \cdot 1.5 = 0.5$.
+
+Обратное напрядение на диоде: $U_\text{обр макс} = 1.05 \cdot U_\text{хх} = 1.05 \cdot 11 = 11.05$
+
+Под данные параметры подходит диод КД247А с характеристиками $I_\text{н ср} = 1 \text{А}, \space U_\text{обр макс} = 100 \text{В}, \space f = 150 \text{кГц}$.
+
+\section{Расчет ориентировочных значений активного сопротивления фазы вторичной
+  обмотки и индуктивности рассеяния фазы вторичной обмотки трансформатора
+}
+
+Амплитудное значение тока диода:  $I_\text{д} =  I_\text{н ср} = 0.5 \text{А}$.
+
+$k_r = 2.5$
+
+$k_L = 10^{-3}$
+
+Приближенное значение номинальной выходной мощности $P_\text{вых} = U_\text{н} \cdot I_\text{н} = 10 \cdot 1.5 = 15 \text{Вт}$.
+
+При частоте $f = 50 Гц$ и мощности 15 Вт для стали марки Э42 индукция будет находиться в промежутке $ [1.1, 1.26]$. Примем $B_\text{макс} \approx 1.2 \text{ Тл}$.
+
+Число стерженей трансформатора, так как трансформатор броневого типа: $s = 1$.
+
+Тогда сопротивление фазы вторичной обмотки:
+
+$R_{\text{ТР}} = k_r \frac{U_H}{I_H f B_{\text{макс}}} \sqrt[4]{\frac{s f B_{\text{макс}}}{U_H I_H}} = 2.5 \frac{10}{1.5\cdot50\cdot1.2}\sqrt[4]{\frac{1\cdot50\cdot1.2}{10\cdot1.5}} \approx 0.393 \text{Ом}$
+
+Индуктивность рассеяния фазы вторичной обмотки:
+
+$L_S = k_L \frac{s U_H}{I_H f B_{\text{макс}}} \frac{1}{\sqrt[4]{\frac{s f B_{\text{макс}}}{U_H I_H}}} = 10^{-3} \frac{1\cdot10}{1.5\cdot50\cdot1.2}\frac{1}{\sqrt[4]{\frac{1\cdot50\cdot1.2}{10\cdot1.5}}} \approx 78.6 \text{мкГн}$
+
+\section{Расчет падения напряжения на трансформаторе}
+
+Падение напряжения на приведенном активном сопротивлении:
+
+$\Delta U_r = 2 \cdot I_\text{н} \cdot R_\text{ТР} = 2 * 1.5 \cdot 0.393 = 1.179 \text{В}$
+
+Падение напряжение на приведенном реактивном сопротивлении:
+
+$\Delta U_L = 6 \cdot I_\text{н} \cdot f \cdot \pi \cdot L_S = 6 \cdot 1.5 \cdot 50 \cdot 3.14 \cdot 78.6 \cdot 10^{-6}= 0.111 \text{В}$\
+
+\section{Определение падения напряжения на диодах схемы}
+Падение напряжения на диоде КД247А: $\Delta U_\text{д} = 1.3 \text{В}$.
+
+Приведенное сопротивление диода: $R_\text{пр} = \frac{\Delta U_\text{д}}{I_\text{н}} = \frac{1.3}{1.5} = 0.867 \text{Ом} $.
+
+Падение напряжения на диодах схемы: $\Delta U_\text{сх} = 2 \cdot I_\text{н} \cdot R_\text{пр} = 2 \cdot 0.867 \cdot 1.5 = 2.6 \text{В}$.
+
+\section{Расчет падения напряжения на трансформаторе}
+
+Для расчитываемой схемы из таблицы 3 имеем $\Delta U_\text{др} = (0.2 - 0.14)U_\text{н} $. Возьмем среднее значение $\Delta U_\text{др} = 0.17 \cdot U_\text{н} = 0.17 \cdot 10 = 1.7 \text{В}$.
+
+\section{Уточнение напряжения холостого хода}
+$U_\text{хх} = U_\text{н} + \Delta U_\text{r} + \Delta U_\text{L} + \Delta U_\text{сх} + \Delta U_\text{др} = 10 + 1.179 + 0.111 + 2.6 + 1.7 = 15.59 \text{В} $.
+
+Уточненное значение отличаетсмя от приближенного, что не является критичным.
+
+\section{Уточнение обратного напряжения на диоде}
+
+$U_\text{обр макс}$ должно быть меньше, чем максимальное обратное напряжение выбранного диода.
+
+$U_\text{обр макс} = 1.05 \cdot U_\text{хх} = 1.05 \cdot 15.59 = 16,37 \text{В}$
+
+Полученное значение не превышает максимального напряжения обратного тока на выбранном диоде.
+
+\section{Вычисление ЭДС фазы вторичной обмотки трансформатора и действующее значение тока}
+
+Действующая ЭДС вторичной обмотки: $E_2 = 0.43 \cdot U_\text{хх} = 0.43 \cdot 15.59 = 6.70 \text{В}$.
+
+Действующий ток вторичной обмотки: $I_2 = 0.82 \cdot I_\text{н} = 0.82 \cdot 1.5 = 1.23 \text{А}$.
+
+\section{Уточнение габаритной мощности }
+Габаритная мощность трансформатора: $P_\text{габ} = 1.05 \cdot U_\text{хх} \cdot I_\text{н} = 1.05 \cdot 15.59 \cdot 1.5 \approx 24.55 \text{Вт}$.
+
+\section{Вычисление оптимальной индуктивности и подбор дросселя фильтра}
+$L_{\text{др опт}} = \frac{2U_\text{н}}{(p^2 - 1) p f I_\text{н мин} \pi} = \frac{2\cdot 10}{(6^2 - 1)\cdot 6 \cdot 50 \cdot 1.2 \cdot 3.14} = 0.51 \text{мГн}$
+
+Самый подходящий из предложенных дросселей - Д125, его характеристики :$I_\text{н} = 6.3 \text{А},\space L_\text{др} = 0.0006 \text{Тл}, \space R_\text{др} = 0.04 \text{Ом}$.
+
+\section{Вычисление коэффициента сглаживания и подбор фильтра}
+Для схемы Ларионова коэффициент пульсации на входе $k_\text{п0} = 0.057$, требуемый коэффициент на выходе $k_\text{п} = 0.015$. Тогда коэффициент сглаживания фильтра должен быть равен $q = \frac{k_\text{п0}}{k_\text{п}} = \frac{0.057}{0.015} = 3.8$.
+
+Для частоты тока $f = 50 \text{Гц}$ найдем емкость необходимого конденсатора: $C_\text{ф} = \frac{10\cdot(q+1)}{p^2 \cdot L_\text{др}} = \frac{10\cdot (3.8 + 1)}{6^2 \cdot 0.0006} \approx 2222 \text{мкФ}$.
+
+Был выбран конденсатор серии TREC GR c емкостью $C_\text{ф} = 3300 \text{мкФ}$ и рабочим напряжением $U_\text{к} = 25 \text{В}$.
+
+\section{Уточнение напряжений и токов в цепи}
+Падение напряжения на дросселе: $\Delta U_\text{др} =  I_\text{н} \cdot R_\text{др} = 1.5 \cdot 0.04 = 0.06 \text{В}$.
+
+Напряжение холостого хода: $U_\text{хх} = U_\text{н} + \Delta U_\text{r} + \Delta U_\text{L} + \Delta U_\text{сх} + \Delta U_\text{др} = 10 + 1.179 + 0.111 + 2.6 + 0.06 = 13.95  \text{В} $.
+
+$U_\text{обр макс} = 1.05 \cdot U_\text{хх} = 1.05 \cdot 13.95 = 14.65 \text{В}$.
+
+Действующая ЭДС вторичной обмотки: $E_2 = 0.43 \cdot U_\text{хх} = 0.43 \cdot 13.95 = 6.00 \text{В}$.
+
+Действующий ток вторичной обмотки: $I_2 = 1.23 \text{А}$
+коэффициент пеобразовния трансформатора: $k_\text{тр} = \frac{E_1}{E_2} = \frac{36}{6} = 6 \text{В}$
+Действующий ток первичной обмотки: Действующий ток вторичной обмотки: $I_2 = 0.82 \cdot \frac{I_\text{н}}{k_\text{тр}} = 0.82 \cdot \frac{1.5}{6} = 0.205 \text{А}$.
+
+\section{Нагрузочная характеристика выпрямителя}
+
+Представляет собой прямую линию и строится по двум точкам:
+\begin{enumerate}
+  \item холостой ход I = 0; U = Uхх.
+  \item номинальная нагрузка I = Iн ; U = Uн.
+\end{enumerate}
+
+По ее наклону можно определить внутреннее сопротивление выпрямителя:$R_\text{вн} = \frac{U_\text{хх}-U_\text{н}}{I_\text{н}}  = \frac{13.95 - 10 }{1.5} = 2.63 \text{Ом}$.
+
+\section{Моделирование}
+
+\end{document}
