@@ -1,0 +1,46 @@
+function [x, y, k] = rosenbrock(func, x0, maxlambda, maxk, epsilon)
+    
+    n = length(x0);
+    s = eye(n);
+    ei = eye(n);
+
+    i = 0;
+    k = 0;
+    x = x0;
+    lambda = zeros(1:n);
+    while k < maxk
+        for i = 1:n
+            lambda(i) = gold(func, x, -maxlambda, maxlambda, s(:, i), epsilon);
+            x = x  + s(:, i) * lambda(i);
+            k++;
+        end
+    if norm(x - x0) <= epsilon 
+       break
+    else
+        
+        a = zeros(n, n);
+        b = zeros(n, n);
+        
+        for i = 1:n
+            if lambda(i) == 0
+                a(:, i) = s(:, i);
+            else
+                for j = i : n
+                    a(:, i) = a(:, i) + s(:, j)*lambda(j);
+                end
+            end
+        end
+        for i = 1:n
+            b(:, i) = a(:, i);
+            for j = 1 : i-1
+                b(:, i) = b(:,i) -  (a(:,  i)' * s(:, j)) * s(:, j);
+            end
+                s(:, i) = b(:, i) / norm(b(:, i));
+        end
+    end
+
+    x0 = x;
+
+   end
+   y = func(x);
+end
