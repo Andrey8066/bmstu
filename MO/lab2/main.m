@@ -1,48 +1,147 @@
+clear;
+close all;
+clc;
 
-clc cls; clear; close all;
+x0         = [100; -50];
+maxiter    = 1000;
+epsilon    = 0.0001;
 
-functions = {@rosenbrockFunc, @ackleyFunc, @himmelblauFunc, @boothFunc, @rastriginFunc};
-functionsName = {"Rosenbrock’s function", "Ackley’s function", "Himmelblau’s function", "Booth’s function", "Rastrigin’s function"};
-start_points = {[10;-10], [10;-10], [10;-10], [10;-10], [10; 10]};
+% =========================================================================
+%  Rosenbrock's function  (минимум в [1,1])
+% =========================================================================
+fprintf("Rosenbrock's function :\n");
 
-maxlambda = 2;
-maxiter = 1000;
-epsilon = 0.0001;
+t = tic;
+[x, y, k] = coordDescent(@rosenbrockFunc, x0, 150, maxiter, epsilon);
+fprintf("Метод покоординатного спуска:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
+t = tic;
+[x, y, k] = patternSearch(@rosenbrockFunc, x0, 150, maxiter, epsilon);
+fprintf("Метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
-for i = 1:length(functions)
-    f = functions{i};
+t = tic;
+[x, y, k] = generalizedPatternSearch(@rosenbrockFunc, x0, 10, maxiter, epsilon);
+fprintf("Обобщённый метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
-    fprintf("%s :\n", functionsName{i});
-    t= tic;
-    [x, y, k] = coordDescent(f, start_points{i}, maxlambda, maxiter, epsilon);
-    time = toc(t);
-    fprintf("Метод покоординатного спуска:\nx = [%.3f, %.3f] , y = %.3f, k = %d,  Время выполнения = %.3f секунд\n", x, y, k, time);
+t = tic;
+[x, y, k] = rosenbrock(@rosenbrockFunc, x0, 150, maxiter, epsilon);
+fprintf("Метод Розенброка:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
+t = tic;
+[x, y, k] = powell(@rosenbrockFunc, x0, 150, maxiter, epsilon);
+fprintf("Метод Пауэлла:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
-    t = tic;
-    [x, y, k] = patternSearch(f, start_points{i}, maxlambda, maxiter, epsilon);
-    time = toc(t);
-    fprintf("Метод Хука-Дживса:\nx = [%.3f, %.3f], y = %.3f, k = %d,  Время выполнения = %.3f секунд\n", x, y, k, time);
+fprintf("\n%s\n\n", repmat('-', 1, 70));
 
+% =========================================================================
+%  Ackley's function  (минимум в [0,0], значение 0)
+%  Функция сильно мультимодальна — нужен широкий отрезок, но не слишком
+%  большой, иначе золотое сечение застрянет в боковом минимуме.
+% =========================================================================
+fprintf("Ackley's function :\n");
 
-    t = tic;
-    [x, y, k] = generalizedPatternSearch(f, start_points{i}, maxlambda, maxiter, epsilon);
-    time = toc(t);
-    fprintf("Обобщенный метод Хука-Дживса :\nx = [%.3f, %.3f], y = %.3f, k = %d,  Время выполнения = %.3f секунд\n", x, y, k, time);
+t = tic;
+[x, y, k] = coordDescent(@ackleyFunc, x0, 120, maxiter, epsilon);
+fprintf("Метод покоординатного спуска:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
+t = tic;
+[x, y, k] = patternSearch(@ackleyFunc, x0, 120, maxiter, epsilon);
+fprintf("Метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
-    t = tic;
-    [x, y, k] = rosenbrock(f, start_points{i}, maxlambda, maxiter, epsilon);
-    time = toc(t);
-    fprintf("Метод Розенброка :\nx = [%.3f, %.3f], y = %.3f, k = %d,  Время выполнения = %.3f секунд\n", x, y, k, time);
+t = tic;
+[x, y, k] = generalizedPatternSearch(@ackleyFunc, x0, 120, maxiter, epsilon);
+fprintf("Обобщённый метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
+t = tic;
+[x, y, k] = rosenbrock(@ackleyFunc, x0, 100, maxiter, epsilon);
+fprintf("Метод Розенброка:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
-    t = tic;
-    [x, y, k] = powell(f, start_points{i}, maxlambda, maxiter, epsilon);
-    time = toc(t);
-    fprintf("Метод Пауэлла :\nx = [%.3f, %.3f], y = %.3f, k = %d,  Время выполнения = %.3f секунд\n", x, y, k, time);
+t = tic;
+[x, y, k] = powell(@ackleyFunc, x0, 100, maxiter, epsilon);
+fprintf("Метод Пауэлла:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
 
+fprintf("\n%s\n\n", repmat('-', 1, 70));
 
-    disp("\n ---------------------------------------------------------------------- \n")
-end
+% =========================================================================
+%  Himmelblau's function  (четыре минимума вблизи начала координат)
+%  Старт далеко — нужен широкий отрезок; метод придёт в ближайший минимум.
+% =========================================================================
+fprintf("Himmelblau's function :\n");
+
+t = tic;
+[x, y, k] = coordDescent(@himmelblauFunc, x0, 160, maxiter, epsilon);
+fprintf("Метод покоординатного спуска:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = patternSearch(@himmelblauFunc, x0, 160, maxiter, epsilon);
+fprintf("Метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = generalizedPatternSearch(@himmelblauFunc, x0, 160, maxiter, epsilon);
+fprintf("Обобщённый метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = rosenbrock(@himmelblauFunc, x0, 160, maxiter, epsilon);
+fprintf("Метод Розенброка:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = powell(@himmelblauFunc, x0, 160, maxiter, epsilon);
+fprintf("Метод Пауэлла:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+fprintf("\n%s\n\n", repmat('-', 1, 70));
+
+% =========================================================================
+%  Booth's function  (минимум в [1, 3], квадратичная — сходится легко)
+% =========================================================================
+fprintf("Booth's function :\n");
+
+t = tic;
+[x, y, k] = coordDescent(@boothFunc, x0, 110, maxiter, epsilon);
+fprintf("Метод покоординатного спуска:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = patternSearch(@boothFunc, x0, 110, maxiter, epsilon);
+fprintf("Метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = generalizedPatternSearch(@boothFunc, x0, 110, maxiter, epsilon);
+fprintf("Обобщённый метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = rosenbrock(@boothFunc, x0, 110, maxiter, epsilon);
+fprintf("Метод Розенброка:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = powell(@boothFunc, x0, 110, maxiter, epsilon);
+fprintf("Метод Пауэлла:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+fprintf("\n%s\n\n", repmat('-', 1, 70));
+
+% =========================================================================
+%  Rastrigin's function  (глобальный минимум в [0,0], значение 0)
+%  Очень мультимодальна — широкий отрезок необходим, чтобы перепрыгнуть
+%  через боковые ямы при большом начальном смещении.
+% =========================================================================
+fprintf("Rastrigin's function :\n");
+
+t = tic;
+[x, y, k] = coordDescent(@rastriginFunc, x0, 30, maxiter, epsilon);
+fprintf("Метод покоординатного спуска:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = patternSearch(@rastriginFunc, x0, 100, maxiter, epsilon);
+fprintf("Метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = generalizedPatternSearch(@rastriginFunc, x0, 50, maxiter, epsilon);
+fprintf("Обобщённый метод Хука-Дживса:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = rosenbrock(@rastriginFunc, x0, 50, maxiter, epsilon);
+fprintf("Метод Розенброка:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+t = tic;
+[x, y, k] = powell(@rastriginFunc, x0, 50, maxiter, epsilon);
+fprintf("Метод Пауэлла:\n  x = [%.4f, %.4f], y = %.6f, k = %d,  t = %.4f с\n", x(1), x(2), y, k, toc(t));
+
+fprintf("\n%s\n\n", repmat('-', 1, 70));

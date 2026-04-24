@@ -1,0 +1,159 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{  }\PYG{n+nb}{clc}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{clear}\PYG{p}{;}\PYG{+w}{ }\PYG{n}{close}\PYG{+w}{ }\PYG{l+s}{all}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} Путь сохранения \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{scriptPath}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{fileparts}\PYG{p}{(}\PYG{n+nb}{mfilename}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}fullpath\PYGZsq{}}\PYG{p}{));}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{n+nb}{isempty}\PYG{p}{(}\PYG{n}{scriptPath}\PYG{p}{)}
+\PYG{+w}{      }\PYG{n}{scriptPath}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{pwd}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{n}{outDir}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{scriptPath}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}results\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{  }\PYG{k}{if}\PYG{+w}{ }\PYG{o}{\PYGZti{}}\PYG{n+nb}{exist}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}dir\PYGZsq{}}\PYG{p}{)}
+\PYG{+w}{      }\PYG{n+nb}{mkdir}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{);}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} Исходные данные \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{data}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{];}\PYG{+w}{ }\PYG{c}{\PYGZpc{} 46 = 00101110 (MSB → LSB)}
+
+\PYG{+w}{  }\PYG{n}{Tb}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{samples}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{100}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n}{t}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{Tb}\PYG{o}{/}\PYG{n}{samples}\PYG{p}{:}\PYG{n}{Tb}\PYG{o}{*}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{Tb}\PYG{o}{/}\PYG{n}{samples}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nb}{expand}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{@(}\PYG{n}{bits}\PYG{p}{)}\PYG{+w}{ }\PYG{n+nb}{repelem}\PYG{p}{(}\PYG{n}{bits}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} NRZ (однополярный) \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{nrz\PYGZus{}uni}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{expand}\PYG{p}{(}\PYG{n}{data}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{nrz\PYGZus{}uni}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}NRZ Unipolar\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}NRZ\PYGZus{}unipolar.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} NRZ (биполярный) \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{nrz\PYGZus{}bi}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{expand}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{data}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{nrz\PYGZus{}bi}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}NRZ Bipolar\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}NRZ\PYGZus{}bipolar.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} NRZ\PYGZhy{}I (инверсия при 1) \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{nrz\PYGZus{}i1}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{));}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{1}
+\PYG{+w}{          }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{end}
+\PYG{+w}{      }\PYG{n}{nrz\PYGZus{}i1}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{end}
+\PYG{+w}{  }\PYG{n}{nrz\PYGZus{}i1}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{expand}\PYG{p}{(}\PYG{n}{nrz\PYGZus{}i1}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{nrz\PYGZus{}i1}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}NRZ\PYGZhy{}I (инверсия при 1)\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}NRZ\PYGZus{}I\PYGZus{}1.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} NRZ\PYGZhy{}I (инверсия при 0) \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{nrz\PYGZus{}i0}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{));}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}
+\PYG{+w}{          }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{end}
+\PYG{+w}{      }\PYG{n}{nrz\PYGZus{}i0}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{end}
+\PYG{+w}{  }\PYG{n}{nrz\PYGZus{}i0}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{expand}\PYG{p}{(}\PYG{n}{nrz\PYGZus{}i0}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{nrz\PYGZus{}i0}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}NRZ\PYGZhy{}I (инверсия при 0)\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}NRZ\PYGZus{}I\PYGZus{}0.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} AMI \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{ami}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{));}
+\PYG{+w}{  }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{1}
+\PYG{+w}{          }\PYG{n}{ami}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{          }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{else}
+\PYG{+w}{          }\PYG{n}{ami}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{end}
+\PYG{+w}{  }\PYG{k}{end}
+\PYG{+w}{  }\PYG{n}{ami}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{expand}\PYG{p}{(}\PYG{n}{ami}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{ami}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}AMI\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}AMI.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} RZ \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{rz}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{1}
+\PYG{+w}{          }\PYG{n}{rz}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{rz}\PYG{+w}{ }\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)];}
+\PYG{+w}{      }\PYG{k}{else}
+\PYG{+w}{          }\PYG{n}{rz}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{rz}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)];}
+\PYG{+w}{      }\PYG{k}{end}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{rz}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}RZ\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}RZ.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} Manchester \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{man}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}
+\PYG{+w}{          }\PYG{n}{man}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{man}\PYG{+w}{ }\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)];}
+\PYG{+w}{      }\PYG{k}{else}
+\PYG{+w}{          }\PYG{n}{man}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{man}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)];}
+\PYG{+w}{      }\PYG{k}{end}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{man}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Manchester (IEEE 802.3)\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}Manchester.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} Differential Manchester \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{diff\PYGZus{}man}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[];}
+\PYG{+w}{  }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+\PYG{+w}{      }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{data}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}
+\PYG{+w}{          }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{      }\PYG{k}{end}
+\PYG{+w}{      }\PYG{n}{first}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n+nb}{second}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{n}{level}\PYG{p}{;}
+\PYG{+w}{      }\PYG{n}{diff\PYGZus{}man}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{diff\PYGZus{}man}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{          }\PYG{n}{first}\PYG{o}{*}\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{),}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{          }\PYG{n+nb}{second}\PYG{o}{*}\PYG{n+nb}{ones}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{o}{/}\PYG{l+m+mi}{2}\PYG{p}{)];}
+\PYG{+w}{      }\PYG{n}{level}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{second}\PYG{p}{;}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}\PYG{+w}{ }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{diff\PYGZus{}man}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Differential Manchester\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{1.5}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}Diff\PYGZus{}Manchester.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+
+\PYG{+w}{  }\PYG{c}{\PYGZpc{}\PYGZpc{} \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{} 2B1Q \PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}\PYGZhy{}}
+\PYG{+w}{  }\PYG{n}{pairs}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{reshape}\PYG{p}{(}\PYG{n}{data}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{[])}\PYG{o}{\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n}{map}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{containers.Map}\PYG{p}{(\PYGZob{}}\PYG{l+s}{\PYGZsq{}00\PYGZsq{}}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}01\PYGZsq{}}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}10\PYGZsq{}}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}11\PYGZsq{}}\PYG{p}{\PYGZcb{},}\PYG{+w}{ }\PYG{p}{[}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{2.5}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{0.833}\PYG{+w}{ }\PYG{l+m+mf}{0.833}\PYG{+w}{ }\PYG{l+m+mf}{2.5}\PYG{p}{]);}
+
+\PYG{+w}{  }\PYG{n}{levels}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{size}\PYG{p}{(}\PYG{n}{pairs}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{));}
+\PYG{+w}{  }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n+nb}{size}\PYG{p}{(}\PYG{n}{pairs}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{)}
+\PYG{+w}{      }\PYG{n}{key}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{pairs}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{,:),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}d\PYGZpc{}d\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{      }\PYG{n}{levels}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{map}\PYG{p}{(}\PYG{n}{key}\PYG{p}{);}
+\PYG{+w}{  }\PYG{k}{end}
+
+\PYG{+w}{  }\PYG{n}{b2q}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{repelem}\PYG{p}{(}\PYG{n}{levels}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{samples}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n}{t2}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{n}{Tb}\PYG{o}{/}\PYG{n}{samples}\PYG{p}{:}\PYG{n}{Tb}\PYG{o}{*}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{levels}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{n}{Tb}\PYG{o}{/}\PYG{n}{samples}\PYG{p}{;}
+
+\PYG{+w}{  }\PYG{n+nb}{figure}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{stairs}\PYG{p}{(}\PYG{n}{t2}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{b2q}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}LineWidth\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mf}{1.5}\PYG{p}{);}
+\PYG{+w}{  }\PYG{n+nb}{title}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}2B1Q\PYGZsq{}}\PYG{p}{);}\PYG{+w}{ }\PYG{n}{grid}\PYG{+w}{ }\PYG{l+s}{on}\PYG{p}{;}
+\PYG{+w}{  }\PYG{n+nb}{ylim}\PYG{p}{([}\PYG{o}{\PYGZhy{}}\PYG{l+m+mf}{3.5}\PYG{+w}{ }\PYG{l+m+mf}{3.5}\PYG{p}{])}
+\PYG{+w}{  }\PYG{n+nb}{exportgraphics}\PYG{p}{(}\PYG{n+nb}{gcf}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{fullfile}\PYG{p}{(}\PYG{n}{outDir}\PYG{p}{,}\PYG{l+s}{\PYGZsq{}2B1Q.png\PYGZsq{}}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}Resolution\PYGZsq{}}\PYG{p}{,}\PYG{l+m+mi}{300}\PYG{p}{);}
+\end{MintedVerbatim}

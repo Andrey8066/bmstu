@@ -9,16 +9,26 @@ function [x, y, k] = patternSearch(func, x0, maxlambda, maxk, epsilon)
     while k < maxk
 
         for i = 1:n
-            x = x  + ei(:, i) * gold(func, x, -maxlambda, maxlambda, ei(:, i), epsilon);
-            k++;
+            f = @(lambda) func(x+lambda*ei(:,i));
+            x = x  + ei(:, i) * gold(f, -maxlambda, maxlambda, epsilon);
+            
         end
     if norm(x - x0) <= epsilon 
        break
     else
-        x = x  + (x-x0) * gold(func, x, -maxlambda, maxlambda, x-x0, epsilon);
+        d = x-x0;
+        f = @(lambda) func(x+lambda*d);
+        x = x  + d * gold(f, -maxlambda, maxlambda, epsilon);
     end
 
-    x0 = x;
+    if func(x) >= func(x0)
+        maxlambda = maxlambda/2;
+        x = x0;
+    else
+        x0 = x;
+    end
+
+    k = k+1;
 
    end
    y = func(x);
