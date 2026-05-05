@@ -1,7 +1,8 @@
-function [x, y, k] = generalizedPatternSearch(func, x0, lambda, maxk, epsilon)
+function [x, y, k, dots] = generalizedPatternSearch(func, x0, lambda, maxk, epsilon)
     
     n = length(x0);
     ei = eye(n);
+    dots = [[x0;func(x0)]];
 
     i = 0;
     k = 0;
@@ -26,6 +27,7 @@ function [x, y, k] = generalizedPatternSearch(func, x0, lambda, maxk, epsilon)
             
         else
             x0 = x;
+            dots = [dots,[x;func(x)]];
         end
         k = k + 1;
     end

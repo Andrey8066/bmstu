@@ -1,8 +1,10 @@
-function [x, y, k] = powell(func, x0, maxlambda, maxk, epsilon)
+function [x, y, k, dots] = powell(func, x0, maxlambda, maxk, epsilon)
     
 
     n = length(x0);
     s = eye(n);
+    dots = [[x0;func(x0)]];
+
     x = x0;
     k = 0;
 
@@ -37,7 +39,7 @@ function [x, y, k] = powell(func, x0, maxlambda, maxk, epsilon)
             s(:, n) = d ;
         end
 
-
+        dots = [dots,[x;func(x)]];
         k = k + 1;
 
     end

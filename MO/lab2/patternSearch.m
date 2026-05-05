@@ -1,7 +1,8 @@
-function [x, y, k] = patternSearch(func, x0, maxlambda, maxk, epsilon)
+function [x, y, k, dots] = patternSearch(func, x0, maxlambda, maxk, epsilon)
     
     n = length(x0);
     ei = eye(n);
+    dots = [[x0;func(x0)]];
 
     i = 0;
     k = 0;
@@ -26,6 +27,7 @@ function [x, y, k] = patternSearch(func, x0, maxlambda, maxk, epsilon)
         x = x0;
     else
         x0 = x;
+        dots = [dots,[x;func(x)]];
     end
 
     k = k+1;

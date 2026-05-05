@@ -1,10 +1,11 @@
-function [x, y, k] = coordDescent(func, x0, maxlambda, maxk, epsilon)
+function [x, y, k, dots] = coordDescent(func, x0, maxlambda, maxk, epsilon)
     
     n = length(x0);
     ei = eye(n);
 
     k = 0;
     x = x0;
+    dots = [[x0;func(x0)]];
 
     while k < maxk
 
@@ -19,6 +20,7 @@ function [x, y, k] = coordDescent(func, x0, maxlambda, maxk, epsilon)
         end
 
         x0 = x;
+        dots = [dots,[x;func(x)]];
         k = k + 1;
 
    end

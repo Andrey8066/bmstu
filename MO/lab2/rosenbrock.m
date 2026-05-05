@@ -1,9 +1,10 @@
-function [x, y, k] = rosenbrock(func, x0, maxlambda, maxk, epsilon)
+function [x, y, k, dots] = rosenbrock(func, x0, maxlambda, maxk, epsilon)
     
 
     n = length(x0);
     s = eye(n);
     ei = eye(n);
+    dots = [[x0;func(x0)]];
 
     i = 0;
     k = 0;
@@ -43,6 +44,7 @@ function [x, y, k] = rosenbrock(func, x0, maxlambda, maxk, epsilon)
 
     k = k+1;
     x0 = x;
+    dots = [dots,[x;func(x)]];
 
    end
    y = func(x);
