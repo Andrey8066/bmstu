@@ -1,0 +1,130 @@
+\begin{MintedVerbatim}[commandchars=\\\{\}]
+\PYG{+w}{    }\PYG{n+nb}{clc}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n+nb}{clear}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{close}\PYG{+w}{ }\PYG{l+s}{all}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n+nb}{poly}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{l+m+mi}{0}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{];}
+
+\PYG{+w}{    }\PYG{n}{crcGen}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{comm}\PYG{p}{.}\PYG{n}{CRCGenerator}\PYG{p}{(}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}Polynomial\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{poly}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}ChecksumsPerFrame\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{crcDet}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{comm}\PYG{p}{.}\PYG{n}{CRCDetector}\PYG{p}{(}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}Polynomial\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{poly}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}ChecksumsPerFrame\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n}{msg\PYGZus{}dec}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{46}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{msg}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{de2bi}\PYG{p}{(}\PYG{n}{msg\PYGZus{}dec}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}left\PYGZhy{}msb\PYGZsq{}}\PYG{p}{)}\PYG{o}{\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{encoded}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{step}\PYG{p}{(}\PYG{n}{crcGen}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{logical}\PYG{p}{(}\PYG{n}{msg}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{n}{msg\PYGZus{}len}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{msg}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{enc\PYGZus{}len}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{redundancy}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{enc\PYGZus{}len}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{msg\PYGZus{}len}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{crc\PYGZus{}bits}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{encoded}\PYG{p}{(}\PYG{k}{end}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{:}\PYG{k}{end}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n}{err\PYGZus{}pos}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{l+m+mi}{5}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{error\PYGZus{}dec}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{\PYGZca{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{error\PYGZus{}vec}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{de2bi}\PYG{p}{(}\PYG{n}{error\PYGZus{}dec}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{),}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}left\PYGZhy{}msb\PYGZsq{}}\PYG{p}{)}\PYG{o}{\PYGZsq{}}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{received}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{bitxor}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{logical}\PYG{p}{(}\PYG{n}{error\PYGZus{}vec}\PYG{p}{));}
+\PYG{+w}{    }\PYG{p}{[}\PYG{n}{decoded}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{errFlag}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{step}\PYG{p}{(}\PYG{n}{crcDet}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{received}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Кодовый полином:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n+nb}{poly}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}Исходное сообщение (dec): \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{msg\PYGZus{}dec}\PYG{p}{)]);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Исходное сообщение (bin):\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{msg}\PYG{o}{\PYGZsq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}CRC остаток:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{crc\PYGZus{}bits}\PYG{o}{\PYGZsq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Закодированное сообщение:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{encoded}\PYG{o}{\PYGZsq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Модель ошибки:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{error\PYGZus{}vec}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Полученное сообщение:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{received}\PYG{o}{\PYGZsq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Декодированное сообщение:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{decoded}\PYG{o}{\PYGZsq{}}\PYG{p}{));}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}Ошибка обнаружена: \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{errFlag}\PYG{p}{)]);}
+
+\PYG{+w}{    }\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{syndrome}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{step}\PYG{p}{(}\PYG{n}{crcDet}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{received}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}Синдром ошибки: \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{syndrome}\PYG{p}{)]);}
+
+\PYG{+w}{    }\PYG{n}{n}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{syndrome\PYGZus{}table}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Таблица синдромов\PYGZsq{}}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{n}
+\PYG{+w}{        }\PYG{n}{err}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{err}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{test\PYGZus{}word}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{bitxor}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{logical}\PYG{p}{(}\PYG{n}{err}\PYG{p}{));}
+\PYG{+w}{        }\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{step}\PYG{p}{(}\PYG{n}{crcDet}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{test\PYGZus{}word}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{syndrome\PYGZus{}table}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{;}
+\PYG{+w}{    }\PYG{k}{end}
+
+\PYG{+w}{    }\PYG{n}{bit\PYGZus{}number}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{err\PYGZus{}pos}\PYG{p}{;}
+
+\PYG{+w}{    }\PYG{n}{T}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{table}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{n}\PYG{p}{)}\PYG{o}{\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{syndrome\PYGZus{}table}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}VariableNames\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZsq{}BitNumber\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}Syndrome\PYGZsq{}}\PYG{p}{\PYGZcb{});}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n}{T}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}Ошибочный бит: \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{bit\PYGZus{}number}\PYG{p}{)]);}
+
+\PYG{+w}{    }\PYG{n}{data7}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{de2bi}\PYG{p}{(}\PYG{l+m+mi}{46}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}left\PYGZhy{}msb\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{parity}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{mod}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{data7}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{xor\PYGZus{}encoded}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{parity}\PYG{+w}{ }\PYG{n}{data7}\PYG{p}{];}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}XOR\PYGZhy{}кодирование\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{xor\PYGZus{}encoded}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{n}{err1}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{de2bi}\PYG{p}{(}\PYG{l+m+mi}{2}\PYG{o}{\PYGZca{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}left\PYGZhy{}msb\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{recv1}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{bitxor}\PYG{p}{(}\PYG{n}{xor\PYGZus{}encoded}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{err1}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{parity\PYGZus{}check1}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{mod}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{recv1}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка в одном бите\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Полученное сообщение:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{recv1}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{parity\PYGZus{}check1}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}
+\PYG{+w}{        }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка НЕ обнаружена\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{else}
+\PYG{+w}{        }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка обнаружена\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{end}
+
+\PYG{+w}{    }\PYG{n}{err2\PYGZus{}dec}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{\PYGZca{}}\PYG{p}{(}\PYG{l+m+mi}{5}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{o}{\PYGZca{}}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{err2}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{de2bi}\PYG{p}{(}\PYG{n}{err2\PYGZus{}dec}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{8}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}left\PYGZhy{}msb\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{recv2}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{bitxor}\PYG{p}{(}\PYG{n}{xor\PYGZus{}encoded}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{err2}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n}{parity\PYGZus{}check2}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{mod}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{recv2}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка в двух битах\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Полученное сообщение:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{recv2}\PYG{p}{));}
+
+\PYG{+w}{    }\PYG{k}{if}\PYG{+w}{ }\PYG{n}{parity\PYGZus{}check2}\PYG{+w}{ }\PYG{o}{==}\PYG{+w}{ }\PYG{l+m+mi}{0}
+\PYG{+w}{        }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка НЕ обнаружена\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{else}
+\PYG{+w}{        }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка обнаружена\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{k}{end}
+
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Вывод:\PYGZsq{}}\PYG{p}{);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}XOR\PYGZhy{}контроль четности обнаруживает \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}ошибки только при нечетном количестве \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}искаженных бит.\PYGZsq{}}\PYG{p}{]);}
+\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}При четном количестве ошибок \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
+\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}обнаружение невозможно.\PYGZsq{}}\PYG{p}{]);}
+\end{MintedVerbatim}

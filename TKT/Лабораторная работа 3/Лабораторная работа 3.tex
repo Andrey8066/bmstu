@@ -1,0 +1,403 @@
+\documentclass[a4paper, 14pt]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian]{babel}
+\usepackage{geometry}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{setspace}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{indentfirst}
+\usepackage{float}
+\usepackage{array}
+\usepackage{cellspace}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{tocloft}
+\usepackage{amsmath}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{tikz-timing}
+\usepackage{minted}
+
+\usetikzlibrary{karnaugh}
+\usetikzlibrary{backgrounds}
+
+\setlength{\cellspacetoplimit}{20pt}
+\setlength{\cellspacebottomlimit}{20pt}
+
+\onehalfspacing
+
+\geometry{
+  a4paper,
+  left=30mm,
+  right=20mm,
+  top=20mm,
+  bottom=20mm
+}
+
+\setlength{\parindent}{1.25cm}
+
+\graphicspath{ {images/} }
+\captionsetup[figure]{
+  labelsep=period,
+  justification=centering
+}
+
+\renewcommand{\figurename}{Рисунок}
+\renewcommand{\contentsname}{Оглавление}
+
+\titleformat{\section}[block]{\normalsize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[block]{\normalsize\bfseries}{\thesubsection}{1em}{}
+\titlespacing*{\section}{0pt}{\parskip}{-\parskip}
+\titlespacing*{\subsection}{0pt}{\parskip}{-\parskip}
+
+\renewcommand{\cftbeforetoctitleskip}{-30pt}
+\renewcommand{\cftaftertoctitleskip}{-10pt}
+
+\begin{document}
+
+\begin{titlepage}
+  \begin{center}
+    \small
+    \underline{
+      \begin{minipage}{0.2\textwidth}
+        \centering
+        \includegraphics[width=3cm]{BMSTU logo}
+      \end{minipage}
+      \hfill
+      \begin{minipage}{0.8\textwidth}
+        \begin{center}
+
+          \textbf{Министерство науки и высшего образования Российской Федерации
+            Федеральное государственное бюджетное образовательное учреждение высшего образования «Московский государственный технический университет имени Н.Э. Баумана национальный исследовательский университет»
+          (МГТУ им. Н.Э. Баумана)}
+        \end{center}
+      \end{minipage}
+
+    }
+
+    \vspace{7cm}
+    \Large
+    \textbf{Лабораторная работа №3} \\
+    Исследование методов циклического кодирования
+    \\
+    \vspace{5cm}
+    \normalsize
+    \begin{tabular}{p{8cm}p{6cm}}
+      \textbf{Студенты группы ИУ1-41Б} & Соин А. Д. \\
+      & Кочнева К. Д. \\
+      & «14» мая 2026 г. \\
+      & \\
+      \textbf{Преподаватель} & Кузнецов М. А. \\
+      & «\underline{\hspace{1.5cm}}»\underline{\hspace{2.5cm}}2026 г. \\
+    \end{tabular}
+    \vfill{\Large{Москва, 2026}}
+  \end{center}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Реализация побитного циклического кодирования}
+
+В ходе выполнения лабораторной работы был написан необходимый программный код на языке matlab.
+
+В результате выполнения кода был получен следующий вывод:
+
+\begin{center}
+    \begin{minted}{text}
+        Кодовый полином:
+        1  0  0  1  1
+        ==============================
+        Исходное сообщение (dec): 46
+        Исходное сообщение (bin):
+        0  0  1  0  1  1  1  0
+        ==============================
+        CRC остаток:
+        1  0  1  1
+        ==============================
+        Закодированное сообщение:
+        0  0  1  0  1  1  1  0  1  0  1  1
+        ==============================
+        Модель ошибки:
+        0
+        0
+        0
+        0
+        0
+        0
+        0
+        1
+        0
+        0
+        0
+        0
+        ==============================
+        Полученное сообщение:
+        0  0  1  0  1  1  1  1  1  0  1  1
+        ==============================
+        Декодированное сообщение:
+        0  0  1  0  1  1  1  1
+        ==============================
+        Ошибка обнаружена: 1
+        ==============================
+        Синдром ошибки: 1
+        ==============================
+        Таблица синдромов
+            BitNumber        Syndrome
+            _________    ________________
+
+                1        0    1    0    1
+                2        1    1    0    0
+                3        0    0    0    1
+                4        1    1    1    0
+                5        0    0    0    0
+                6        0    1    1    1
+                7        1    1    0    1
+                8        1    0    0    0
+                9        1    0    1    1
+               10        1    0    1    1
+               11        1    0    1    1
+               12        1    0    1    1
+
+        Ошибочный бит: 5
+    \end{minted}
+\end{center}
+
+Ошибка моделируется и обнаруживается правильно.
+
+\section{Реализация побитного “исключающего или”}
+
+Исключающее или было реализовано на основе цикла for.
+
+\begin{center}
+    \begin{minted}{text}
+        XOR-кодирование
+        0  0  1  0  1  1  1  0
+        ==============================
+        Ошибка в одном бите
+        Полученное сообщение:
+        0  0  1  1  1  1  1  0
+        Ошибка обнаружена
+        ==============================
+        Ошибка в двух битах
+        Полученное сообщение:
+        0  0  1  1  1  0  1  0
+        Ошибка НЕ обнаружена
+    \end{minted}
+\end{center}
+
+В результате выполнения выяснено, что XOR-контроль четности обнаруживает ошибки только при нечетном количестве искаженных бит.
+При четном количестве ошибок обнаружение невозможно.
+
+\section{Контрольные вопросы}
+
+\begin{enumerate}
+  \item \textbf{В чем суть циклического кодирования?}
+
+    Циклическое кодирование --- это метод обнаружения и/или исправления ошибок при передаче данных, основанный на представлении двоичных последовательностей в виде полиномов над полем $GF(2)$.
+
+    Основная идея метода:
+    \begin{itemize}
+      \item сообщение интерпретируется как полином;
+      \item сообщение делится на порождающий полином;
+      \item остаток от деления (CRC) добавляется к сообщению;
+      \item на приемной стороне выполняется повторное деление;
+      \item если остаток ненулевой --- обнаружена ошибка.
+    \end{itemize}
+
+    Циклические коды эффективно обнаруживают одиночные, пакетные и большинство многобитовых ошибок.
+
+  \item \textbf{Для каких задач могут применяться методы циклического кодирования?}
+
+    Методы циклического кодирования применяются в системах передачи и хранения данных для контроля целостности информации.
+
+    Основные области применения:
+    \begin{itemize}
+      \item компьютерные сети;
+      \item телекоммуникационные системы;
+      \item мобильная и спутниковая связь;
+      \item интерфейсы передачи данных (USB, CAN, SATA);
+      \item устройства хранения данных;
+      \item архиваторы и файловые форматы;
+      \item микроконтроллеры и встроенные системы.
+    \end{itemize}
+
+    CRC широко используется благодаря высокой надежности обнаружения ошибок и простоте реализации.
+
+  \item \textbf{В чем отличие побитного от побайтного метода циклического кодирования, в каких случаях какому методу необходимо отдавать приоритет?}
+
+    \textbf{Побитный метод} выполняет обработку данных по одному биту:
+    \begin{itemize}
+      \item требует меньше памяти;
+      \item проще реализуется аппаратно;
+      \item подходит для потоковой обработки;
+      \item работает медленнее.
+    \end{itemize}
+
+    \textbf{Побайтный метод} выполняет обработку сразу байтами:
+    \begin{itemize}
+      \item обладает высокой скоростью работы;
+      \item эффективен при обработке больших объемов данных;
+      \item требует дополнительной памяти для таблиц.
+    \end{itemize}
+
+    Побитный метод предпочтителен для аппаратной реализации и систем с ограниченными ресурсами, а побайтный --- для высокоскоростной программной обработки данных.
+
+  \item \textbf{Что такое порождающий полином?}
+
+    Порождающий полином --- это двоичный полином, определяющий структуру циклического кода и используемый для вычисления контрольной суммы CRC.
+
+    Например, для CRC-4-ITU используется полином:
+    \[
+      g(x) = x^4 + x + 1
+    \]
+
+    В двоичном виде:
+    \[
+      [1\ 0\ 0\ 1\ 1]
+    \]
+
+    Степень порождающего полинома определяет количество контрольных бит, добавляемых к сообщению.
+
+\end{enumerate}
+
+\newpage
+\section*{Приложение 1. Програмный код}
+\addcontentsline{toc}{section}{Приложение 1. Програмный код}
+
+\begin{minted}[linenos]{matlab}
+    clc;
+    clear;
+    close all;
+
+    poly = [1 0 0 1 1];
+
+    crcGen = comm.CRCGenerator( ...
+        'Polynomial', poly, ...
+        'ChecksumsPerFrame', 1);
+    crcDet = comm.CRCDetector( ...
+        'Polynomial', poly, ...
+        'ChecksumsPerFrame', 1);
+
+    msg_dec = 46;
+
+    msg = de2bi(msg_dec, 8, 'left-msb')';
+    encoded = step(crcGen, logical(msg));
+
+    msg_len = length(msg);
+    enc_len = length(encoded);
+    redundancy = enc_len - msg_len;
+
+    crc_bits = encoded(end-3:end);
+
+    err_pos = length(encoded) - 5 + 1;
+    error_dec = 2^(5-1);
+    error_vec = de2bi(error_dec, length(encoded), 'left-msb')';
+    received = bitxor(encoded, logical(error_vec));
+    [decoded, errFlag] = step(crcDet, received);
+
+    disp('==============================');
+    disp('Кодовый полином:');
+    disp(num2str(poly));
+    disp('==============================');
+    disp(['Исходное сообщение (dec): ', num2str(msg_dec)]);
+    disp('Исходное сообщение (bin):');
+    disp(num2str(msg'));
+    disp('==============================');
+    disp('CRC остаток:');
+    disp(num2str(crc_bits'));
+    disp('==============================');
+    disp('Закодированное сообщение:');
+    disp(num2str(encoded'));
+    disp('==============================');
+    disp('Модель ошибки:');
+    disp(num2str(error_vec));
+    disp('==============================');
+    disp('Полученное сообщение:');
+    disp(num2str(received'));
+    disp('==============================');
+    disp('Декодированное сообщение:');
+    disp(num2str(decoded'));
+    disp('==============================');
+    disp(['Ошибка обнаружена: ', num2str(errFlag)]);
+
+    [~, syndrome] = step(crcDet, received);
+
+    disp('==============================');
+    disp(['Синдром ошибки: ', num2str(syndrome)]);
+
+    n = length(encoded);
+    syndrome_table = zeros(n, 1);
+
+    disp('==============================');
+    disp('Таблица синдромов');
+
+    for i = 1:n
+        err = zeros(n,1);
+        err(i) = 1;
+        test_word = bitxor(encoded, logical(err));
+        [~, s] = step(crcDet, test_word);
+        syndrome_table(i) = s;
+    end
+
+    bit_number = err_pos;
+
+    T = table((1:n)', syndrome_table, ...
+        'VariableNames', {'BitNumber', 'Syndrome'});
+
+    disp(T);
+    disp(['Ошибочный бит: ', num2str(bit_number)]);
+
+    data7 = de2bi(46, 7, 'left-msb');
+    parity = mod(sum(data7), 2);
+    xor_encoded = [parity data7];
+
+    disp('==============================');
+    disp('XOR-кодирование');
+    disp(num2str(xor_encoded));
+
+    err1 = de2bi(2^(5-1), 8, 'left-msb');
+    recv1 = bitxor(xor_encoded, err1);
+    parity_check1 = mod(sum(recv1), 2);
+
+    disp('==============================');
+    disp('Ошибка в одном бите');
+    disp('Полученное сообщение:');
+    disp(num2str(recv1));
+
+    if parity_check1 == 0
+        disp('Ошибка НЕ обнаружена');
+    else
+        disp('Ошибка обнаружена');
+    end
+
+    err2_dec = 2^(5-1) + 2^(3-1);
+    err2 = de2bi(err2_dec, 8, 'left-msb');
+    recv2 = bitxor(xor_encoded, err2);
+    parity_check2 = mod(sum(recv2), 2);
+
+    disp('==============================');
+    disp('Ошибка в двух битах');
+    disp('Полученное сообщение:');
+    disp(num2str(recv2));
+
+    if parity_check2 == 0
+        disp('Ошибка НЕ обнаружена');
+    else
+        disp('Ошибка обнаружена');
+    end
+
+    disp('==============================');
+    disp('Вывод:');
+    disp(['XOR-контроль четности обнаруживает ', ...
+        'ошибки только при нечетном количестве ', ...
+        'искаженных бит.']);
+    disp(['При четном количестве ошибок ', ...
+        'обнаружение невозможно.']);
+\end{minted}
+
+\end{document}
