@@ -19,7 +19,7 @@ function [x, y, k, dots] = conjugateGradient(func, x0, maxlambda, maxk, epsilon)
         g0 =  g;
         g = gradient(func, x, epsilon);
         
-        if mod(k, n) == 0 && k != 0
+        if mod(k, n) == 0 && k > 0
             s = -g;
         else
             w = norm(g)^2/norm(g0)^2;

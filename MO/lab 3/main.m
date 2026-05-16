@@ -3,31 +3,34 @@ close all;
 clc;
 
 x0      = [10; -10];
-maxlambda = 100;
+maxlambda = 10;
 maxiter = 1000;
 epsilon = 0.001;
 desc = 1000;
+maxcord = 12;
 
 colors  = {'r', 'g', 'b'};
 markers = {'-o', '-s', '-^'};
 names   = {'Наискорейший спуск', 'Сопряженные градиенты', 'Полак-Рибьер'};
 
-print  = 0;
+print  = 1;
 
 % =========================================================================
 %  Rosenbrock
 % =========================================================================
 fprintf("Rosenbrock's function :\n");
 
-t = tic; [x, y, k, d1] = steepestDescent(@rosenbrockFunc, x0, maxlambda, maxiter, epsilon);
+t = tic; 
+[x, y, k, d1] = steepestDescent(@rosenbrockFunc, x0, maxlambda, maxiter, epsilon);
 fprintf("Наискорейший спуск:           x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
-t = tic; [x, y, k, d2] = conjugateGradient(@rosenbrockFunc, x0, maxlambda, maxiter, epsilon);
+t = tic; 
+[x, y, k, d2] = conjugateGradient(@rosenbrockFunc, x0, maxlambda, maxiter, epsilon);
 fprintf("Метод сопряженных градиентов: x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
-t = tic; [x, y, k, d3] = polakRibiere(@rosenbrockFunc, x0, maxlambda, maxiter, epsilon);
+t = tic; 
+[x, y, k, d3] = polakRibiere(@rosenbrockFunc, x0, maxlambda, maxiter, epsilon);
 fprintf("Метод Полака-Рибьера:         x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
 
 if print == 1
-    maxcord = 120;
     [X,Y] = meshgrid(-maxcord:maxcord/desc:maxcord, -maxcord:maxcord/desc:maxcord);
     Z = arrayfun(@(a,b) rosenbrockFunc([a;b]), X, Y);
     figure('Name',"Rosenbrock");
@@ -50,15 +53,15 @@ fprintf("\n%s\n\n", repmat('-',1,70));
 % =========================================================================
 fprintf("Ackley's function :\n");
 
-t = tic; [x, y, k, d1] = steepestDescent(@ackleyFunc, x0, maxlambda, maxiter, epsilon);
+t = tic; [x, y, k, d1] = steepestDescent(@ackleyFunc, x0, 1, maxiter, epsilon);
 fprintf("Наискорейший спуск:           x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
-t = tic; [x, y, k, d2] = conjugateGradient(@ackleyFunc, x0, maxlambda+100, maxiter, epsilon);
+t = tic; [x, y, k, d2] = conjugateGradient(@ackleyFunc, x0, 1, maxiter, epsilon);
 fprintf("Метод сопряженных градиентов: x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
-t = tic; [x, y, k, d3] = polakRibiere(@ackleyFunc, x0, maxlambda+100, maxiter, epsilon);
+t = tic; [x, y, k, d3] = polakRibiere(@ackleyFunc, x0, 1, maxiter, epsilon);
 fprintf("Метод Полака-Рибьера:         x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
 
 if print == 1
-    maxcord = 120;
+    
     [X,Y] = meshgrid(-maxcord:maxcord/desc:maxcord, -maxcord:maxcord/desc:maxcord);
     Z = arrayfun(@(a,b) ackleyFunc([a;b]), X, Y);
     figure('Name',"Ackley");
@@ -89,7 +92,6 @@ t = tic; [x, y, k, d3] = polakRibiere(@himmelblauFunc, x0, maxlambda, maxiter, e
 fprintf("Метод Полака-Рибьера:         x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
 
 if print == 1
-    maxcord = 120;
     [X,Y] = meshgrid(-maxcord:maxcord/desc:maxcord, -maxcord:maxcord/desc:maxcord);
     Z = arrayfun(@(a,b) himmelblauFunc([a;b]), X, Y);
     figure('Name',"Himmelblau");
@@ -120,7 +122,6 @@ t = tic; [x, y, k, d3] = polakRibiere(@boothFunc, x0, maxlambda, maxiter, epsilo
 fprintf("Метод Полака-Рибьера:         x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
 
 if print == 1
-    maxcord = 120;
     [X,Y] = meshgrid(-maxcord:maxcord/desc:maxcord, -maxcord:maxcord/desc:maxcord);
     Z = arrayfun(@(a,b) boothFunc([a;b]), X, Y);
     figure('Name',"Booth");
@@ -151,7 +152,6 @@ t = tic; [x, y, k, d3] = polakRibiere(@rastriginFunc, x0, maxlambda, maxiter, ep
 fprintf("Метод Полака-Рибьера:         x=[%.4f,%.4f] y=%.6f k=%d t=%.4fс\n", x(1),x(2),y,k,toc(t));
 
 if print == 1
-    maxcord = 120;
     [X,Y] = meshgrid(-maxcord:maxcord/desc:maxcord, -maxcord:maxcord/desc:maxcord);
     Z = arrayfun(@(a,b) rastriginFunc([a;b]), X, Y);
     figure('Name',"Rastrigin");

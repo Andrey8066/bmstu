@@ -1,0 +1,82 @@
+clc;
+clear;
+close all;
+
+x = 46;
+%% Recomended standert
+bits = de2bi(x, 8, 'right-msb');
+
+bits = [0, bits, 1, 1]
+
+signal = [];
+
+figure;
+for i = 1:length(bits)
+    if (bits(i) == 1)
+        signal = [signal, -6];
+    else
+        signal = [signal, 6];
+    end
+end
+signal = [signal]
+t = 0:length(signal)-1;
+stairs(t, signal, 'LineWidth', 2);
+grid on;
+ylim([-12 12]);
+xlim([0 length(signal)]);
+title("RS-423 (Ассинхронный, LSB-FIRST)");
+xlabel('Время');
+ylabel('Уровень сигнала');
+
+for i = 1:length(signal)-1
+    x_text = i - 0.5;
+    y_text = 8;
+    text(x_text, y_text, num2str(bits(i)), ...
+        'HorizontalAlignment', 'center', ...
+        'FontSize', 12, ...
+        'FontWeight', 'bold');
+end
+
+figure;
+signal1 = [signal]
+signal2 = [-signal]
+t = 0:length(signal)-1;
+subplot(2, 1, 1);
+stairs(t, signal1, 'LineWidth', 2);
+grid on;
+ylim([-12 12]);
+xlim([0 length(signal)]);
+title("RS-485 Линия А(Неинвертированная)");
+xlabel('Время');
+ylabel('Уровень сигнала');
+
+for i = 1:length(signal)-1
+    x_text = i - 0.5;
+    y_text = 8;
+    text(x_text, y_text, num2str(bits(i)), ...
+        'HorizontalAlignment', 'center', ...
+        'FontSize', 12, ...
+        'FontWeight', 'bold');
+end
+
+
+subplot(2, 1, 2);
+stairs(t, signal2, 'LineWidth', 2);
+grid on;
+ylim([-12 12]);
+xlim([0 length(signal)]);
+xlabel('Время');
+ylabel('Уровень сигнала');
+title("RS-485 Линия B(Инвертированная)");
+for i = 1:length(signal)-1
+    x_text = i - 0.5;
+    y_text = 8;
+    text(x_text, y_text, num2str(bits(i)), ...
+        'HorizontalAlignment', 'center', ...
+        'FontSize', 12, ...
+        'FontWeight', 'bold');
+end
+
+%% SPI
+
+bits =de2bi(x, )

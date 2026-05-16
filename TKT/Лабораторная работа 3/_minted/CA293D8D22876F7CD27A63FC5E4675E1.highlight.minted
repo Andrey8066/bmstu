@@ -65,15 +65,18 @@
 \PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
 \PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Таблица синдромов\PYGZsq{}}\PYG{p}{);}
 
+\PYG{+w}{    }\PYG{n}{syndrome\PYGZus{}table}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{4}\PYG{p}{);}
+
 \PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{n}
 \PYG{+w}{        }\PYG{n}{err}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{zeros}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{);}
 \PYG{+w}{        }\PYG{n}{err}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
 \PYG{+w}{        }\PYG{n}{test\PYGZus{}word}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{bitxor}\PYG{p}{(}\PYG{n}{encoded}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{logical}\PYG{p}{(}\PYG{n}{err}\PYG{p}{));}
-\PYG{+w}{        }\PYG{p}{[}\PYG{o}{\PYGZti{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{]}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{step}\PYG{p}{(}\PYG{n}{crcDet}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{test\PYGZus{}word}\PYG{p}{);}
-\PYG{+w}{        }\PYG{n}{syndrome\PYGZus{}table}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{s}\PYG{p}{;}
+\PYG{+w}{        }\PYG{n}{temp}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{step}\PYG{p}{(}\PYG{n}{crcGen}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{test\PYGZus{}word}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{k}{end}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{4}\PYG{p}{));}
+\PYG{+w}{        }\PYG{n}{syndrome}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{temp}\PYG{p}{(}\PYG{k}{end}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{3}\PYG{p}{:}\PYG{k}{end}\PYG{p}{);}
+\PYG{+w}{        }\PYG{n}{syndrome\PYGZus{}table}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{,:)}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{syndrome}\PYG{o}{\PYGZsq{}}\PYG{p}{;}
 \PYG{+w}{    }\PYG{k}{end}
 
-\PYG{+w}{    }\PYG{n}{bit\PYGZus{}number}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{err\PYGZus{}pos}\PYG{p}{;}
+\PYG{+w}{    }\PYG{n}{bit\PYGZus{}number}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{n}\PYG{+w}{ }\PYG{o}{\PYGZhy{}}\PYG{+w}{ }\PYG{n}{err\PYGZus{}pos}\PYG{+w}{ }\PYG{o}{+}\PYG{+w}{ }\PYG{l+m+mi}{1}\PYG{p}{;}
 
 \PYG{+w}{    }\PYG{n}{T}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{table}\PYG{p}{((}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{n}\PYG{p}{)}\PYG{o}{\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{syndrome\PYGZus{}table}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
 \PYG{+w}{        }\PYG{l+s}{\PYGZsq{}VariableNames\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{p}{\PYGZob{}}\PYG{l+s}{\PYGZsq{}BitNumber\PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}Syndrome\PYGZsq{}}\PYG{p}{\PYGZcb{});}
@@ -82,7 +85,13 @@
 \PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}Ошибочный бит: \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{n+nb}{num2str}\PYG{p}{(}\PYG{n}{bit\PYGZus{}number}\PYG{p}{)]);}
 
 \PYG{+w}{    }\PYG{n}{data7}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{de2bi}\PYG{p}{(}\PYG{l+m+mi}{46}\PYG{p}{,}\PYG{+w}{ }\PYG{l+m+mi}{7}\PYG{p}{,}\PYG{+w}{ }\PYG{l+s}{\PYGZsq{}left\PYGZhy{}msb\PYGZsq{}}\PYG{p}{);}
-\PYG{+w}{    }\PYG{n}{parity}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{mod}\PYG{p}{(}\PYG{n+nb}{sum}\PYG{p}{(}\PYG{n}{data7}\PYG{p}{),}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{n}{parity}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n}{data7}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{);}
+
+\PYG{+w}{    }\PYG{k}{for}\PYG{+w}{ }\PYG{n+nb}{i}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{l+m+mi}{2}\PYG{p}{:}\PYG{n+nb}{length}\PYG{p}{(}\PYG{n}{data7}\PYG{p}{)}
+\PYG{+w}{        }\PYG{n}{parity}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{n+nb}{bitxor}\PYG{p}{(}\PYG{n}{parity}\PYG{p}{,}\PYG{+w}{ }\PYG{n}{data7}\PYG{p}{(}\PYG{n+nb}{i}\PYG{p}{));}
+\PYG{+w}{    }\PYG{k}{end}
+
 \PYG{+w}{    }\PYG{n}{xor\PYGZus{}encoded}\PYG{+w}{ }\PYG{p}{=}\PYG{+w}{ }\PYG{p}{[}\PYG{n}{parity}\PYG{+w}{ }\PYG{n}{data7}\PYG{p}{];}
 
 \PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
@@ -119,12 +128,4 @@
 \PYG{+w}{    }\PYG{k}{else}
 \PYG{+w}{        }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Ошибка обнаружена\PYGZsq{}}\PYG{p}{);}
 \PYG{+w}{    }\PYG{k}{end}
-
-\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}==============================\PYGZsq{}}\PYG{p}{);}
-\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Вывод:\PYGZsq{}}\PYG{p}{);}
-\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}XOR\PYGZhy{}контроль четности обнаруживает \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
-\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}ошибки только при нечетном количестве \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
-\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}искаженных бит.\PYGZsq{}}\PYG{p}{]);}
-\PYG{+w}{    }\PYG{n+nb}{disp}\PYG{p}{([}\PYG{l+s}{\PYGZsq{}При четном количестве ошибок \PYGZsq{}}\PYG{p}{,}\PYG{+w}{ }\PYG{k}{...}
-\PYG{+w}{        }\PYG{l+s}{\PYGZsq{}обнаружение невозможно.\PYGZsq{}}\PYG{p}{]);}
 \end{MintedVerbatim}

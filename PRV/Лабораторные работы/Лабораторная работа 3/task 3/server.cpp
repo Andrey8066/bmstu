@@ -1,64 +1,92 @@
 #include <boost/asio.hpp>
 #include <iostream>
 #include <memory>
+#include <mutex>
 #include <sstream>
+#include <thread>
+#include <vector>
 
 using boost::asio::ip::tcp;
+
+std::mutex cout_mutex;
+
+void safe_print(const std::string &s) {
+  std::lock_guard<std::mutex> lock(cout_mutex);
+  std::cout << s << std::endl;
+}
 
 int main() {
   try {
     boost::asio::io_context io;
 
+    auto work = boost::asio::make_work_guard(io);
+
+    std::vector<std::thread> pool;
+    for (int i = 0; i < 4; ++i) {
+      pool.emplace_back([&io]() { io.run(); });
+    }
+
     tcp::acceptor acceptor(io, tcp::endpoint(tcp::v4(), 12345));
-    std::cout << "Сервер запущен...\n";
+    safe_print("Сервер запущен...");
 
     while (true) {
       tcp::socket socket(io);
       acceptor.accept(socket);
 
-      boost::asio::streambuf buffer;
-      boost::asio::read_until(socket, buffer, '\n');
+      boost::asio::post(io, [sock = std::make_shared<tcp::socket>(
+                                 std::move(socket))]() {
+        auto strand = boost::asio::make_strand(sock->get_executor());
 
-      std::istream input(&buffer);
-      std::string message;
-      std::getline(input, message);
+        try {
+          while (true) {
+            boost::asio::streambuf buffer;
+            boost::asio::read_until(*sock, buffer, '\n');
 
-      std::cout << "Получено: " << message << std::endl;
+            std::istream input(&buffer);
+            std::string message;
+            std::getline(input, message);
 
-      if (message.rfind("timer", 0) == 0) {
-        std::istringstream iss(message);
-        std::string cmd;
-        int seconds;
-        iss >> cmd >> seconds;
+            safe_print("Получено: " + message);
 
-        // отправляем сразу
-        std::string response = "Ready in " + std::to_string(seconds) + " sec\n";
+            if (message.rfind("timer", 0) == 0) {
+              std::istringstream iss(message);
+              std::string cmd;
+              int seconds;
+              iss >> cmd >> seconds;
 
-        boost::asio::write(socket, boost::asio::buffer(response));
+              std::string response =
+                  "Установлен таймер на " + std::to_string(seconds) + "\n";
 
-        std::cout << "Отправлено: " << response;
+              boost::asio::post(strand, [sock, response]() {
+                boost::asio::write(*sock, boost::asio::buffer(response));
+              });
 
-        // ВАЖНО: переносим socket в shared_ptr
-        auto sock = std::make_shared<tcp::socket>(std::move(socket));
+              auto timer = std::make_shared<boost::asio::steady_timer>(
+                  sock->get_executor(), boost::asio::chrono::seconds(seconds));
 
-        // ВАЖНО: таймер тоже в shared_ptr
-        auto timer = std::make_shared<boost::asio::steady_timer>(
-            io, boost::asio::chrono::seconds(seconds));
+              timer->async_wait(boost::asio::bind_executor(
+                  strand,
+                  [sock, timer, seconds](const boost::system::error_code &ec) {
+                    if (!ec) {
+                      std::string msg =
+                          "Истек таймер на " + std::to_string(seconds) + "!\n";
 
-        timer->async_wait([sock, timer](const boost::system::error_code &ec) {
-          if (!ec) {
-            std::string msg = "Done!\n";
-            boost::asio::write(*sock, boost::asio::buffer(msg));
+                      boost::asio::write(*sock, boost::asio::buffer(msg));
 
-            std::cout << "Отправлено: Done!\n";
+                      std::lock_guard<std::mutex> lock(cout_mutex);
+                      std::cout << "Отправлено: " << msg;
+                    }
+                  }));
+            }
           }
-        });
-
-        // запускаем обработку async
-        io.run();
-        io.restart();
-      }
+        } catch (...) {
+          safe_print("Клиент отключился");
+        }
+      });
     }
+
+    for (auto &t : pool)
+      t.join();
 
   } catch (std::exception &e) {
     std::cerr << "Ошибка: " << e.what() << std::endl;

@@ -336,15 +336,18 @@
     disp('==============================');
     disp('Таблица синдромов');
 
+    syndrome_table = zeros(n, 4);
+
     for i = 1:n
         err = zeros(n,1);
         err(i) = 1;
         test_word = bitxor(encoded, logical(err));
-        [~, s] = step(crcDet, test_word);
-        syndrome_table(i) = s;
+        temp = step(crcGen, test_word(1:end-4));
+        syndrome = temp(end-3:end);
+        syndrome_table(i,:) = syndrome';
     end
 
-    bit_number = err_pos;
+    bit_number = n - err_pos + 1;
 
     T = table((1:n)', syndrome_table, ...
         'VariableNames', {'BitNumber', 'Syndrome'});
@@ -353,7 +356,13 @@
     disp(['Ошибочный бит: ', num2str(bit_number)]);
 
     data7 = de2bi(46, 7, 'left-msb');
-    parity = mod(sum(data7), 2);
+
+    parity = data7(1);
+
+    for i = 2:length(data7)
+        parity = bitxor(parity, data7(i));
+    end
+
     xor_encoded = [parity data7];
 
     disp('==============================');
@@ -390,14 +399,6 @@
     else
         disp('Ошибка обнаружена');
     end
-
-    disp('==============================');
-    disp('Вывод:');
-    disp(['XOR-контроль четности обнаруживает ', ...
-        'ошибки только при нечетном количестве ', ...
-        'искаженных бит.']);
-    disp(['При четном количестве ошибок ', ...
-        'обнаружение невозможно.']);
 \end{minted}
 
 \end{document}

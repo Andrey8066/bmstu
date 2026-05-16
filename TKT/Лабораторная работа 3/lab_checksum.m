@@ -25,9 +25,9 @@ redundancy = enc_len - msg_len;
 
 crc_bits = encoded(end-3:end);
 
-err_pos = length(encoded) - 5 + 1;
+%err_pos = length(encoded) - 9 + 1;
 
-error_dec = 2^(5-1);
+error_dec = 2^(3-1);
 
 error_vec = de2bi(error_dec, length(encoded), 'left-msb')';
 
@@ -67,10 +67,11 @@ disp(num2str(decoded'));
 disp('==============================');
 disp(['Ошибка обнаружена: ', num2str(errFlag)]);
 
-[~, syndrome] = step(crcDet, received);
+%[msg, syndrome] = gfdeconv(double(received'), poly)
+msgSyndrome = crc_syndrome(received, poly);
 
 disp('==============================');
-disp(['Синдром ошибки: ', num2str(syndrome)]);
+disp(['Синдром ошибки: ', num2str(msgSyndrome)]);
 
 n = length(encoded);
 
@@ -83,22 +84,26 @@ syndrome_table = zeros(n, 4);
 
 for i = 1:n
     err = zeros(n,1);
-    err(i) = 1;
-    test_word = bitxor(encoded, logical(err));
-    temp = step(crcGen, test_word(1:end-4));
-    syndrome = temp(end-3:end);
-    syndrome_table(i,:) = syndrome';
+    err(n - i + 1) = 1;
+    temp = step(crcGen, logical(err));
+    %bitxor(encoded, logical(err));
+    %temp = step(crcGen, test_word(1:end-4))
+    syndrome = crc_syndrome(err, poly);
+    syndrome_table(i,:) = syndrome;
 
 end
 
-bit_number = n - err_pos + 1;
+%bit_number = n - err_pos + 1;
+
+found_bit = find(ismember(syndrome_table, msgSyndrome, 'rows'));
 
 T = table((1:n)', syndrome_table, ...
     'VariableNames', {'BitNumber', 'Syndrome'});
 
 disp(T);
 
-disp(['Ошибочный бит: ', num2str(bit_number)]);
+%disp(['Ошибочный бит: ', num2str(bit_number)]);
+disp(['Ошибочный бит: ', num2str(found_bit)]);
 
 data7 = de2bi(46, 7, 'left-msb');
 
@@ -151,3 +156,34 @@ else
     disp('Ошибка обнаружена');
 end
 
+
+
+function syndrome = crc_syndrome(word, poly)
+
+ 
+
+    word = logical(word(:));
+
+    r = length(poly)-1;
+
+    reg = zeros(1,r);
+
+    data = double(word');
+
+    for i = 1:length(data)
+
+        feedback = xor(data(i), reg(1));
+
+        reg(1:end-1) = reg(2:end);
+
+        reg(end) = 0;
+
+        if feedback
+            reg = xor(reg, poly(2:end));
+        end
+
+    end
+
+    syndrome = reg;
+
+end

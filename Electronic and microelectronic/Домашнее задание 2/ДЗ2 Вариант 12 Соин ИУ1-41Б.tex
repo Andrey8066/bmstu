@@ -21,6 +21,7 @@
 \usepackage{tikz}
 \usepackage{tikz-timing}
 
+\usetikzlibrary{karnaugh}
 \usetikzlibrary{backgrounds}
 
 \setlength{\cellspacetoplimit}{20pt}
@@ -167,6 +168,12 @@
   \end{tabular}
 \end{center}
 
+Выделим контуры
+
+\begin{center}
+  \includegraphics{karno1.png}
+\end{center}
+
 Тогда минимизированная функция имеет вид $$F_1 = \overline{X_4}\overline{X_2} + \overline{X_4}X_1 + \overline{X_3}X_1 + X_2X_3\overline{X_1}$$
 
 Минимизируем функию $F_2$
@@ -179,11 +186,17 @@
     \hline
     01 & *  & 0  & 0  & 1  \\
     \hline
-    11 & 0  & 1  & 1  & 1  \\
+    11 & 0  & 1  & 1  & 0   \\
     \hline
     10 & 1  & 1  & 1  & 0  \\
     \hline
   \end{tabular}
+\end{center}
+
+Выделим контуры
+
+\begin{center}
+  \includegraphics{karno2.png}
 \end{center}
 
 Тогда минимизированная функция имеет вид $$F_2 = \overline{X_4}X_2\overline{X_1} + X_4\overline{X_3}\overline{X_2} + X_1X_4$$
@@ -195,13 +208,13 @@
 Для функции 1
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{logic1.png}
+  \includegraphics[width=0.6\textwidth]{logic1.png}
 \end{center}
 
 Для функции 2
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{logic2.png}
+  \includegraphics[width=0.6\textwidth]{logic2.png}
 \end{center}
 
 \section{Моделирование в multisim}
@@ -209,11 +222,11 @@
 В результате моделирования были получены следующиие схемы.
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{scheme1.png}
+  \includegraphics[width=0.6\textwidth]{scheme1.png}
 \end{center}
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{scheme2.png}
+  \includegraphics[width=0.6\textwidth]{scheme2.png}
 \end{center}
 
 В результате тестирования были получены следующие значения
@@ -341,13 +354,13 @@ $$F_2 = \overline{\overline{\overline{X_4}X_2\overline{X_1}} \cdot \overline{X_4
 В логических схемах для функций $F_1$ и $F_2$ используются общие логические эллементы, реализующие инверсию входных сигналов $X_n$. Объединим схемы для уменьшения количества логических эллементов, в результате получим следующую схему
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{logicnotandunit.png}
+  \includegraphics[width=0.6\textwidth]{logicnotandunit.png}
 \end{center}
 
 При моделирование этой схемы получаем следующую модель ДКЦУ
 
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{schemetest.png}
+  \includegraphics[width=0.6\textwidth]{schemetest.png}
 \end{center}
 
 Проверим полученную схему построив временную диаграмму

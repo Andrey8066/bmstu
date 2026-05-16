@@ -8,6 +8,7 @@ function [x, y, k, dots] = steepestDescent(func, x0, maxlambda, maxk, epsilon)
 
     while k < maxk
         g = gradient(func, x, epsilon);
+        g = g/norm(g);
         s= -g;
 
         f = @(lambda) func(x+lambda*s);
@@ -24,4 +25,5 @@ function [x, y, k, dots] = steepestDescent(func, x0, maxlambda, maxk, epsilon)
 
    end
    y = func(x);
+
 end
