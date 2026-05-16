@@ -1,10 +1,10 @@
 {
   "jobname": "\"\u041b\u0430\u0431\u043e\u0440\u0430\u0442\u043e\u0440\u043d\u0430\u044f \u0440\u0430\u0431\u043e\u0442\u0430 3\"",
   "md5": "7F96C42AA62EDE7F9A519EAB0751ED18",
-  "timestamp": "20260514015936",
+  "timestamp": "20260516132446",
   "cachefiles": [
+    "8F1CA42C248E7AB8ECC6E19EC1326D93.highlight.minted",
     "AE2B02607869FF6A9F730DD7C1CCBD18.highlight.minted",
-    "B32F0F11B100225248E3D76401CF5511.highlight.minted",
     "CA293D8D22876F7CD27A63FC5E4675E1.highlight.minted",
     "_7F96C42AA62EDE7F9A519EAB0751ED18.index.minted",
     "default.style.minted"
