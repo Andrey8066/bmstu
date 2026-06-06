@@ -16,13 +16,15 @@ function [x, y, k, dots] = newton(func, x0, maxlambda, maxk, epsilon)
         x = x  + s ;
         
 
-        if norm(gradient(func, x, epsilon)) <= epsilon 
-            break
-        end
 
         x0 = x;
         dots = [dots,[x;func(x)]];
         k = k + 1;
+        
+        if norm(gradient(func, x, epsilon)) <= epsilon 
+            break
+        end
+
 
    end
    y = func(x);

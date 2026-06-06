@@ -12,7 +12,11 @@ function [x, y, k, dots] = broyden(func, x0, maxlambda, maxk, epsilon)
     while k < maxk
         g = gradient(func, x, epsilon);
         
-        A = A + dA;
+        if mod(k, n) == 0
+        
+        else
+            A = A + dA;
+            en
 
         s = - A*g;
 

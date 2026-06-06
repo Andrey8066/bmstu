@@ -15,15 +15,15 @@ function [x, y, k, dots] = newtonRaphson(func, x0, maxlambda, maxk, epsilon)
 
         f = @(lambda) func(x+lambda*s);
         x = x  + s * gold(f, 0, maxlambda, epsilon);
-        
+
+        x0 = x;
+        dots = [dots,[x;func(x)]];
+        k = k + 1;
 
         if norm(gradient(func, x, epsilon)) <= epsilon 
             break
         end
 
-        x0 = x;
-        dots = [dots,[x;func(x)]];
-        k = k + 1;
 
    end
    y = func(x);

@@ -1,26 +1,20 @@
-function H = hesse(func, x0, epsilon)
+function H = hesse(func, x, epsilon)
 
-    n = length(x0);
+    n = length(x);
 
     H = zeros(n);
 
-    for i = 1:n
-        for j = 1:n
+    g0 = gradient(func, x, epsilon);
 
-            ei = zeros(n,1);
-            ej = zeros(n,1);
+    for j = 1:n
 
-            ei(i) = epsilon;
-            ej(j) = epsilon;
+        e = zeros(n,1);
+        e(j) = epsilon;
 
-            H(i,j) = ...
-                ( func(x0 + ei + ej) ...
-                - func(x0 + ei - ej) ...
-                - func(x0 - ei + ej) ...
-                + func(x0 - ei - ej) ) ...
-                / (4 * epsilon^2);
+        g1 = gradient(func, x + e, epsilon);
 
-        end
+        H(:,j) = (g1 - g0) / epsilon;
+
     end
 
 end

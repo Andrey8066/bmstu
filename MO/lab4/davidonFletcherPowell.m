@@ -29,15 +29,18 @@ function [x, y, k, dots] = davidonFletcherPowell(func, x0, maxlambda, maxk, epsi
         M = ((-A * g) * (- A * g)')/((- A * g)' * dg);
         N = ((-A * dg) * (- A * dg)')/(dg' * (- A * dg));
 
-        if norm(gradient(func, x, epsilon)) <= epsilon 
-            break
-        end
-
         x0 = x;
         dots = [dots,[x;func(x)]];
         k = k + 1;
+        
+        if norm(gradient(func, x, epsilon)) <= epsilon 
+            break
+        end
+        
 
    end
    y = func(x);
+
+   disp(A + M + N - hesse(func, x0, epsilon)^(-1));
 
 end

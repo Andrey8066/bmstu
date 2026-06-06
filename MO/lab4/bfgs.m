@@ -26,15 +26,17 @@ function [x, y, k, dots] = bfgs(func, x0, maxlambda, maxk, epsilon)
         dg = gradient(func, x, epsilon) - g;
         dA = (1 + ((dg)'*A *dg)/(dx'*dg))*((dx*dx')/(dx'*dg)) - ((dx * dg' * A)/ (dx' * dg)) - ((A * dg * dx')/(dx' * dg));
 
+        k = k + 1;
+        x0 = x;
+        dots = [dots,[x;func(x)]];
+
         if norm(gradient(func, x, epsilon)) <= epsilon 
             break
         end
 
-        x0 = x;
-        dots = [dots,[x;func(x)]];
-        k = k + 1;
-
    end
    y = func(x);
+
+   disp(A + dA - hesse(func, x0, epsilon)^(-1));
 
 end
