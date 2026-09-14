@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o -c \"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/mocs_compilation.cpp\"",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/mocs_compilation.cpp",
+  "output": "CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/main.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp",
+  "output": "CMakeFiles/osm_loader.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp",
+  "output": "CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o"
+}
+]

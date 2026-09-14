@@ -1,0 +1,5 @@
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/osm_loader.dir
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/edit_cache.dir
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/rebuild_cache.dir
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/osm_loader_autogen_timestamp_deps.dir
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/osm_loader_autogen.dir
