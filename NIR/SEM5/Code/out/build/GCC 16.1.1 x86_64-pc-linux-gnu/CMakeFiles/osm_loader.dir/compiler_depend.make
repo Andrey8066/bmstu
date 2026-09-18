@@ -1735,6 +1735,7 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/
   /usr/include/qt6/QtCore/QMetaType \
   /usr/include/qt6/QtCore/QObject \
   /usr/include/qt6/QtCore/QRect \
+  /usr/include/qt6/QtCore/QSettings \
   /usr/include/qt6/QtCore/QSharedDataPointer \
   /usr/include/qt6/QtCore/QString \
   /usr/include/qt6/QtCore/QUrl \
@@ -1832,6 +1833,7 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/
   /usr/include/qt6/QtCore/qscopedpointer.h \
   /usr/include/qt6/QtCore/qscopeguard.h \
   /usr/include/qt6/QtCore/qset.h \
+  /usr/include/qt6/QtCore/qsettings.h \
   /usr/include/qt6/QtCore/qshareddata.h \
   /usr/include/qt6/QtCore/qshareddata_impl.h \
   /usr/include/qt6/QtCore/qsharedpointer.h \
@@ -2642,6 +2644,10 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o:
 
 /usr/lib/libnghttp2.so.14:
 
+/usr/lib/libmvec.so.1:
+
+/usr/lib/libmount.so.1:
+
 /usr/lib/cmake/Qt6DBus/Qt6DBusConfigVersion.cmake:
 
 /usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
@@ -3053,8 +3059,6 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 /usr/include/bits/mathcalls-macros.h:
 
 /usr/include/bits/fp-logb.h:
-
-/usr/lib/libmvec.so.1:
 
 /usr/include/qt6/QtCore/QFlags:
 
@@ -4742,6 +4746,8 @@ osm_loader_autogen/UVLADIE3JM/moc_osm_data_loader.cpp:
 
 /usr/include/qt6/QtNetwork/QSslError:
 
+/usr/include/qt6/QtCore/QSettings:
+
 /usr/include/qt6/QtCore/qabstracteventdispatcher.h:
 
 /usr/include/qt6/QtCore/qbasictimer.h:
@@ -4761,6 +4767,10 @@ osm_loader_autogen/UVLADIE3JM/moc_osm_data_loader.cpp:
 /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp:
 
 /usr/include/qt6/QtCore/qeventloop.h:
+
+/usr/include/qt6/QtCore/qsettings.h:
+
+/usr/lib/libfontconfig.so.1:
 
 /usr/include/qt6/QtCore/qbytearrayview.h:
 
@@ -4836,8 +4846,6 @@ osm_loader_autogen/UVLADIE3JM/moc_osm_data_loader.cpp:
 
 /usr/lib/libGLdispatch.so.0:
 
-/usr/lib/libmount.so.1:
-
 /usr/lib/libQt6Core.so.6.11.2:
 
 /usr/lib/libQt6Network.so.6.11.2:
@@ -4867,8 +4875,6 @@ osm_loader_autogen/UVLADIE3JM/moc_osm_data_loader.cpp:
 /usr/lib/libexpat.so.1:
 
 /usr/lib/libffi.so.8:
-
-/usr/lib/libfontconfig.so.1:
 
 /usr/lib/libfreetype.so.6:
 

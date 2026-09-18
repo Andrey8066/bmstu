@@ -344,4 +344,5 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: \
  /usr/include/qt6/QtCore/qdeadlinetimer.h \
  /usr/include/qt6/QtCore/qnativeinterface.h \
  /usr/include/qt6/QtCore/qcoreapplication_platform.h \
- /usr/include/qt6/QtCore/QDebug
+ /usr/include/qt6/QtCore/QDebug /usr/include/qt6/QtCore/QSettings \
+ /usr/include/qt6/QtCore/qsettings.h

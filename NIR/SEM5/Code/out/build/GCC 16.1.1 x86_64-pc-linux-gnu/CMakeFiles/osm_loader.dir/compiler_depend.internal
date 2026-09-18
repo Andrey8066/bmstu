@@ -1738,6 +1738,7 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o
  /usr/include/qt6/QtCore/QMetaType
  /usr/include/qt6/QtCore/QObject
  /usr/include/qt6/QtCore/QRect
+ /usr/include/qt6/QtCore/QSettings
  /usr/include/qt6/QtCore/QSharedDataPointer
  /usr/include/qt6/QtCore/QString
  /usr/include/qt6/QtCore/QUrl
@@ -1835,6 +1836,7 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o
  /usr/include/qt6/QtCore/qscopedpointer.h
  /usr/include/qt6/QtCore/qscopeguard.h
  /usr/include/qt6/QtCore/qset.h
+ /usr/include/qt6/QtCore/qsettings.h
  /usr/include/qt6/QtCore/qshareddata.h
  /usr/include/qt6/QtCore/qshareddata_impl.h
  /usr/include/qt6/QtCore/qsharedpointer.h
