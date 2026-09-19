@@ -1,0 +1,128 @@
+clear; clc;
+close all;
+
+values = [];
+
+for j = 1:3
+    rng(j);                         % повторяемое начало случайного поиска
+res = zeros(2, 6);
+fun = @(x) sum(x.^2);            % сфера: x_1^2 + x_2^2 + ...
+fun_rastrigin = @(x) 20+x(1)^2+x(2)^2-10*cos(2*pi*x(1))-10*cos(2*pi*x(2));
+fun_rozenbrok = @(x) 00*(x(2)-x(1)^2)^2+(1-x(1))^2;
+nvars = 2;                      % число переменных
+lb = -5*ones(1,nvars);           % каждая переменная от -5
+ub =  5*ones(1,nvars);           % до 5
+lb_rozenbrok = -2*ones(1,nvars);           % каждая переменная от -5
+ub_rozenbrok =  2*ones(1,nvars);           % до 5
+
+options = optimoptions('ga', ...
+    'PopulationSize',50, ...
+    'MaxGenerations',100, ...
+    'EliteCount',2, ...
+    'CrossoverFraction',0.8, ...
+    'PlotFcn',@gaplotbestf, ... 
+    'Display','off');
+
+[x,fval,exitflag,output] = ga(fun,nvars,[],[],[],[],lb,ub,[],options);
+disp('Найденная точка:'); disp(x);
+fprintf('f = %.6g; поколений: %d; оценок: %d\n', ...
+    fval,output.generations,output.funccount);
+
+if nvars == 2
+    [X,Y] = meshgrid(linspace(lb(1),ub(1),80), ...
+        linspace(lb(2),ub(2),80));
+    Z = X.^2 + Y.^2;             % сфера на сетке; .^ — поэлементная степень
+
+    figure('Color','w');
+    subplot(1,2,1);
+    surf(X,Y,Z,'EdgeColor','none');
+    xlabel('x_1'); ylabel('x_2'); zlabel('f(x)');
+    title('Сфера: x_1^2 + x_2^2');
+
+    subplot(1,2,2);
+    contour(X,Y,Z,20); hold on;
+    plot(x(1),x(2),'rp','MarkerSize',12,'MarkerFaceColor','r');
+    axis equal tight; grid on;
+    xlabel('x_1'); ylabel('x_2');
+    title('Красная звезда — результат ga');
+end
+
+res(1) = x;
+
+[x,fval,exitflag_rastrigin,output] = ga(fun_rastrigin,nvars,[],[],[],[],lb,ub,[],options);
+disp('Найденная точка:'); disp(x);
+fprintf('f = %.6g; поколений: %d; оценок: %d\n', ...
+    fval,output.generations,output.funccount);
+
+if nvars == 2
+    [X,Y] = meshgrid(linspace(lb(1),ub(1),80), ...
+        linspace(lb(2),ub(2),80));
+    Z = 20+X.^2+Y.^2-10*cos(2*X.*pi)-10*cos(2*Y.*pi);    % сфера на сетке; .^ — поэлементная степень
+
+    figure('Color','w');
+    subplot(1,2,1);
+    surf(X,Y,Z,'EdgeColor','none');
+    xlabel('x_1'); ylabel('x_2'); zlabel('f(x)');
+    title('Растригин: f = 20+x1^2+x2^2-10*cos(2*pi*x1)-10*cos(2*pi*x2).');
+
+    subplot(1,2,2);
+    contour(X,Y,Z,20); hold on;
+    plot(x(1),x(2),'rp','MarkerSize',12,'MarkerFaceColor','r');
+    axis equal tight; grid on;
+    xlabel('x_1'); ylabel('x_2');
+    title('Красная звезда — результат ga');
+end
+res()
+%% Функция розенброка
+
+for i = 20:30:111
+fprintf("Функция розенброка, популяции %d \n", i);
+    options = optimoptions('ga', ...
+    'PopulationSize',i, ...
+    'MaxGenerations',100, ...
+    'EliteCount',2, ...
+    'CrossoverFraction',0.8, ...
+    'PlotFcn',@gaplotbestf, ... 
+    'Display','off');
+
+[x_rozenbrok,fval,exitflag_rastrigin,output] = ga(fun_rozenbrok,nvars,[],[],[],[],lb_rozenbrok,ub_rozenbrok,[],options);
+disp('Найденная точка:'); disp(x_rozenbrok);
+fprintf('f = %.6g; поколений: %d; оценок: %d\n', ...
+    fval,output.generations,output.funccount);
+
+if nvars == 2
+    [X,Y] = meshgrid(linspace(lb(1),ub(1),80), ...
+        linspace(lb(2),ub(2),80));
+    Z = 100*(Y-X.^2)^2+(1-X)^2;    % сфера на сетке; .^ — поэлементная степень
+
+    figure('Color','w');
+    subplot(1,2,1);
+    surf(X,Y,Z,'EdgeColor','none');
+    xlabel('x_1'); ylabel('x_2'); zlabel('f(x)');
+    title('Розенброк: f = 100*(x2-x1^2)^2+(1-x1)^2');
+
+    subplot(1,2,2);
+    contour(X,Y,Z,20); hold on;
+    plot(x_rozenbrok(1),x_rozenbrok(2),'rp','MarkerSize',12,'MarkerFaceColor','r');
+    axis equal tight; grid on;
+    xlabel('x_1'); ylabel('x_2');
+    title('Красная звезда — результат ga');
+end
+
+end
+end
+%% Указание для графиков
+% Для сферы достаточно изменить nvars: fun и границы уже учитывают размер.
+% При nvars ~= 2 останется только график сходимости, блок поверхности пропустится.
+% Для другой функции двух переменных измените и fun, и формулу Z.
+% В формуле Z используйте .^, .* и ./ для поэлементных операций с сеткой.
+% После изменений запускайте скрипт целиком.
+
+%% Допишите по образцу
+% 1. Для сферы проверьте ответ около [0 0], f около 0.
+% 2. Растригин: f = 20+x1^2+x2^2-10*cos(2*pi*x1)-10*cos(2*pi*x2).
+% 3. Розенброк: f = 100*(x2-x1^2)^2+(1-x1)^2; границы [-2 2].
+% 4. На Розенброке попробуйте популяции 20, 50 и 100.
+% 5. Оберните rng и вызов ga в цикл for k = 1:3 ... end.
+%    Используйте rng(k), записывайте fval в values(k), затем выведите values.
+

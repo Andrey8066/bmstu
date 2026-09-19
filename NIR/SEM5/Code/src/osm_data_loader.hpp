@@ -17,9 +17,11 @@ class OSMDataLoader : public QObject {
   Q_OBJECT
 
 public:
-
   QString filePath = "osm.json";
-  explicit OSMDataLoader(QObject *parent = nullptr, const QString apiUrl = "https://maps.mail.ru/osm/tools/overpass/api/interpreter");
+  explicit OSMDataLoader(
+      QObject *parent = nullptr,
+      const QString apiUrl =
+          "https://maps.mail.ru/osm/tools/overpass/api/interpreter");
 
   enum QueryType { Buildings, Roads, Crosswalks, AllElements };
 
@@ -30,8 +32,7 @@ signals:
 public slots:
   // Загрузка данных из OpenStreetMap через Overpass API
   QByteArray fetchOSMData(const QString &queryType = "all",
-                       const int &timeout = 30, 
-                       const QRect &area = QRect());
+                          const int &timeout = 30, const QRect &area = QRect());
 
   OSMDataLoaderArea getDefaultArea() const;
   void setArea(const OSMDataLoaderArea &area);
@@ -47,7 +48,6 @@ private:
   OSMDataLoaderArea defaultArea;
   QByteArray requestResult;
   QUrl url;
-
 };
 
 #endif // OSM_DATA_LOADER_HPP
