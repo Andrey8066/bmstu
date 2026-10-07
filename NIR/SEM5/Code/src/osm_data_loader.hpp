@@ -6,6 +6,8 @@
 #include <QRect>
 #include <QString>
 
+#define earthRadius 6371000.0
+
 struct OSMDataLoaderArea {
   double lat;
   double lon;
@@ -19,9 +21,10 @@ class OSMDataLoader : public QObject {
 public:
   QString filePath = "osm.json";
   explicit OSMDataLoader(
-      QObject *parent = nullptr,
       const QString apiUrl =
-          "https://maps.mail.ru/osm/tools/overpass/api/interpreter");
+          "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+      double lat = 55.766863, double lon = 37.681677, double radius = 1000,
+      QObject *parent = nullptr);
 
   enum QueryType { Buildings, Roads, Crosswalks, AllElements };
 
@@ -36,6 +39,9 @@ public slots:
 
   OSMDataLoaderArea getDefaultArea() const;
   void setArea(const OSMDataLoaderArea &area);
+  void setArea(double lat, double lon, double radius);
+
+  void waitData();
 
   // Формирование Overpass QL запроса
   QString buildOverpassQuery(const int &timout, const QString &queryType);
@@ -48,6 +54,8 @@ private:
   OSMDataLoaderArea defaultArea;
   QByteArray requestResult;
   QUrl url;
+  double radToLat(double radius);
+  double radToLon(double radius);
 };
 
 #endif // OSM_DATA_LOADER_HPP

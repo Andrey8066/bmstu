@@ -276,6 +276,15 @@ Code_IS_TOP_LEVEL:STATIC=ON
 //Value Computed by CMake
 Code_SOURCE_DIR:STATIC=/home/andrey/Documents/BMSTU/NIR/SEM5/Code
 
+//Path to the gdal-config tool
+GDAL_CONFIG:FILEPATH=/usr/bin/gdal-config
+
+//Path to the GDAL include directory
+GDAL_INCLUDE_DIR:PATH=/usr/include
+
+//Path to the GDAL library
+GDAL_LIBRARY:FILEPATH=/usr/lib/libgdal.so
+
 //Path to a file.
 OPENGL_EGL_INCLUDE_DIR:PATH=/usr/include
 
@@ -340,8 +349,17 @@ Qt6GuiTools_DIR:PATH=/usr/lib/cmake/Qt6GuiTools
 //The directory containing a CMake configuration file for Qt6Gui.
 Qt6Gui_DIR:PATH=/usr/lib/cmake/Qt6Gui
 
+//The directory containing a CMake configuration file for Qt6MainWindow.
+Qt6MainWindow_DIR:PATH=Qt6MainWindow_DIR-NOTFOUND
+
 //The directory containing a CMake configuration file for Qt6Network.
 Qt6Network_DIR:PATH=/usr/lib/cmake/Qt6Network
+
+//The directory containing a CMake configuration file for Qt6OpenGLWidgets.
+Qt6OpenGLWidgets_DIR:PATH=/usr/lib/cmake/Qt6OpenGLWidgets
+
+//The directory containing a CMake configuration file for Qt6OpenGL.
+Qt6OpenGL_DIR:PATH=/usr/lib/cmake/Qt6OpenGL
 
 //The directory containing a CMake configuration file for Qt6Sql.
 Qt6Sql_DIR:PATH=/usr/lib/cmake/Qt6Sql
@@ -544,6 +562,8 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Deprecated.  Use -W[no-]deprecated instead.
 CMAKE_WARN_DEPRECATED:INTERNAL=ON
+//Details about finding GDAL
+FIND_PACKAGE_MESSAGE_DETAILS_GDAL:INTERNAL=[/usr/lib/libgdal.so][/usr/include][v3.13.3()]
 //Details about finding OpenGL
 FIND_PACKAGE_MESSAGE_DETAILS_OpenGL:INTERNAL=[/usr/lib/libOpenGL.so][/usr/lib/libGLX.so][/usr/include][ ][v()]
 //Details about finding Threads
@@ -554,6 +574,12 @@ FIND_PACKAGE_MESSAGE_DETAILS_WrapAtomic:INTERNAL=[1][v()]
 FIND_PACKAGE_MESSAGE_DETAILS_WrapOpenGL:INTERNAL=[ON][v()]
 //Details about finding WrapVulkanHeaders
 FIND_PACKAGE_MESSAGE_DETAILS_WrapVulkanHeaders:INTERNAL=[/usr/include][v()]
+//ADVANCED property for variable: GDAL_CONFIG
+GDAL_CONFIG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GDAL_INCLUDE_DIR
+GDAL_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: GDAL_LIBRARY
+GDAL_LIBRARY-ADVANCED:INTERNAL=1
 //Test HAVE_STDATOMIC
 HAVE_STDATOMIC:INTERNAL=1
 //ADVANCED property for variable: OPENGL_EGL_INCLUDE_DIR

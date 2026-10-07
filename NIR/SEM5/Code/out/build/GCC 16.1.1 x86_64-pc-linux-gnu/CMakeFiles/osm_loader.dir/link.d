@@ -5,9 +5,15 @@ osm_loader: \
   CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o \
   CMakeFiles/osm_loader.dir/src/main.cpp.o \
   CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o \
+  CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o \
+  CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o \
+  CMakeFiles/osm_loader.dir/src/glwidget.cpp.o \
+  /usr/lib/libgdal.so \
   /usr/lib/libQt6Network.so.6.11.2 \
   /usr/lib/libQt6Sql.so.6.11.2 \
+  /usr/lib/libQt6OpenGLWidgets.so.6.11.2 \
   /usr/lib/libQt6Widgets.so.6.11.2 \
+  /usr/lib/libQt6OpenGL.so.6.11.2 \
   /usr/lib/libQt6Gui.so.6.11.2 \
   /usr/lib/libGLX.so \
   /usr/lib/libOpenGL.so \
@@ -42,21 +48,61 @@ osm_loader: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/libgcc.a \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/crtendS.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/../../../../lib/crtn.o \
+  /usr/lib32/libz.so.1 \
+  /usr/lib/libz.so.1 \
+  /usr/lib/libarchive.so.13 \
+  /usr/lib32/libcurl.so.4 \
+  /usr/lib/libcurl.so.4 \
+  /usr/lib/libodbc.so.2 \
+  /usr/lib/libodbcinst.so.2 \
+  /usr/lib32/libxml2.so.16 \
+  /usr/lib/libxml2.so.16 \
+  /usr/lib/libcryptopp.so.8 \
+  /usr/lib32/libcrypto.so.3 \
+  /usr/lib/libcrypto.so.3 \
+  /usr/lib32/liblzma.so.5 \
+  /usr/lib/liblzma.so.5 \
+  /usr/lib/libdeflate.so.0 \
+  /usr/lib/liblz4.so.1 \
+  /usr/lib/libblosc.so.1 \
+  /usr/lib/libqhull_r.so.8.0 \
+  /usr/lib/libxerces-c-3.3.so \
+  /usr/lib32/libjpeg.so.8 \
+  /usr/lib/libjpeg.so.8 \
+  /usr/lib/libgeotiff.so.5 \
+  /usr/lib/libmuparser.so.2 \
+  /usr/lib32/libpng16.so.16 \
+  /usr/lib/libpng16.so.16 \
+  /usr/lib32/libzstd.so.1 \
+  /usr/lib/libzstd.so.1 \
+  /usr/lib/libaec.so.0 \
+  /usr/lib32/libsqlite3.so.0 \
+  /usr/lib/libsqlite3.so.0 \
+  /usr/lib32/libpcre2-8.so.0 \
+  /usr/lib/libpcre2-8.so.0 \
+  /usr/lib/libspatialite.so.8 \
+  /usr/lib32/libexpat.so.1 \
+  /usr/lib/libexpat.so.1 \
+  /usr/lib/libgeos_c.so.1 \
+  /usr/lib32/libgomp.so.1 \
+  /usr/lib/libgomp.so.1 \
+  /usr/lib/libproj.so.25 \
+  /usr/lib32/libjson-c.so.5 \
+  /usr/lib/libjson-c.so.5 \
+  /usr/lib32/libtiff.so.6 \
+  /usr/lib/libtiff.so.6 \
+  /usr/lib/ld-linux-x86-64.so.2 \
   /usr/lib/libgssapi_krb5.so.2 \
   /usr/lib/libbrotlidec.so.1 \
-  /usr/lib/libzstd.so.1 \
-  /usr/lib/libz.so.1 \
   /usr/lib/libproxy.so.1 \
   /usr/lib/libproxy.so.1 \
   /usr/lib/libproxy.so.1 \
-  /usr/lib/libcrypto.so.3 \
   /usr/lib/libEGL.so.1 \
   /usr/lib/libfontconfig.so.1 \
   /usr/lib/libX11.so.6 \
   /usr/lib/libglib-2.0.so.0 \
   /usr/lib/libQt6DBus.so.6 \
   /usr/lib/libxkbcommon.so.0 \
-  /usr/lib/libpng16.so.16 \
   /usr/lib/libharfbuzz.so.0 \
   /usr/lib/libmd4c.so.0 \
   /usr/lib/libfreetype.so.6 \
@@ -69,7 +115,40 @@ osm_loader: \
   /usr/lib/libdouble-conversion.so.3 \
   /usr/lib/libb2.so.1 \
   /usr/lib/libpcre2-16.so.0 \
-  /usr/lib/ld-linux-x86-64.so.2 \
+  /usr/lib32/libacl.so.1 \
+  /usr/lib/libacl.so.1 \
+  /usr/lib32/libbz2.so.1.0 \
+  /usr/lib/libbz2.so.1.0 \
+  /usr/lib32/libnghttp3.so.9 \
+  /usr/lib/libnghttp3.so.9 \
+  /usr/lib32/libngtcp2_crypto_ossl.so.0 \
+  /usr/lib/libngtcp2_crypto_ossl.so.0 \
+  /usr/lib32/libngtcp2.so.16 \
+  /usr/lib/libngtcp2.so.16 \
+  /usr/lib32/libnghttp2.so.14 \
+  /usr/lib/libnghttp2.so.14 \
+  /usr/lib32/libidn2.so.0 \
+  /usr/lib/libidn2.so.0 \
+  /usr/lib32/libssh2.so.1 \
+  /usr/lib/libssh2.so.1 \
+  /usr/lib32/libpsl.so.5 \
+  /usr/lib/libpsl.so.5 \
+  /usr/lib32/libssl.so.3 \
+  /usr/lib/libssl.so.3 \
+  /usr/lib/libltdl.so.7 \
+  /usr/lib32/libbrotlienc.so.1 \
+  /usr/lib/libbrotlienc.so.1 \
+  /usr/lib/libsnappy.so.1 \
+  /usr/lib32/libnsl.so.3 \
+  /usr/lib/libnsl.so.3 \
+  /usr/lib32/libicudata.so.78 \
+  /usr/lib/libicudata.so.78 \
+  /usr/lib/libminizip.so.1 \
+  /usr/lib/librttopo.so.1 \
+  /usr/lib/libfreexl.so.1 \
+  /usr/lib/libgeos.so.3.14.1 \
+  /usr/lib/libjbig.so.2.1 \
+  /usr/lib/libwebp.so.7 \
   /usr/lib32/libkrb5.so.3 \
   /usr/lib/libkrb5.so.3 \
   /usr/lib32/libk5crypto.so.3 \
@@ -87,24 +166,15 @@ osm_loader: \
   /usr/lib/libproxy/libpxbackend-1.0.so \
   /usr/lib32/libgobject-2.0.so.0 \
   /usr/lib/libgobject-2.0.so.0 \
-  /usr/lib32/libbrotlienc.so.1 \
-  /usr/lib/libbrotlienc.so.1 \
-  /usr/lib32/libexpat.so.1 \
-  /usr/lib/libexpat.so.1 \
   /usr/lib32/libxcb.so.1 \
   /usr/lib/libxcb.so.1 \
-  /usr/lib32/libpcre2-8.so.0 \
-  /usr/lib/libpcre2-8.so.0 \
   /usr/lib/libdbus-1.so.3 \
   /usr/lib/libgraphite2.so.3 \
-  /usr/lib32/libbz2.so.1.0 \
-  /usr/lib/libbz2.so.1.0 \
-  /usr/lib32/libicudata.so.78 \
-  /usr/lib/libicudata.so.78 \
-  /usr/lib32/libgomp.so.1 \
-  /usr/lib/libgomp.so.1 \
-  /usr/lib32/libcurl.so.4 \
-  /usr/lib/libcurl.so.4 \
+  /usr/lib32/libunistring.so.5 \
+  /usr/lib/libunistring.so.5 \
+  /usr/lib32/libtirpc.so.3 \
+  /usr/lib/libtirpc.so.3 \
+  /usr/lib/libsharpyuv.so.0 \
   /usr/lib32/libgio-2.0.so.0 \
   /usr/lib/libgio-2.0.so.0 \
   /usr/lib/libduktape.so.207 \
@@ -114,28 +184,10 @@ osm_loader: \
   /usr/lib/libXau.so.6 \
   /usr/lib32/libXdmcp.so.6 \
   /usr/lib/libXdmcp.so.6 \
-  /usr/lib32/libnghttp3.so.9 \
-  /usr/lib/libnghttp3.so.9 \
-  /usr/lib32/libngtcp2_crypto_ossl.so.0 \
-  /usr/lib/libngtcp2_crypto_ossl.so.0 \
-  /usr/lib32/libngtcp2.so.16 \
-  /usr/lib/libngtcp2.so.16 \
-  /usr/lib32/libnghttp2.so.14 \
-  /usr/lib/libnghttp2.so.14 \
-  /usr/lib32/libidn2.so.0 \
-  /usr/lib/libidn2.so.0 \
-  /usr/lib32/libssh2.so.1 \
-  /usr/lib/libssh2.so.1 \
-  /usr/lib32/libpsl.so.5 \
-  /usr/lib/libpsl.so.5 \
-  /usr/lib32/libssl.so.3 \
-  /usr/lib/libssl.so.3 \
   /usr/lib32/libgmodule-2.0.so.0 \
   /usr/lib/libgmodule-2.0.so.0 \
   /usr/lib32/libmount.so.1 \
   /usr/lib/libmount.so.1 \
-  /usr/lib32/libunistring.so.5 \
-  /usr/lib/libunistring.so.5 \
   /usr/lib32/libblkid.so.1 \
   /usr/lib/libblkid.so.1
 
@@ -151,11 +203,23 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o:
 
 CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 
+CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/glwidget.cpp.o:
+
+/usr/lib/libgdal.so:
+
 /usr/lib/libQt6Network.so.6.11.2:
 
 /usr/lib/libQt6Sql.so.6.11.2:
 
+/usr/lib/libQt6OpenGLWidgets.so.6.11.2:
+
 /usr/lib/libQt6Widgets.so.6.11.2:
+
+/usr/lib/libQt6OpenGL.so.6.11.2:
 
 /usr/lib/libQt6Gui.so.6.11.2:
 
@@ -225,21 +289,103 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/16/../../../../lib/crtn.o:
 
+/usr/lib32/libz.so.1:
+
+/usr/lib/libz.so.1:
+
+/usr/lib/libarchive.so.13:
+
+/usr/lib32/libcurl.so.4:
+
+/usr/lib/libcurl.so.4:
+
+/usr/lib/libodbc.so.2:
+
+/usr/lib/libodbcinst.so.2:
+
+/usr/lib32/libxml2.so.16:
+
+/usr/lib/libxml2.so.16:
+
+/usr/lib/libcryptopp.so.8:
+
+/usr/lib32/libcrypto.so.3:
+
+/usr/lib/libcrypto.so.3:
+
+/usr/lib32/liblzma.so.5:
+
+/usr/lib/liblzma.so.5:
+
+/usr/lib/libdeflate.so.0:
+
+/usr/lib/liblz4.so.1:
+
+/usr/lib/libblosc.so.1:
+
+/usr/lib/libqhull_r.so.8.0:
+
+/usr/lib/libxerces-c-3.3.so:
+
+/usr/lib32/libjpeg.so.8:
+
+/usr/lib/libjpeg.so.8:
+
+/usr/lib/libgeotiff.so.5:
+
+/usr/lib/libmuparser.so.2:
+
+/usr/lib32/libpng16.so.16:
+
+/usr/lib/libpng16.so.16:
+
+/usr/lib32/libzstd.so.1:
+
+/usr/lib/libzstd.so.1:
+
+/usr/lib/libaec.so.0:
+
+/usr/lib32/libsqlite3.so.0:
+
+/usr/lib/libsqlite3.so.0:
+
+/usr/lib32/libpcre2-8.so.0:
+
+/usr/lib/libpcre2-8.so.0:
+
+/usr/lib/libspatialite.so.8:
+
+/usr/lib32/libexpat.so.1:
+
+/usr/lib/libexpat.so.1:
+
+/usr/lib/libgeos_c.so.1:
+
+/usr/lib32/libgomp.so.1:
+
+/usr/lib/libgomp.so.1:
+
+/usr/lib/libproj.so.25:
+
+/usr/lib32/libjson-c.so.5:
+
+/usr/lib/libjson-c.so.5:
+
+/usr/lib32/libtiff.so.6:
+
+/usr/lib/libtiff.so.6:
+
+/usr/lib/ld-linux-x86-64.so.2:
+
 /usr/lib/libgssapi_krb5.so.2:
 
 /usr/lib/libbrotlidec.so.1:
 
-/usr/lib/libzstd.so.1:
-
-/usr/lib/libz.so.1:
-
 /usr/lib/libproxy.so.1:
 
 /usr/lib/libproxy.so.1:
 
 /usr/lib/libproxy.so.1:
-
-/usr/lib/libcrypto.so.3:
 
 /usr/lib/libEGL.so.1:
 
@@ -252,8 +398,6 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 /usr/lib/libQt6DBus.so.6:
 
 /usr/lib/libxkbcommon.so.0:
-
-/usr/lib/libpng16.so.16:
 
 /usr/lib/libharfbuzz.so.0:
 
@@ -279,7 +423,73 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 
 /usr/lib/libpcre2-16.so.0:
 
-/usr/lib/ld-linux-x86-64.so.2:
+/usr/lib32/libacl.so.1:
+
+/usr/lib/libacl.so.1:
+
+/usr/lib32/libbz2.so.1.0:
+
+/usr/lib/libbz2.so.1.0:
+
+/usr/lib32/libnghttp3.so.9:
+
+/usr/lib/libnghttp3.so.9:
+
+/usr/lib32/libngtcp2_crypto_ossl.so.0:
+
+/usr/lib/libngtcp2_crypto_ossl.so.0:
+
+/usr/lib32/libngtcp2.so.16:
+
+/usr/lib/libngtcp2.so.16:
+
+/usr/lib32/libnghttp2.so.14:
+
+/usr/lib/libnghttp2.so.14:
+
+/usr/lib32/libidn2.so.0:
+
+/usr/lib/libidn2.so.0:
+
+/usr/lib32/libssh2.so.1:
+
+/usr/lib/libssh2.so.1:
+
+/usr/lib32/libpsl.so.5:
+
+/usr/lib/libpsl.so.5:
+
+/usr/lib32/libssl.so.3:
+
+/usr/lib/libssl.so.3:
+
+/usr/lib/libltdl.so.7:
+
+/usr/lib32/libbrotlienc.so.1:
+
+/usr/lib/libbrotlienc.so.1:
+
+/usr/lib/libsnappy.so.1:
+
+/usr/lib32/libnsl.so.3:
+
+/usr/lib/libnsl.so.3:
+
+/usr/lib32/libicudata.so.78:
+
+/usr/lib/libicudata.so.78:
+
+/usr/lib/libminizip.so.1:
+
+/usr/lib/librttopo.so.1:
+
+/usr/lib/libfreexl.so.1:
+
+/usr/lib/libgeos.so.3.14.1:
+
+/usr/lib/libjbig.so.2.1:
+
+/usr/lib/libwebp.so.7:
 
 /usr/lib32/libkrb5.so.3:
 
@@ -315,41 +525,23 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 
 /usr/lib/libgobject-2.0.so.0:
 
-/usr/lib32/libbrotlienc.so.1:
-
-/usr/lib/libbrotlienc.so.1:
-
-/usr/lib32/libexpat.so.1:
-
-/usr/lib/libexpat.so.1:
-
 /usr/lib32/libxcb.so.1:
 
 /usr/lib/libxcb.so.1:
-
-/usr/lib32/libpcre2-8.so.0:
-
-/usr/lib/libpcre2-8.so.0:
 
 /usr/lib/libdbus-1.so.3:
 
 /usr/lib/libgraphite2.so.3:
 
-/usr/lib32/libbz2.so.1.0:
+/usr/lib32/libunistring.so.5:
 
-/usr/lib/libbz2.so.1.0:
+/usr/lib/libunistring.so.5:
 
-/usr/lib32/libicudata.so.78:
+/usr/lib32/libtirpc.so.3:
 
-/usr/lib/libicudata.so.78:
+/usr/lib/libtirpc.so.3:
 
-/usr/lib32/libgomp.so.1:
-
-/usr/lib/libgomp.so.1:
-
-/usr/lib32/libcurl.so.4:
-
-/usr/lib/libcurl.so.4:
+/usr/lib/libsharpyuv.so.0:
 
 /usr/lib32/libgio-2.0.so.0:
 
@@ -369,38 +561,6 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 
 /usr/lib/libXdmcp.so.6:
 
-/usr/lib32/libnghttp3.so.9:
-
-/usr/lib/libnghttp3.so.9:
-
-/usr/lib32/libngtcp2_crypto_ossl.so.0:
-
-/usr/lib/libngtcp2_crypto_ossl.so.0:
-
-/usr/lib32/libngtcp2.so.16:
-
-/usr/lib/libngtcp2.so.16:
-
-/usr/lib32/libnghttp2.so.14:
-
-/usr/lib/libnghttp2.so.14:
-
-/usr/lib32/libidn2.so.0:
-
-/usr/lib/libidn2.so.0:
-
-/usr/lib32/libssh2.so.1:
-
-/usr/lib/libssh2.so.1:
-
-/usr/lib32/libpsl.so.5:
-
-/usr/lib/libpsl.so.5:
-
-/usr/lib32/libssl.so.3:
-
-/usr/lib/libssl.so.3:
-
 /usr/lib32/libgmodule-2.0.so.0:
 
 /usr/lib/libgmodule-2.0.so.0:
@@ -408,10 +568,6 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
 /usr/lib32/libmount.so.1:
 
 /usr/lib/libmount.so.1:
-
-/usr/lib32/libunistring.so.5:
-
-/usr/lib/libunistring.so.5:
 
 /usr/lib32/libblkid.so.1:
 

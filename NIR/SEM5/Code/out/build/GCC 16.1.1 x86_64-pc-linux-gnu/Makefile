@@ -179,6 +179,54 @@ osm_loader_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.s
 .PHONY : osm_loader_autogen/mocs_compilation.cpp.s
 
+src/dem_reader.o: src/dem_reader.cpp.o
+.PHONY : src/dem_reader.o
+
+# target to build an object file
+src/dem_reader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o
+.PHONY : src/dem_reader.cpp.o
+
+src/dem_reader.i: src/dem_reader.cpp.i
+.PHONY : src/dem_reader.i
+
+# target to preprocess a source file
+src/dem_reader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/dem_reader.cpp.i
+.PHONY : src/dem_reader.cpp.i
+
+src/dem_reader.s: src/dem_reader.cpp.s
+.PHONY : src/dem_reader.s
+
+# target to generate assembly for a file
+src/dem_reader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/dem_reader.cpp.s
+.PHONY : src/dem_reader.cpp.s
+
+src/glwidget.o: src/glwidget.cpp.o
+.PHONY : src/glwidget.o
+
+# target to build an object file
+src/glwidget.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/glwidget.cpp.o
+.PHONY : src/glwidget.cpp.o
+
+src/glwidget.i: src/glwidget.cpp.i
+.PHONY : src/glwidget.i
+
+# target to preprocess a source file
+src/glwidget.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/glwidget.cpp.i
+.PHONY : src/glwidget.cpp.i
+
+src/glwidget.s: src/glwidget.cpp.s
+.PHONY : src/glwidget.s
+
+# target to generate assembly for a file
+src/glwidget.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/glwidget.cpp.s
+.PHONY : src/glwidget.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -202,6 +250,30 @@ src/main.s: src/main.cpp.s
 src/main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
+
+src/mainwindow.o: src/mainwindow.cpp.o
+.PHONY : src/mainwindow.o
+
+# target to build an object file
+src/mainwindow.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o
+.PHONY : src/mainwindow.cpp.o
+
+src/mainwindow.i: src/mainwindow.cpp.i
+.PHONY : src/mainwindow.i
+
+# target to preprocess a source file
+src/mainwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/mainwindow.cpp.i
+.PHONY : src/mainwindow.cpp.i
+
+src/mainwindow.s: src/mainwindow.cpp.s
+.PHONY : src/mainwindow.s
+
+# target to generate assembly for a file
+src/mainwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/mainwindow.cpp.s
+.PHONY : src/mainwindow.cpp.s
 
 src/osm_data_loader.o: src/osm_data_loader.cpp.o
 .PHONY : src/osm_data_loader.o
@@ -241,9 +313,18 @@ help:
 	@echo "... osm_loader_autogen/mocs_compilation.o"
 	@echo "... osm_loader_autogen/mocs_compilation.i"
 	@echo "... osm_loader_autogen/mocs_compilation.s"
+	@echo "... src/dem_reader.o"
+	@echo "... src/dem_reader.i"
+	@echo "... src/dem_reader.s"
+	@echo "... src/glwidget.o"
+	@echo "... src/glwidget.i"
+	@echo "... src/glwidget.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/mainwindow.o"
+	@echo "... src/mainwindow.i"
+	@echo "... src/mainwindow.s"
 	@echo "... src/osm_data_loader.o"
 	@echo "... src/osm_data_loader.i"
 	@echo "... src/osm_data_loader.s"

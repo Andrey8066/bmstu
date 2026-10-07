@@ -3,7 +3,13 @@ osm_loader_autogen/timestamp: \
 	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/CMakeFiles/4.4.3/CMakeCXXCompiler.cmake \
 	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/CMakeFiles/4.4.3/CMakeSystem.cmake \
 	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/moc_predefs.h \
+	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp \
+	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.hpp \
+	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp \
+	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.hpp \
 	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp \
+	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp \
+	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp \
 	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp \
 	/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.hpp \
 	/usr/include/alloca.h \
@@ -21,24 +27,42 @@ osm_loader_autogen/timestamp: \
 	/usr/include/assert.h \
 	/usr/include/bits/atomic_wide_counter.h \
 	/usr/include/bits/byteswap.h \
+	/usr/include/bits/confname.h \
 	/usr/include/bits/cpu-set.h \
 	/usr/include/bits/endian.h \
 	/usr/include/bits/endianness.h \
+	/usr/include/bits/environments.h \
 	/usr/include/bits/errno.h \
 	/usr/include/bits/floatn-common.h \
 	/usr/include/bits/floatn.h \
+	/usr/include/bits/flt-eval-method.h \
+	/usr/include/bits/fp-fast.h \
+	/usr/include/bits/fp-logb.h \
+	/usr/include/bits/getopt_core.h \
+	/usr/include/bits/getopt_posix.h \
+	/usr/include/bits/iscanonical.h \
 	/usr/include/bits/libc-header-start.h \
+	/usr/include/bits/libm-simd-decl-stubs.h \
 	/usr/include/bits/local_lim.h \
 	/usr/include/bits/locale.h \
 	/usr/include/bits/long-double.h \
+	/usr/include/bits/math-vector.h \
+	/usr/include/bits/mathcalls-helper-functions.h \
+	/usr/include/bits/mathcalls-macros.h \
+	/usr/include/bits/mathcalls-narrow.h \
+	/usr/include/bits/mathcalls.h \
 	/usr/include/bits/posix1_lim.h \
 	/usr/include/bits/posix2_lim.h \
+	/usr/include/bits/posix_opt.h \
 	/usr/include/bits/pthread_stack_min-dynamic.h \
 	/usr/include/bits/pthreadtypes-arch.h \
 	/usr/include/bits/pthreadtypes.h \
 	/usr/include/bits/sched.h \
 	/usr/include/bits/select.h \
 	/usr/include/bits/setjmp.h \
+	/usr/include/bits/stat.h \
+	/usr/include/bits/statx-generic.h \
+	/usr/include/bits/statx.h \
 	/usr/include/bits/stdint-intn.h \
 	/usr/include/bits/stdint-least.h \
 	/usr/include/bits/stdint-uintn.h \
@@ -46,6 +70,7 @@ osm_loader_autogen/timestamp: \
 	/usr/include/bits/stdlib-float.h \
 	/usr/include/bits/struct_mutex.h \
 	/usr/include/bits/struct_rwlock.h \
+	/usr/include/bits/struct_stat.h \
 	/usr/include/bits/thread-shared-types.h \
 	/usr/include/bits/time.h \
 	/usr/include/bits/time64.h \
@@ -70,6 +95,8 @@ osm_loader_autogen/timestamp: \
 	/usr/include/bits/types/struct___jmp_buf_tag.h \
 	/usr/include/bits/types/struct_itimerspec.h \
 	/usr/include/bits/types/struct_sched_param.h \
+	/usr/include/bits/types/struct_statx.h \
+	/usr/include/bits/types/struct_statx_timestamp.h \
 	/usr/include/bits/types/struct_timespec.h \
 	/usr/include/bits/types/struct_timeval.h \
 	/usr/include/bits/types/struct_tm.h \
@@ -79,9 +106,11 @@ osm_loader_autogen/timestamp: \
 	/usr/include/bits/typesizes.h \
 	/usr/include/bits/uintn-identity.h \
 	/usr/include/bits/uio_lim.h \
+	/usr/include/bits/unistd_ext.h \
 	/usr/include/bits/waitflags.h \
 	/usr/include/bits/waitstatus.h \
 	/usr/include/bits/wchar.h \
+	/usr/include/bits/wctype-wchar.h \
 	/usr/include/bits/wordsize.h \
 	/usr/include/bits/xopen_lim.h \
 	/usr/include/c++/16/algorithm \
@@ -97,6 +126,8 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/bits/allocator.h \
 	/usr/include/c++/16/bits/atomic_base.h \
 	/usr/include/c++/16/bits/atomic_lockfree_defines.h \
+	/usr/include/c++/16/bits/basic_ios.h \
+	/usr/include/c++/16/bits/basic_ios.tcc \
 	/usr/include/c++/16/bits/basic_string.h \
 	/usr/include/c++/16/bits/basic_string.tcc \
 	/usr/include/c++/16/bits/char_traits.h \
@@ -118,9 +149,12 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/bits/hashtable_policy.h \
 	/usr/include/c++/16/bits/invoke.h \
 	/usr/include/c++/16/bits/ios_base.h \
+	/usr/include/c++/16/bits/istream.tcc \
 	/usr/include/c++/16/bits/list.tcc \
 	/usr/include/c++/16/bits/locale_classes.h \
 	/usr/include/c++/16/bits/locale_classes.tcc \
+	/usr/include/c++/16/bits/locale_facets.h \
+	/usr/include/c++/16/bits/locale_facets.tcc \
 	/usr/include/c++/16/bits/localefwd.h \
 	/usr/include/c++/16/bits/memory_resource.h \
 	/usr/include/c++/16/bits/memoryfwd.h \
@@ -131,7 +165,10 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/bits/new_except.h \
 	/usr/include/c++/16/bits/new_throw.h \
 	/usr/include/c++/16/bits/node_handle.h \
+	/usr/include/c++/16/bits/ostream.h \
+	/usr/include/c++/16/bits/ostream.tcc \
 	/usr/include/c++/16/bits/ostream_insert.h \
+	/usr/include/c++/16/bits/ostream_print.h \
 	/usr/include/c++/16/bits/parse_numbers.h \
 	/usr/include/c++/16/bits/postypes.h \
 	/usr/include/c++/16/bits/predefined_ops.h \
@@ -143,6 +180,7 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/bits/shared_ptr_atomic.h \
 	/usr/include/c++/16/bits/shared_ptr_base.h \
 	/usr/include/c++/16/bits/specfun.h \
+	/usr/include/c++/16/bits/sstream.tcc \
 	/usr/include/c++/16/bits/std_abs.h \
 	/usr/include/c++/16/bits/std_function.h \
 	/usr/include/c++/16/bits/stdexcept_except.h \
@@ -192,6 +230,7 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/clocale \
 	/usr/include/c++/16/cmath \
 	/usr/include/c++/16/compare \
+	/usr/include/c++/16/complex \
 	/usr/include/c++/16/concepts \
 	/usr/include/c++/16/cstddef \
 	/usr/include/c++/16/cstdint \
@@ -200,6 +239,7 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/cstring \
 	/usr/include/c++/16/ctime \
 	/usr/include/c++/16/cwchar \
+	/usr/include/c++/16/cwctype \
 	/usr/include/c++/16/debug/assertions.h \
 	/usr/include/c++/16/debug/debug.h \
 	/usr/include/c++/16/exception \
@@ -212,7 +252,9 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/ext/type_traits.h \
 	/usr/include/c++/16/functional \
 	/usr/include/c++/16/initializer_list \
+	/usr/include/c++/16/ios \
 	/usr/include/c++/16/iosfwd \
+	/usr/include/c++/16/istream \
 	/usr/include/c++/16/iterator \
 	/usr/include/c++/16/limits \
 	/usr/include/c++/16/list \
@@ -221,6 +263,7 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/new \
 	/usr/include/c++/16/numeric \
 	/usr/include/c++/16/optional \
+	/usr/include/c++/16/ostream \
 	/usr/include/c++/16/pstl/execution_defs.h \
 	/usr/include/c++/16/pstl/glue_algorithm_defs.h \
 	/usr/include/c++/16/pstl/glue_memory_defs.h \
@@ -228,6 +271,7 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/pstl/pstl_config.h \
 	/usr/include/c++/16/ratio \
 	/usr/include/c++/16/set \
+	/usr/include/c++/16/sstream \
 	/usr/include/c++/16/stdexcept \
 	/usr/include/c++/16/streambuf \
 	/usr/include/c++/16/string \
@@ -259,26 +303,80 @@ osm_loader_autogen/timestamp: \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/c++config.h \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/c++locale.h \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/cpu_defines.h \
+	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/ctype_base.h \
+	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/ctype_inline.h \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/error_constants.h \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/gthr-default.h \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/gthr.h \
 	/usr/include/c++/16/x86_64-pc-linux-gnu/bits/os_defines.h \
+	/usr/include/cpl_atomic_ops.h \
+	/usr/include/cpl_config.h \
+	/usr/include/cpl_conv.h \
+	/usr/include/cpl_error.h \
+	/usr/include/cpl_json.h \
+	/usr/include/cpl_minixml.h \
+	/usr/include/cpl_multiproc.h \
+	/usr/include/cpl_port.h \
+	/usr/include/cpl_progress.h \
+	/usr/include/cpl_string.h \
+	/usr/include/cpl_virtualmem.h \
+	/usr/include/cpl_vsi.h \
 	/usr/include/ctype.h \
 	/usr/include/endian.h \
 	/usr/include/errno.h \
 	/usr/include/features-time64.h \
 	/usr/include/features.h \
+	/usr/include/gdal.h \
+	/usr/include/gdal_asyncreader.h \
+	/usr/include/gdal_colortable.h \
+	/usr/include/gdal_computedrasterband.h \
+	/usr/include/gdal_cpp_functions.h \
+	/usr/include/gdal_dataset.h \
+	/usr/include/gdal_defaultoverviews.h \
+	/usr/include/gdal_driver.h \
+	/usr/include/gdal_drivermanager.h \
+	/usr/include/gdal_frmts.h \
+	/usr/include/gdal_fwd.h \
+	/usr/include/gdal_gcp.h \
+	/usr/include/gdal_geotransform.h \
+	/usr/include/gdal_majorobject.h \
+	/usr/include/gdal_maskbands.h \
+	/usr/include/gdal_multidim.h \
+	/usr/include/gdal_multidim_cpp.h \
+	/usr/include/gdal_multidomainmetadata.h \
+	/usr/include/gdal_openinfo.h \
+	/usr/include/gdal_pam_multidim.h \
+	/usr/include/gdal_priv.h \
+	/usr/include/gdal_raster_cpp.h \
+	/usr/include/gdal_rasterband.h \
+	/usr/include/gdal_rasterblock.h \
+	/usr/include/gdal_relationship.h \
+	/usr/include/gdal_version.h \
+	/usr/include/gdalsubdatasetinfo.h \
 	/usr/include/gnu/stubs-64.h \
 	/usr/include/gnu/stubs.h \
 	/usr/include/limits.h \
+	/usr/include/linux/close_range.h \
 	/usr/include/linux/errno.h \
 	/usr/include/linux/limits.h \
 	/usr/include/linux/posix_types.h \
 	/usr/include/linux/sched/types.h \
+	/usr/include/linux/stat.h \
 	/usr/include/linux/stddef.h \
 	/usr/include/linux/types.h \
 	/usr/include/locale.h \
+	/usr/include/math.h \
+	/usr/include/ogr_api.h \
+	/usr/include/ogr_core.h \
+	/usr/include/ogr_feature.h \
+	/usr/include/ogr_featurestyle.h \
+	/usr/include/ogr_geomcoordinateprecision.h \
+	/usr/include/ogr_geometry.h \
+	/usr/include/ogr_refcountedptr.h \
+	/usr/include/ogr_spatialref.h \
+	/usr/include/ogr_srs_api.h \
 	/usr/include/pthread.h \
+	/usr/include/qt6/QtCore/QDebug \
 	/usr/include/qt6/QtCore/QFlags \
 	/usr/include/qt6/QtCore/QIODevice \
 	/usr/include/qt6/QtCore/QList \
@@ -454,9 +552,12 @@ osm_loader_autogen/timestamp: \
 	/usr/include/sys/cdefs.h \
 	/usr/include/sys/select.h \
 	/usr/include/sys/single_threaded.h \
+	/usr/include/sys/stat.h \
 	/usr/include/sys/types.h \
 	/usr/include/time.h \
+	/usr/include/unistd.h \
 	/usr/include/wchar.h \
+	/usr/include/wctype.h \
 	/usr/lib/cmake/Qt6/FindWrapAtomic.cmake \
 	/usr/lib/cmake/Qt6/FindWrapOpenGL.cmake \
 	/usr/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake \
@@ -862,6 +963,24 @@ osm_loader_autogen/timestamp: \
 	/usr/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets-relwithdebinfo.cmake \
 	/usr/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets.cmake \
 	/usr/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargetsPrecheck.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLAdditionalTargetInfo.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersion.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLTargetsPrecheck.cmake \
+	/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLVersionlessAliasTargets.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsAdditionalTargetInfo.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersionImpl.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsDependencies.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargetsPrecheck.cmake \
+	/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake \
 	/usr/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginAdditionalTargetInfo.cmake \
 	/usr/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginConfig.cmake \
 	/usr/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets-relwithdebinfo.cmake \
@@ -936,6 +1055,7 @@ osm_loader_autogen/timestamp: \
 	/usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake \
 	/usr/share/cmake/Modules/Compiler/GNU-CXX.cmake \
 	/usr/share/cmake/Modules/Compiler/GNU.cmake \
+	/usr/share/cmake/Modules/FindGDAL.cmake \
 	/usr/share/cmake/Modules/FindOpenGL.cmake \
 	/usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake \
 	/usr/share/cmake/Modules/FindPackageMessage.cmake \

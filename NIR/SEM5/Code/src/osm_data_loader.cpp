@@ -11,15 +11,19 @@
 #include <QNetworkRequest>
 #include <QUrl>
 #include <QUrlQuery>
+#include <cmath>
 
-OSMDataLoader::OSMDataLoader(QObject *parent, const QString apiUrl)
+OSMDataLoader::OSMDataLoader(const QString apiUrl, double lat, double lon,
+                             double radius, QObject *parent)
     : QObject(parent), manager(new QNetworkAccessManager(this)), url(apiUrl) {
 
-  // Координаты центра карты по умолчанию (Москва)
-  defaultArea.lat = 55.766863; // 55.766863, 37.681677
-  defaultArea.lon = 37.681677;
-  defaultArea.width = 0.002;  // +/- 0.2 градуса по широте
-  defaultArea.height = 0.003; // +/- 0.3 градуса по долготе
+  // TODO: прописать преобразование радиуса в отклонение координат
+  //  Координаты центра карты по умолчанию (Москва)
+
+  defaultArea.lat = lat; // 55.766863, 37.681677
+  defaultArea.lon = lon;
+  defaultArea.width = radToLat(radius);  // +/- 0.2 градуса по широте
+  defaultArea.height = radToLon(radius); // +/- 0.3 градуса по долготе
 
   connect(this, &OSMDataLoader::dataLoaded, this,
           [&](const QJsonArray &data, const QString &queryType) {
@@ -124,8 +128,6 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
             qDebug() << "OSM JSON успешно получен.";
 
             qDebug() << "Получено байт:" << requestResult.size();
-            qDebug().noquote() << "Ответ сервера:";
-            qDebug().noquote() << QString::fromUtf8(requestResult);
 
             const QJsonObject root = doc.object();
             const QJsonArray elements = root["elements"].toArray();
@@ -144,15 +146,23 @@ void OSMDataLoader::setArea(const OSMDataLoaderArea &area) {
   defaultArea = area;
 }
 
+void OSMDataLoader::setArea(double lat, double lon, double radius) {
+
+  defaultArea.lat = lat; // 55.766863, 37.681677
+  defaultArea.lon = lon;
+  defaultArea.width = radToLat(radius);  // +/- 0.2 градуса по широте
+  defaultArea.height = radToLon(radius); // +/- 0.3 градуса по долготе
+}
+
 // Формирование Overpass QL запроса - правильная syntax
 QString OSMDataLoader::buildOverpassQuery(const int &timeout,
                                           const QString &queryType) {
   if (queryType == "all") {
     return QString(R"([out:json][timeout: %1];
     (
-node["building"]({{bbox}});
-way["building"]({{bbox}});
-relation["building"]({{bbox}});
+node({{bbox}});
+way({{bbox}});
+relation({{bbox}});
     );
 out geom;)")
         .arg(timeout);
@@ -183,4 +193,14 @@ QString OSMDataLoader::saveToJSONFile(const QJsonArray &data,
   file.close();
 
   return filename;
+}
+
+void OSMDataLoader::waitData() {}
+
+double OSMDataLoader::radToLat(double radius) {
+  return radius / (earthRadius * M_PI) * 180;
+}
+double OSMDataLoader::radToLon(double radius) {
+  return radius / (earthRadius * cos(radToLat(radius) * M_PI / 180.0) * M_PI) *
+         180;
 }

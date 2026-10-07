@@ -54,6 +54,10 @@ template <> constexpr inline auto OSMDataLoader::qt_create_metaobjectdata<qt_met
         "getDefaultArea",
         "OSMDataLoaderArea",
         "setArea",
+        "lat",
+        "lon",
+        "radius",
+        "waitData",
         "buildOverpassQuery",
         "timout",
         "saveToJSONFile",
@@ -90,13 +94,19 @@ template <> constexpr inline auto OSMDataLoader::qt_create_metaobjectdata<qt_met
         QtMocHelpers::SlotData<void(const OSMDataLoaderArea &)>(14, 2, QMC::AccessPublic, QMetaType::Void, {{
             { 0x80000000 | 13, 11 },
         }}),
+        // Slot 'setArea'
+        QtMocHelpers::SlotData<void(double, double, double)>(14, 2, QMC::AccessPublic, QMetaType::Void, {{
+            { QMetaType::Double, 15 }, { QMetaType::Double, 16 }, { QMetaType::Double, 17 },
+        }}),
+        // Slot 'waitData'
+        QtMocHelpers::SlotData<void()>(18, 2, QMC::AccessPublic, QMetaType::Void),
         // Slot 'buildOverpassQuery'
-        QtMocHelpers::SlotData<QString(const int &, const QString &)>(15, 2, QMC::AccessPublic, QMetaType::QString, {{
-            { QMetaType::Int, 16 }, { QMetaType::QString, 5 },
+        QtMocHelpers::SlotData<QString(const int &, const QString &)>(19, 2, QMC::AccessPublic, QMetaType::QString, {{
+            { QMetaType::Int, 20 }, { QMetaType::QString, 5 },
         }}),
         // Slot 'saveToJSONFile'
-        QtMocHelpers::SlotData<QString(const QJsonArray &, const QString &)>(17, 2, QMC::AccessPublic, QMetaType::QString, {{
-            { 0x80000000 | 3, 18 }, { QMetaType::QString, 19 },
+        QtMocHelpers::SlotData<QString(const QJsonArray &, const QString &)>(21, 2, QMC::AccessPublic, QMetaType::QString, {{
+            { 0x80000000 | 3, 22 }, { QMetaType::QString, 23 },
         }}),
     };
     QtMocHelpers::UintData qt_properties {
@@ -134,9 +144,11 @@ void OSMDataLoader::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         case 6: { OSMDataLoaderArea _r = _t->getDefaultArea();
             if (_a[0]) *reinterpret_cast<OSMDataLoaderArea*>(_a[0]) = std::move(_r); }  break;
         case 7: _t->setArea((*reinterpret_cast<std::add_pointer_t<OSMDataLoaderArea>>(_a[1]))); break;
-        case 8: { QString _r = _t->buildOverpassQuery((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])));
+        case 8: _t->setArea((*reinterpret_cast<std::add_pointer_t<double>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<double>>(_a[2])),(*reinterpret_cast<std::add_pointer_t<double>>(_a[3]))); break;
+        case 9: _t->waitData(); break;
+        case 10: { QString _r = _t->buildOverpassQuery((*reinterpret_cast<std::add_pointer_t<int>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])));
             if (_a[0]) *reinterpret_cast<QString*>(_a[0]) = std::move(_r); }  break;
-        case 9: { QString _r = _t->saveToJSONFile((*reinterpret_cast<std::add_pointer_t<QJsonArray>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])));
+        case 11: { QString _r = _t->saveToJSONFile((*reinterpret_cast<std::add_pointer_t<QJsonArray>>(_a[1])),(*reinterpret_cast<std::add_pointer_t<QString>>(_a[2])));
             if (_a[0]) *reinterpret_cast<QString*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -168,14 +180,14 @@ int OSMDataLoader::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 10)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 10;
+        _id -= 12;
     }
     if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 10)
+        if (_id < 12)
             *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
-        _id -= 10;
+        _id -= 12;
     }
     return _id;
 }
