@@ -56,8 +56,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
   setCentralWidget(centralWidget);
 
-  loader = new OSMDataLoader(
-      "https://maps.mail.ru/osm/tools/overpass/api/interpreter");
+  loader = new OSMDataLoader("https://overpass-api.de/api/interpreter");
 }
 
 void MainWindow::onLoadButtonClicked() {

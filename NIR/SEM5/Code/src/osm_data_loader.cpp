@@ -63,29 +63,19 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
   qDebug() << "BBox:" << bbox;
   qDebug() << "Весь запрос:" << finalQuery;
 
-  // Адрес Overpass API
-  // const QUrl url("https://overpass-api.de/api/interpreter");
-  // const QUrl url("https://maps.mail.ru/osm/tools/overpass/api/interpreter");
-
   QNetworkRequest request(url);
 
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "application/x-www-form-urlencoded");
-
-  // ВАЖНО: Overpass API отклоняет запросы без User-Agent (HTTP 406).
-  // Qt не устанавливает User-Agent автоматически, поэтому задаём его явно.
   request.setHeader(
       QNetworkRequest::UserAgentHeader,
       "BMSTU-NIR-OSM-Loader/1.0 (+https://github.com/Andrey8066)");
-
-  // Явно сообщаем, что ожидаем JSON — некоторые инстансы Overpass
-  // проверяют Accept и иначе могут вернуть 406.
   request.setRawHeader("Accept", "application/json");
 
   QByteArray postData = "data=";
   postData += QUrl::toPercentEncoding(finalQuery);
 
-  QNetworkReply *reply = manager->post(request, postData);
+  reply = new manager->post(request, postData);
 
   connect(reply, &QNetworkReply::finished, this,
           [this, area, reply, queryType]() {
@@ -195,12 +185,26 @@ QString OSMDataLoader::saveToJSONFile(const QJsonArray &data,
   return filename;
 }
 
-void OSMDataLoader::waitData() {}
+void OSMDataLoader::waitData() {
+  if (!reply) {
+    qDebug() << "Нет активного запроса";
+    return;
+  }
+
+  if (!reply->isFinished()) {
+    QEventLoop loop;
+
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+    loop.exec();
+  }
+
+  qDebug() << "waitData(): запрос завершён";
+}
 
 double OSMDataLoader::radToLat(double radius) {
   return radius / (earthRadius * M_PI) * 180;
 }
 double OSMDataLoader::radToLon(double radius) {
-  return radius / (earthRadius * cos(radToLat(radius) * M_PI / 180.0) * M_PI) *
-         180;
+  return radius / (earthRadius * cos(radToLat(radius)) * M_PI) * 180;
 }

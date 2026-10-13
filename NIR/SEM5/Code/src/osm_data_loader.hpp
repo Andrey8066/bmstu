@@ -53,6 +53,7 @@ private:
   QNetworkAccessManager *manager;
   OSMDataLoaderArea defaultArea;
   QByteArray requestResult;
+  QNetworkReply reply;
   QUrl url;
   double radToLat(double radius);
   double radToLon(double radius);

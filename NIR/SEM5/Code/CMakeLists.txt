@@ -20,7 +20,7 @@ add_executable(osm_loader
 find_package(Qt6 REQUIRED COMPONENTS Core Network Sql Widgets OpenGLWidgets)
 find_package(GDAL REQUIRED)
 
-target_link_libraries(osm_loader PRIVATE GDAL::GDAL Qt::Core Qt::Network Qt::Sql Qt::Widgets Qt::OpenGLWidgets)
+target_link_libraries(osm_loader PRIVATE GDAL::GDAL Qt6::Core Qt6::Network Qt6::Sql Qt6::Widgets Qt6::OpenGLWidgets)
 
 # Указываем директории исходных файлов
 target_include_directories(osm_loader PRIVATE src)
