@@ -566,7 +566,8 @@ void GLWidget::rebuildBuildingMesh() {
     const float groundElevation =
         static_cast<float>(elevationSum / elevationCount);
 
-    const float baseY = (groundElevation - dem.minElevation) * verticalScale;
+    const float baseY =
+        (groundElevation - dem.minElevation + 10) * verticalScale;
 
     const float roofY = baseY + building.heightMeters * verticalScale;
 

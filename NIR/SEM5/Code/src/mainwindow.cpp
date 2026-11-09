@@ -91,9 +91,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   });
   connect(loader, &OSMDataLoader::dataLoaded, this,
           [this](const QJsonArray &elements, const QString &queryType) {
-            if (queryType != "buildings")
-              return;
-
             std::vector<BuildingFootprint> buildingList;
 
             for (const QJsonValue &value : elements) {
@@ -204,7 +201,7 @@ void MainWindow::onLoadOsmButtonClicked() {
   qDebug() << "Radius:" << radius;
 
   loader->setArea(latitude, longitude, radius);
-  loader->fetchOSMData("buildings", 60);
+  loader->fetchOSMData("all", 60);
 
   return;
 }
