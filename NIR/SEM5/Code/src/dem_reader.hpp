@@ -1,18 +1,26 @@
-#ifndef DEM_READER_HPP
-#define DEM_READER_HPP
 
-#include <gdal_priv.h>
-#include <QObject>
-#include <QDebug>
+#pragma once
 
+#include <QString>
+#include <vector>
 
-class DEMReader : public QObject {
-  Q_OBJECT
+struct DEMData {
+  int width = 0;
+  int height = 0;
 
-public:
-  explicit DEMReader(QObject *parent = nullptr);
-  void loadDem(QString filePath);
-  void readDem();
+  // Высоты: индекс = y * width + x
+  std::vector<float> elevation;
+
+  // Геотрансформация GDAL
+  double geoTransform[6] = {};
+
+  QString projectionWkt;
+
+  float minElevation = 0.0f;
+  float maxElevation = 0.0f;
 };
 
-#endif
+class DEMReader {
+public:
+  static bool loadDem(const QString &fileName, DEMData &out);
+};

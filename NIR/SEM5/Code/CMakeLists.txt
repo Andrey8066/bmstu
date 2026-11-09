@@ -4,6 +4,7 @@ project(Code VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Добавляем исходные файлы для загрузки OSM данных
 add_executable(osm_loader
@@ -14,6 +15,7 @@ add_executable(osm_loader
     src/mainwindow.cpp
     src/glwidget.hpp
     src/glwidget.cpp
+    src/geo_utils.hpp
 )
 
 # Подключение Qt
@@ -24,5 +26,6 @@ target_link_libraries(osm_loader PRIVATE GDAL::GDAL Qt6::Core Qt6::Network Qt6::
 
 # Указываем директории исходных файлов
 target_include_directories(osm_loader PRIVATE src)
+
 
 

@@ -19,5 +19,6 @@ private:
   GLWidget *glWidget;
   OSMDataLoader *loader;
 
-  void onLoadButtonClicked();
+  void onLoadOsmButtonClicked();
+  void onLoadDemButtonClicked();
 };

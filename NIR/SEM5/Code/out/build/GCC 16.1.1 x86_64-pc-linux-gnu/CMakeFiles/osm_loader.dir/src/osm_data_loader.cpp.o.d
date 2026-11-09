@@ -335,7 +335,9 @@ CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o: \
  /usr/include/qt6/QtCore/qcheckedint_impl.h \
  /usr/include/qt6/QtCore/qmargins.h /usr/include/qt6/QtCore/qsize.h \
  /usr/include/qt6/QtCore/qpoint.h /usr/include/qt6/QtCore/QString \
- /usr/include/qt6/QtCore/QDebug /usr/include/qt6/QtCore/QFile \
+ /usr/include/qt6/QtCore/QDebug /usr/include/qt6/QtCore/QEventLoop \
+ /usr/include/qt6/QtCore/qeventloop.h \
+ /usr/include/qt6/QtCore/qdeadlinetimer.h /usr/include/qt6/QtCore/QFile \
  /usr/include/qt6/QtCore/qfile.h /usr/include/qt6/QtCore/qfiledevice.h \
  /usr/include/c++/16/filesystem /usr/include/c++/16/bits/fs_fwd.h \
  /usr/include/c++/16/bits/fs_path.h /usr/include/c++/16/locale \

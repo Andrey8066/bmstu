@@ -1,40 +1,88 @@
-#include "dem_reader.hpp"
-#include <vector>
-#include <iostream>
 
-void DEMReader::loadDem(const QString fileName) {
+#include "dem_reader.hpp"
+
+#include <cpl_conv.h>
+#include <gdal_priv.h>
+
+#include <algorithm>
+#include <limits>
+
+#include <QDebug>
+
+bool DEMReader::loadDem(const QString &fileName, DEMData &out) {
   GDALAllRegister();
 
-  GDALDataset *dataset =
-      static_cast<GDALDataset *>(GDALOpen(fileName.toLocal8Bit(), GA_ReadOnly));
+  GDALDataset *dataset = static_cast<GDALDataset *>(
+      GDALOpen(fileName.toLocal8Bit().constData(), GA_ReadOnly));
 
-  double gt[6];
+  if (!dataset)
+    return false;
 
-  if (dataset->GetGeoTransform(gt) == CE_None) {
-    qDebug() << "Origin X:" << gt[0];
-    qDebug() << "Origin Y:" << gt[3];
-    qDebug() << "Pixel width:" << gt[1];
-    qDebug() << "Pixel height:" << gt[5];
+  const int width = dataset->GetRasterXSize();
+  const int height = dataset->GetRasterYSize();
+
+  if (width < 2 || height < 2 || dataset->GetRasterCount() < 1) {
+    GDALClose(dataset);
+    return false;
   }
-  int width = dataset->GetRasterXSize();
-  int height = dataset->GetRasterYSize();
+
   GDALRasterBand *band = dataset->GetRasterBand(1);
 
-  std::vector<float> elevation(width * height);
+  out.width = width;
+  out.height = height;
 
-  CPLErr result = band->RasterIO(GF_Read, 0, 0, width, height, elevation.data(),
-                                 width, height, GDT_Float32, 0, 0);
+  qDebug() << "Размер DEM:" << width << "x" << height;
 
+  qDebug() << "Projection:" << dataset->GetProjectionRef();
 
-    qDebug() << "DEM успешно прочитан";
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            std::cout << elevation[i*height + j] << " ";
-        }
-        std::cout << "\n";
+  qDebug() << "Raster type:" << GDALGetDataTypeName(band->GetRasterDataType());
+
+  int hasNoData = 0;
+  double noData = band->GetNoDataValue(&hasNoData);
+
+  qDebug() << "NoData exists:" << hasNoData << "value:" << noData;
+
+  qDebug() << "Scale:" << band->GetScale() << "Offset:" << band->GetOffset();
+
+  if (dataset->GetGeoTransform(out.geoTransform) != CE_None) {
+    GDALClose(dataset);
+
+    const char *projection = dataset->GetProjectionRef();
+
+    out.projectionWkt = projection ? QString::fromUtf8(projection) : QString();
+
+    return false;
+  }
+
+  out.elevation.resize(static_cast<std::size_t>(width) * height);
+
+  const CPLErr result =
+      band->RasterIO(GF_Read, 0, 0, width, height, out.elevation.data(), width,
+                     height, GDT_Float32, 0, 0);
+
+  if (result != CE_None) {
+    GDALClose(dataset);
+    out = DEMData{};
+    return false;
+  }
+
+  float minZ = std::numeric_limits<float>::max();
+  float maxZ = std::numeric_limits<float>::lowest();
+
+  for (float &z : out.elevation) {
+    if (!std::isfinite(z) || (hasNoData && z == static_cast<float>(noData))) {
+      // Для первого прототипа заполняем пропуски нулём.
+      // Для точной модели NoData лучше интерполировать.
+      z = 0.0f;
     }
-}
 
-DEMReader::DEMReader(QObject *parent) : QObject(parent) {}
+    minZ = std::min(minZ, z);
+    maxZ = std::max(maxZ, z);
+  }
+
+  out.minElevation = minZ;
+  out.maxElevation = maxZ;
+
+  GDALClose(dataset);
+  return true;
+}
