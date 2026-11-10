@@ -44,6 +44,13 @@ private:
     float r, g, b;
   };
 
+  struct TerrainSize {
+    float width = 0.0f;
+    float height = 0.0f;
+  };
+
+  TerrainSize calculateTerrainSize() const;
+
   void rebuildMesh();
 
   QOpenGLShaderProgram shaderProgram;

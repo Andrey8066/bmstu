@@ -226,7 +226,7 @@ QString OSMDataLoader::buildOverpassQuery(const int &timeout,
                 relation["type"="building"]({{bbox}});
             );
 
-            out body geom;
+            out geom;
         )")
         .arg(timeout);
   }
@@ -234,10 +234,10 @@ QString OSMDataLoader::buildOverpassQuery(const int &timeout,
   if (queryType == "all") {
     return QString(R"([out:json][timeout:%1];
                    (
-                   way["building"]({{bbox}});
-                   way["highway"]({{bbox}});
+                   nwr["building"]({{bbox}});
+                   nwr["highway"]({{bbox}});
                    );
-                   out body geom;
+                   out geom;
                    )")
         .arg(timeout);
   }

@@ -21,4 +21,6 @@ private:
 
   void onLoadOsmButtonClicked();
   void onLoadDemButtonClicked();
+  void loadBuildingsFromJson(const QJsonArray &elements);
+  void onLoadOsmJsonButtonClicked();
 };

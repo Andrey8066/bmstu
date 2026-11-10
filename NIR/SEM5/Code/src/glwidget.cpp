@@ -130,7 +130,6 @@ void GLWidget::initializeGL() {
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 
-  // Совместимые GLSL-шейдеры для простого OpenGL.
   const char *vertexShader = R"(
         attribute vec3 position;
         attribute vec3 color;
@@ -204,13 +203,11 @@ void GLWidget::rebuildMesh() {
   const float elevationRange = maxZ - minZ;
 
   // Сохраняем пропорции растра.
-  const float aspect = static_cast<float>(width) / height;
+  const TerrainSize terrainSize = calculateTerrainSize();
 
-  const float terrainWidth = aspect >= 1.0f ? 2.0f : 2.0f * aspect;
+  const float terrainWidth = terrainSize.width;
+  const float terrainHeight = terrainSize.height;
 
-  const float terrainHeight = aspect >= 1.0f ? 2.0f / aspect : 2.0f;
-
-  // Ограничиваем количество вершин для первого прототипа.
   // Большие DEM нужно предварительно уменьшать по разрешению.
   constexpr int maxDimension = 400;
 
@@ -383,7 +380,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
   zoom -= event->angleDelta().y() / 120.0f * 0.25f;
-  zoom = std::clamp(zoom, 0.7f, 15.0f);
+  zoom = std::clamp(zoom, 0.01f, 15.0f);
   update();
 }
 
@@ -422,11 +419,10 @@ void GLWidget::rebuildBuildingMesh() {
   const float verticalScale =
       elevationRange > 0.0f ? 0.12f / elevationRange : 0.001f;
 
-  const float aspect = static_cast<float>(width) / height;
+  const TerrainSize terrainSize = calculateTerrainSize();
 
-  const float terrainWidth = aspect >= 1.0f ? 2.0f : 2.0f * aspect;
-
-  const float terrainHeight = aspect >= 1.0f ? 2.0f / aspect : 2.0f;
+  const float terrainWidth = terrainSize.width;
+  const float terrainHeight = terrainSize.height;
 
   // Географические координаты -> координаты пикселя.
   auto geoToPixel = [&](double lat, double lon, double &px, double &py) {
@@ -566,8 +562,7 @@ void GLWidget::rebuildBuildingMesh() {
     const float groundElevation =
         static_cast<float>(elevationSum / elevationCount);
 
-    const float baseY =
-        (groundElevation - dem.minElevation + 10) * verticalScale;
+    const float baseY = (groundElevation - dem.minElevation) * verticalScale;
 
     const float roofY = baseY + building.heightMeters * verticalScale;
 
@@ -630,4 +625,48 @@ void GLWidget::rebuildBuildingMesh() {
   }
 
   update();
+}
+
+GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
+  TerrainSize result;
+
+  if (dem.width < 2 || dem.height < 2)
+    return result;
+
+  const double *gt = dem.geoTransform;
+
+  // Широта центра растра
+  const double centerLat =
+      gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
+
+  // Длина одного градуса в метрах
+  const double metersPerDegreeLat = 111132.0;
+
+  const double metersPerDegreeLon =
+      111320.0 * std::cos(qDegreesToRadians(centerLat));
+
+  // Физическая ширина и высота DEM
+  const double dxLon = (dem.width - 1) * gt[1];
+  const double dxLat = (dem.width - 1) * gt[4];
+
+  const double dyLon = (dem.height - 1) * gt[2];
+  const double dyLat = (dem.height - 1) * gt[5];
+
+  const double physicalWidth =
+      std::hypot(dxLon * metersPerDegreeLon, dxLat * metersPerDegreeLat);
+
+  const double physicalHeight =
+      std::hypot(dyLon * metersPerDegreeLon, dyLat * metersPerDegreeLat);
+
+  const double maxDimension = std::max(physicalWidth, physicalHeight);
+
+  if (maxDimension <= 0.0)
+    return result;
+
+  // Нормализуем размеры для OpenGL
+  result.width = static_cast<float>(-2.0 * physicalWidth / maxDimension);
+
+  result.height = static_cast<float>(-2.0 * physicalHeight / maxDimension);
+
+  return result;
 }
