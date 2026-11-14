@@ -1,8 +1,9 @@
 
 #include "glwidget.hpp"
 
+#include <QDebug>
 #include <QMouseEvent>
-#include <QVector3D>
+#include <QVector2D>
 #include <QWheelEvent>
 #include <QtMath>
 
@@ -10,7 +11,6 @@
 #include <array>
 #include <cmath>
 #include <numeric>
-#include <qnamespace.h>
 
 namespace {
 
@@ -62,7 +62,6 @@ triangulatePolygon(const std::vector<QVector2D> &points) {
       const int prev = indices[(i + indices.size() - 1) % indices.size()];
 
       const int curr = indices[i];
-
       const int next = indices[(i + 1) % indices.size()];
 
       const auto &a = points[prev];
@@ -88,8 +87,7 @@ triangulatePolygon(const std::vector<QVector2D> &points) {
         continue;
 
       triangles.push_back({prev, curr, next});
-
-      indices.erase(indices.begin() + i);
+      indices.erase(indices.begin() + static_cast<long>(i));
 
       clipped = true;
       break;
@@ -106,7 +104,15 @@ triangulatePolygon(const std::vector<QVector2D> &points) {
   return triangles;
 }
 
+bool sameGeoPoint(const GeoPoint &a, const GeoPoint &b) {
+  return std::abs(a.lat - b.lat) < 1e-10 && std::abs(a.lon - b.lon) < 1e-10;
+}
+
 } // namespace
+
+// -----------------------------------------------------------------------------
+// Constructor / destructor
+// -----------------------------------------------------------------------------
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
   setFocusPolicy(Qt::StrongFocus);
@@ -117,16 +123,21 @@ GLWidget::~GLWidget() {
     makeCurrent();
 
     vertexBuffer.destroy();
-    buildingBuffer.destroy();
+    featureBuffer.destroy();
 
     doneCurrent();
   }
 }
 
+// -----------------------------------------------------------------------------
+// OpenGL initialization
+// -----------------------------------------------------------------------------
+
 void GLWidget::initializeGL() {
   initializeOpenGLFunctions();
 
   glClearColor(0.08f, 0.10f, 0.13f, 1.0f);
+
   glEnable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 
@@ -136,54 +147,137 @@ void GLWidget::initializeGL() {
 
         uniform mat4 mvp;
 
-        varying vec3 terrainColor;
+        varying vec3 vertexColor;
 
         void main()
         {
             gl_Position = mvp * vec4(position, 1.0);
-            terrainColor = color;
+            vertexColor = color;
         }
     )";
 
   const char *fragmentShader = R"(
-        varying vec3 terrainColor;
+        varying vec3 vertexColor;
 
         void main()
         {
-            gl_FragColor = vec4(terrainColor, 1.0);
+            gl_FragColor = vec4(vertexColor, 1.0);
         }
     )";
 
   if (!shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                             vertexShader) ||
-      !shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                             fragmentShader) ||
-      !shaderProgram.link()) {
-    qWarning() << "OpenGL shader error:" << shaderProgram.log();
+                                             vertexShader)) {
+    qWarning() << "Vertex shader error:" << shaderProgram.log();
     return;
   }
+
+  if (!shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
+                                             fragmentShader)) {
+    qWarning() << "Fragment shader error:" << shaderProgram.log();
+    return;
+  }
+
+  if (!shaderProgram.link()) {
+    qWarning() << "Shader link error:" << shaderProgram.log();
+    return;
+  }
+
+  shaderReady = true;
 
   vertexBuffer.create();
   vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
-  buildingBuffer.create();
-  buildingBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  featureBuffer.create();
+  featureBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
 
   rebuildMesh();
-  rebuildBuildingMesh();
+  rebuildFeatureMesh();
 }
+
+// -----------------------------------------------------------------------------
+// Public setters
+// -----------------------------------------------------------------------------
 
 void GLWidget::setDEM(const DEMData &data) {
-  qDebug() << "setDEM called";
-  qDebug() << "DEM size:" << data.width << data.height;
-  qDebug() << "Elevation count:" << data.elevation.size();
-  qDebug() << "Elevation range:" << data.minElevation << data.maxElevation;
-
   dem = data;
+
+  qDebug() << "DEM loaded:" << dem.width << "x" << dem.height
+           << "elevation range:" << dem.minElevation << dem.maxElevation;
+
   rebuildMesh();
-  rebuildBuildingMesh();
+  rebuildFeatureMesh();
+
   update();
 }
+
+void GLWidget::setFeatures(const QVector<OSMFeature> &newFeatures) {
+  features = newFeatures;
+
+  qDebug() << "OSM features:" << features.size();
+
+  rebuildFeatureMesh();
+
+  update();
+}
+
+void GLWidget::addFeature(const OSMFeature &feature) {
+  features.push_back(feature);
+
+  rebuildFeatureMesh();
+  update();
+}
+
+// -----------------------------------------------------------------------------
+// FeatureDispatcher compatibility methods
+// -----------------------------------------------------------------------------
+
+void GLWidget::addBuildingFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addRoadFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addRoadAreaFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addWaterAreaFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addWaterLineFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addVegetationAreaFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addVegetationPointFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addLanduseAreaFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addRailwayFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addAmenityPointFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+void GLWidget::addAmenityAreaFeature(const OSMFeature &feature) {
+  addFeature(feature);
+}
+
+// -----------------------------------------------------------------------------
+// Terrain mesh
+// -----------------------------------------------------------------------------
 
 void GLWidget::rebuildMesh() {
   vertices.clear();
@@ -192,23 +286,31 @@ void GLWidget::rebuildMesh() {
   const int width = dem.width;
   const int height = dem.height;
 
-  if (width < 2 || height < 2 ||
-      dem.elevation.size() < static_cast<std::size_t>(width) * height) {
+  if (width < 2 || height < 2) {
+    uploadTerrainBuffer();
     update();
     return;
   }
 
-  const float minZ = dem.minElevation;
-  const float maxZ = dem.maxElevation;
-  const float elevationRange = maxZ - minZ;
+  const std::size_t required = static_cast<std::size_t>(width) * height;
 
-  // Сохраняем пропорции растра.
+  if (dem.elevation.size() < required) {
+    qWarning() << "Invalid DEM elevation array";
+    uploadTerrainBuffer();
+    update();
+    return;
+  }
+
+  const float elevationRange = dem.maxElevation - dem.minElevation;
+
   const TerrainSize terrainSize = calculateTerrainSize();
 
-  const float terrainWidth = terrainSize.width;
-  const float terrainHeight = terrainSize.height;
+  if (terrainSize.width <= 0.0f || terrainSize.height <= 0.0f) {
+    uploadTerrainBuffer();
+    update();
+    return;
+  }
 
-  // Большие DEM нужно предварительно уменьшать по разрешению.
   constexpr int maxDimension = 400;
 
   const int stepX =
@@ -217,39 +319,51 @@ void GLWidget::rebuildMesh() {
   const int stepY =
       std::max(1, (height - 1 + maxDimension - 2) / (maxDimension - 1));
 
-  auto vertexAt = [&](int x, int y) -> Vertex {
-    const float z = dem.elevation[static_cast<std::size_t>(y) * width + x];
+  auto vertexAt = [&](int x, int y, Vertex &result) -> bool {
+    const float elevation =
+        dem.elevation[static_cast<std::size_t>(y) * width + x];
+
+    if (!std::isfinite(elevation))
+      return false;
 
     const float nx =
-        (static_cast<float>(x) / (width - 1) - 0.5f) * terrainWidth;
+        (static_cast<float>(x) / (width - 1) - 0.5f) * terrainSize.width;
 
-    const float ny =
-        (0.5f - static_cast<float>(y) / (height - 1)) * terrainHeight;
+    const double *gt = dem.geoTransform;
 
-    // Вертикальное преувеличение для лучшей видимости рельефа.
-    const float nz =
-        elevationRange > 0.0f ? ((z - minZ) / elevationRange) * 0.12f : 0.0f;
+    const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
 
-    const float t = elevationRange > 0.0f
-                        ? std::clamp((z - minZ) / elevationRange, 0.0f, 1.0f)
-                        : 0.5f;
+    const float nz = -rowDirection *
+                     (static_cast<float>(y) / (height - 1) - 0.5f) *
+                     terrainSize.height;
 
-    // Цвет от зелёных низин к светлым вершинам.
+    const float normalized =
+        elevationRange > 0.0f
+            ? std::clamp((elevation - dem.minElevation) / elevationRange, 0.0f,
+                         1.0f)
+            : 0.5f;
+
+    const float vertical = elevationRange > 0.0f ? normalized * 0.12f : 0.0f;
+
     float r, g, b;
 
-    if (t < 0.5f) {
-      const float k = t * 2.0f;
-      r = 0.12f + 0.30f * k;
-      g = 0.35f + 0.30f * k;
-      b = 0.12f + 0.05f * k;
+    if (normalized < 0.5f) {
+      const float t = normalized * 2.0f;
+
+      r = 0.12f + 0.30f * t;
+      g = 0.35f + 0.30f * t;
+      b = 0.12f + 0.05f * t;
     } else {
-      const float k = (t - 0.5f) * 2.0f;
-      r = 0.42f + 0.50f * k;
-      g = 0.65f + 0.30f * k;
-      b = 0.17f + 0.75f * k;
+      const float t = (normalized - 0.5f) * 2.0f;
+
+      r = 0.42f + 0.50f * t;
+      g = 0.65f + 0.30f * t;
+      b = 0.17f + 0.75f * t;
     }
 
-    return {nx, nz, ny, r, g, b};
+    result = {nx, vertical, nz, r, g, b};
+
+    return true;
   };
 
   for (int y = 0; y < height - 1; y += stepY) {
@@ -258,38 +372,599 @@ void GLWidget::rebuildMesh() {
     for (int x = 0; x < width - 1; x += stepX) {
       const int x2 = std::min(x + stepX, width - 1);
 
-      const Vertex a = vertexAt(x, y);
-      const Vertex b = vertexAt(x2, y);
-      const Vertex c = vertexAt(x, y2);
-      const Vertex d = vertexAt(x2, y2);
+      Vertex a, b, c, d;
 
-      // Два треугольника на одну ячейку.
+      if (!vertexAt(x, y, a) || !vertexAt(x2, y, b) || !vertexAt(x, y2, c) ||
+          !vertexAt(x2, y2, d)) {
+        continue;
+      }
+
       vertices.insert(vertices.end(), {a, c, b, b, c, d});
     }
   }
 
-  if (vertices.empty()) {
+  meshReady = !vertices.empty();
+
+  uploadTerrainBuffer();
+
+  qDebug() << "Terrain vertices:" << vertices.size();
+}
+
+void GLWidget::uploadTerrainBuffer() {
+  if (!context() || !context()->isValid())
+    return;
+
+  makeCurrent();
+
+  if (!vertexBuffer.isCreated())
+    vertexBuffer.create();
+
+  if (vertexBuffer.isCreated()) {
+    vertexBuffer.bind();
+
+    if (vertices.empty())
+      vertexBuffer.allocate(0);
+    else
+      vertexBuffer.allocate(vertices.data(),
+                            static_cast<int>(vertices.size() * sizeof(Vertex)));
+
+    vertexBuffer.release();
+  }
+
+  doneCurrent();
+}
+
+// -----------------------------------------------------------------------------
+// Geographic coordinates -> DEM pixels -> scene coordinates
+// -----------------------------------------------------------------------------
+
+bool GLWidget::sampleElevation(double pixelX, double pixelY,
+                               float &elevation) const {
+  const int width = dem.width;
+  const int height = dem.height;
+
+  if (width < 2 || height < 2)
+    return false;
+
+  if (pixelX < 0.0 || pixelY < 0.0 || pixelX > width - 1 ||
+      pixelY > height - 1) {
+    return false;
+  }
+
+  const int x0 = static_cast<int>(std::floor(pixelX));
+  const int y0 = static_cast<int>(std::floor(pixelY));
+
+  const int x1 = std::min(x0 + 1, width - 1);
+  const int y1 = std::min(y0 + 1, height - 1);
+
+  const float fx = static_cast<float>(pixelX - x0);
+  const float fy = static_cast<float>(pixelY - y0);
+
+  const auto at = [&](int x, int y) -> float {
+    return dem.elevation[static_cast<std::size_t>(y) * width + x];
+  };
+
+  const float z00 = at(x0, y0);
+  const float z10 = at(x1, y0);
+  const float z01 = at(x0, y1);
+  const float z11 = at(x1, y1);
+
+  if (!std::isfinite(z00) || !std::isfinite(z10) || !std::isfinite(z01) ||
+      !std::isfinite(z11)) {
+    return false;
+  }
+
+  const float z0 = z00 * (1.0f - fx) + z10 * fx;
+  const float z1 = z01 * (1.0f - fx) + z11 * fx;
+
+  elevation = z0 * (1.0f - fy) + z1 * fy;
+
+  return true;
+}
+
+bool GLWidget::geoToScene(const GeoPoint &point, ScenePoint &result) const {
+  const int width = dem.width;
+  const int height = dem.height;
+
+  if (width < 2 || height < 2)
+    return false;
+
+  const double *gt = dem.geoTransform;
+
+  const double determinant = gt[1] * gt[5] - gt[2] * gt[4];
+
+  if (std::abs(determinant) < 1e-15)
+    return false;
+
+  const double dx = point.lon - gt[0];
+  const double dy = point.lat - gt[3];
+
+  const double pixelX = (gt[5] * dx - gt[2] * dy) / determinant - 0.5;
+
+  const double pixelY = (-gt[4] * dx + gt[1] * dy) / determinant - 0.5;
+
+  float elevation = 0.0f;
+
+  if (!sampleElevation(pixelX, pixelY, elevation))
+    return false;
+
+  const TerrainSize terrainSize = calculateTerrainSize();
+
+  const float sceneX =
+      (static_cast<float>(pixelX) / (width - 1) - 0.5f) * terrainSize.width;
+
+  const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
+
+  const float sceneZ = -rowDirection *
+                       (static_cast<float>(pixelY) / (height - 1) - 0.5f) *
+                       terrainSize.height;
+
+  const float elevationRange = dem.maxElevation - dem.minElevation;
+
+  const float verticalScale =
+      elevationRange > 0.0f ? 0.12f / elevationRange : 0.001f;
+
+  result.position = QVector2D(sceneX, sceneZ);
+
+  result.groundY = (elevation - dem.minElevation) * verticalScale;
+
+  return true;
+}
+
+// -----------------------------------------------------------------------------
+// Common vertex helper
+// -----------------------------------------------------------------------------
+
+void GLWidget::addVertex(std::vector<Vertex> &target, const QVector2D &position,
+                         float y, float r, float g, float b) {
+  target.push_back({position.x(), y, position.y(), r, g, b});
+}
+
+// -----------------------------------------------------------------------------
+// Building geometry: walls + roof
+// -----------------------------------------------------------------------------
+
+void GLWidget::appendBuilding(const OSMFeature &feature) {
+  if (feature.geometry.size() < 3)
+    return;
+
+  std::vector<ScenePoint> scenePoints;
+  scenePoints.reserve(feature.geometry.size());
+
+  for (const GeoPoint &geo : feature.geometry) {
+    ScenePoint point;
+
+    if (!geoToScene(geo, point))
+      return;
+
+    scenePoints.push_back(point);
+  }
+
+  if (scenePoints.size() >= 2 &&
+      sameGeoPoint(feature.geometry.first(), feature.geometry.last())) {
+    scenePoints.pop_back();
+  }
+
+  if (scenePoints.size() < 3)
+    return;
+
+  std::vector<QVector2D> polygon;
+  polygon.reserve(scenePoints.size());
+
+  float groundSum = 0.0f;
+
+  for (const ScenePoint &point : scenePoints) {
+    polygon.push_back(point.position);
+    groundSum += point.groundY;
+  }
+
+  const auto triangles = triangulatePolygon(polygon);
+
+  if (triangles.empty())
+    return;
+
+  const float baseY = groundSum / static_cast<float>(scenePoints.size());
+
+  const float elevationRange = dem.maxElevation - dem.minElevation;
+
+  const float verticalScale =
+      elevationRange > 0.0f ? 0.12f / elevationRange : 0.001f;
+
+  const float buildingHeight = feature.heightMeters > 0.0
+                                   ? static_cast<float>(feature.heightMeters)
+                                   : 6.0f;
+
+  const float roofY = baseY + buildingHeight * verticalScale;
+
+  const Colors &color = feature.colors;
+
+  const int count = static_cast<int>(polygon.size());
+
+  // Стены.
+  for (int i = 0; i < count; ++i) {
+    const int next = (i + 1) % count;
+
+    const QVector2D &a = polygon[i];
+    const QVector2D &b = polygon[next];
+
+    addVertex(featureVertices, a, baseY, color.wallR, color.wallG, color.wallB);
+
+    addVertex(featureVertices, b, baseY, color.wallR, color.wallG, color.wallB);
+
+    addVertex(featureVertices, b, roofY, color.wallR, color.wallG, color.wallB);
+
+    addVertex(featureVertices, a, baseY, color.wallR, color.wallG, color.wallB);
+
+    addVertex(featureVertices, b, roofY, color.wallR, color.wallG, color.wallB);
+
+    addVertex(featureVertices, a, roofY, color.wallR, color.wallG, color.wallB);
+  }
+
+  // Крыша.
+  for (const auto &triangle : triangles) {
+    for (int index : triangle) {
+      addVertex(featureVertices, polygon[index], roofY, color.roofR,
+                color.roofG, color.roofB);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Flat polygon geometry: water, vegetation, landuse, amenity, road areas
+// -----------------------------------------------------------------------------
+
+void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
+  if (feature.geometry.size() < 3)
+    return;
+
+  std::vector<QVector2D> polygon;
+  polygon.reserve(feature.geometry.size());
+
+  float groundSum = 0.0f;
+  int validCount = 0;
+
+  for (const GeoPoint &geo : feature.geometry) {
+    ScenePoint point;
+
+    if (!geoToScene(geo, point))
+      return;
+
+    polygon.push_back(point.position);
+    groundSum += point.groundY;
+    ++validCount;
+  }
+
+  if (polygon.size() >= 2 &&
+      sameGeoPoint(feature.geometry.first(), feature.geometry.last())) {
+    polygon.pop_back();
+  }
+
+  if (polygon.size() < 3 || validCount == 0)
+    return;
+
+  const auto triangles = triangulatePolygon(polygon);
+
+  if (triangles.empty())
+    return;
+
+  const float y = groundSum / static_cast<float>(validCount) + heightOffset;
+
+  const Colors &color = feature.colors;
+
+  for (const auto &triangle : triangles) {
+    for (int index : triangle) {
+      addVertex(featureVertices, polygon[index], y, color.roofR, color.roofG,
+                color.roofB);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Line geometry: roads, rivers, railway
+// Each line segment becomes a flat-width quad.
+// -----------------------------------------------------------------------------
+
+void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
+                          float heightOffset) {
+  if (feature.geometry.size() < 2)
+    return;
+
+  std::vector<ScenePoint> points;
+  points.reserve(feature.geometry.size());
+
+  for (const GeoPoint &geo : feature.geometry) {
+    ScenePoint point;
+
+    if (!geoToScene(geo, point)) {
+      // Не соединяем участки через точки вне DEM.
+      points.clear();
+      return;
+    }
+
+    points.push_back(point);
+  }
+
+  const TerrainSize terrainSize = calculateTerrainSize();
+
+  const double *gt = dem.geoTransform;
+
+  const double centerLat =
+      gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
+
+  const double metersPerDegreeLat = 111132.0;
+
+  const double metersPerDegreeLon =
+      111320.0 * std::cos(qDegreesToRadians(centerLat));
+
+  const double physicalWidth =
+      std::hypot((dem.width - 1) * gt[1] * metersPerDegreeLon,
+                 (dem.width - 1) * gt[4] * metersPerDegreeLat);
+
+  const double physicalHeight =
+      std::hypot((dem.height - 1) * gt[2] * metersPerDegreeLon,
+                 (dem.height - 1) * gt[5] * metersPerDegreeLat);
+
+  const double maxPhysicalDimension = std::max(physicalWidth, physicalHeight);
+
+  if (maxPhysicalDimension <= 0.0)
+    return;
+
+  const float metersToScene = static_cast<float>(2.0 / maxPhysicalDimension);
+
+  const float halfWidth = std::max(0.0001f, widthMeters * metersToScene * 0.5f);
+
+  const Colors &color = feature.colors;
+
+  for (std::size_t i = 0; i + 1 < points.size(); ++i) {
+    const ScenePoint &a = points[i];
+    const ScenePoint &b = points[i + 1];
+
+    const QVector2D direction = b.position - a.position;
+
+    const float length = direction.length();
+
+    if (length < 1e-7f)
+      continue;
+
+    const QVector2D normal(-direction.y() / length, direction.x() / length);
+
+    const QVector2D offset = normal * halfWidth;
+
+    const QVector2D aLeft = a.position + offset;
+    const QVector2D aRight = a.position - offset;
+
+    const QVector2D bLeft = b.position + offset;
+    const QVector2D bRight = b.position - offset;
+
+    const float yA = a.groundY + heightOffset;
+    const float yB = b.groundY + heightOffset;
+
+    // Первый треугольник.
+    addVertex(featureVertices, aLeft, yA, color.roofR, color.roofG,
+              color.roofB);
+
+    addVertex(featureVertices, aRight, yA, color.roofR, color.roofG,
+              color.roofB);
+
+    addVertex(featureVertices, bLeft, yB, color.roofR, color.roofG,
+              color.roofB);
+
+    // Второй треугольник.
+    addVertex(featureVertices, aRight, yA, color.roofR, color.roofG,
+              color.roofB);
+
+    addVertex(featureVertices, bRight, yB, color.roofR, color.roofG,
+              color.roofB);
+
+    addVertex(featureVertices, bLeft, yB, color.roofR, color.roofG,
+              color.roofB);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Point geometry: amenity and other OSM nodes
+// -----------------------------------------------------------------------------
+
+void GLWidget::appendPoint(const OSMFeature &feature, float sizeMeters,
+                           float heightOffset) {
+  if (feature.geometry.isEmpty())
+    return;
+
+  ScenePoint point;
+
+  if (!geoToScene(feature.geometry.first(), point))
+    return;
+
+  const TerrainSize terrainSize = calculateTerrainSize();
+
+  const double *gt = dem.geoTransform;
+
+  const double centerLat =
+      gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
+
+  const double metersPerDegreeLat = 111132.0;
+
+  const double metersPerDegreeLon =
+      111320.0 * std::cos(qDegreesToRadians(centerLat));
+
+  const double physicalWidth =
+      std::hypot((dem.width - 1) * gt[1] * metersPerDegreeLon,
+                 (dem.width - 1) * gt[4] * metersPerDegreeLat);
+
+  const double physicalHeight =
+      std::hypot((dem.height - 1) * gt[2] * metersPerDegreeLon,
+                 (dem.height - 1) * gt[5] * metersPerDegreeLat);
+
+  const double maxDimension = std::max(physicalWidth, physicalHeight);
+
+  if (maxDimension <= 0.0)
+    return;
+
+  const float halfSize =
+      std::max(0.0002f, static_cast<float>(sizeMeters / maxDimension));
+
+  const QVector2D p = point.position;
+
+  const QVector2D a(p.x() - halfSize, p.y() - halfSize);
+  const QVector2D b(p.x() + halfSize, p.y() - halfSize);
+  const QVector2D c(p.x() + halfSize, p.y() + halfSize);
+  const QVector2D d(p.x() - halfSize, p.y() + halfSize);
+
+  const float y = point.groundY + heightOffset;
+
+  const Colors &color = feature.colors;
+
+  addVertex(featureVertices, a, y, color.roofR, color.roofG, color.roofB);
+  addVertex(featureVertices, b, y, color.roofR, color.roofG, color.roofB);
+  addVertex(featureVertices, c, y, color.roofR, color.roofG, color.roofB);
+
+  addVertex(featureVertices, a, y, color.roofR, color.roofG, color.roofB);
+  addVertex(featureVertices, c, y, color.roofR, color.roofG, color.roofB);
+  addVertex(featureVertices, d, y, color.roofR, color.roofG, color.roofB);
+}
+
+// -----------------------------------------------------------------------------
+// OSM feature dispatcher
+// -----------------------------------------------------------------------------
+
+void GLWidget::rebuildFeatureMesh() {
+  featureVertices.clear();
+
+  if (dem.width < 2 || dem.height < 2) {
+    uploadFeatureBuffer();
     update();
     return;
   }
 
-  if (context() && context()->isValid()) {
-    makeCurrent();
+  int buildings = 0;
+  int roads = 0;
+  int water = 0;
+  int vegetation = 0;
+  int railways = 0;
+  int other = 0;
 
-    if (!vertexBuffer.isCreated())
-      vertexBuffer.create();
+  for (const OSMFeature &feature : features) {
+    if (feature.geometry.isEmpty())
+      continue;
 
-    vertexBuffer.bind();
-    vertexBuffer.allocate(vertices.data(),
-                          static_cast<int>(vertices.size() * sizeof(Vertex)));
-    vertexBuffer.release();
+    switch (feature.type) {
+    case OSMFeatureType::Building:
+      if (feature.geometryType == OSMGeometryType::Polygon)
+        appendBuilding(feature);
+      else if (feature.geometryType == OSMGeometryType::Point)
+        appendPoint(feature, 5.0f);
 
-    doneCurrent();
+      ++buildings;
+      break;
+
+    case OSMFeatureType::Road:
+      if (feature.geometryType == OSMGeometryType::Polygon) {
+        appendPolygon(feature, 0.0015f);
+      } else if (feature.geometryType == OSMGeometryType::LineString) {
+        const float width = feature.widthMeters > 0.0
+                                ? static_cast<float>(feature.widthMeters)
+                                : 4.0f;
+
+        appendLine(feature, width, 0.0015f);
+      }
+
+      ++roads;
+      break;
+
+    case OSMFeatureType::Water:
+      if (feature.geometryType == OSMGeometryType::Polygon) {
+        appendPolygon(feature, 0.0025f);
+      } else if (feature.geometryType == OSMGeometryType::LineString) {
+        const float width = feature.widthMeters > 0.0
+                                ? static_cast<float>(feature.widthMeters)
+                                : 5.0f;
+
+        appendLine(feature, width, 0.0025f);
+      }
+
+      ++water;
+      break;
+
+    case OSMFeatureType::Vegetation:
+      if (feature.geometryType == OSMGeometryType::Polygon)
+        appendPolygon(feature, 0.001f);
+      else if (feature.geometryType == OSMGeometryType::Point)
+        appendPoint(feature, 4.0f, 0.001f);
+
+      ++vegetation;
+      break;
+
+    case OSMFeatureType::Landuse:
+      if (feature.geometryType == OSMGeometryType::Polygon)
+        appendPolygon(feature, 0.0008f);
+
+      ++other;
+      break;
+
+    case OSMFeatureType::Railway:
+      if (feature.geometryType == OSMGeometryType::LineString) {
+        const float width = feature.widthMeters > 0.0
+                                ? static_cast<float>(feature.widthMeters)
+                                : 4.5f;
+
+        appendLine(feature, width, 0.002f);
+      }
+
+      ++railways;
+      break;
+
+    case OSMFeatureType::Amenity:
+      if (feature.geometryType == OSMGeometryType::Polygon)
+        appendPolygon(feature, 0.0015f);
+      else if (feature.geometryType == OSMGeometryType::Point)
+        appendPoint(feature, 5.0f, 0.002f);
+
+      ++other;
+      break;
+
+    case OSMFeatureType::Unknown:
+    default:
+      break;
+    }
   }
 
-  meshReady = true;
-  update();
+  uploadFeatureBuffer();
+
+  qDebug() << "OSM mesh rebuilt:"
+           << "buildings =" << buildings << "roads =" << roads
+           << "water =" << water << "vegetation =" << vegetation
+           << "railways =" << railways << "other =" << other
+           << "vertices =" << featureVertices.size();
 }
+
+void GLWidget::uploadFeatureBuffer() {
+  if (!context() || !context()->isValid())
+    return;
+
+  makeCurrent();
+
+  if (!featureBuffer.isCreated())
+    featureBuffer.create();
+
+  if (featureBuffer.isCreated()) {
+    featureBuffer.bind();
+
+    if (featureVertices.empty())
+      featureBuffer.allocate(0);
+    else
+      featureBuffer.allocate(
+          featureVertices.data(),
+          static_cast<int>(featureVertices.size() * sizeof(Vertex)));
+
+    featureBuffer.release();
+  }
+
+  doneCurrent();
+}
+
+// -----------------------------------------------------------------------------
+// Rendering
+// -----------------------------------------------------------------------------
 
 void GLWidget::resizeGL(int width, int height) {
   glViewport(0, 0, width, height);
@@ -298,11 +973,15 @@ void GLWidget::resizeGL(int width, int height) {
 void GLWidget::paintGL() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+  if (!shaderReady)
+    return;
+
   QMatrix4x4 projection;
 
-  projection.perspective(
-      45.0f, static_cast<float>(std::max(1, width())) / std::max(1, height()),
-      0.01f, 100.0f);
+  projection.perspective(45.0f,
+                         static_cast<float>(std::max(1, width())) /
+                             static_cast<float>(std::max(1, height())),
+                         0.01f, 100.0f);
 
   QMatrix4x4 view;
 
@@ -314,7 +993,7 @@ void GLWidget::paintGL() {
   const QMatrix4x4 mvp = projection * view;
 
   auto drawBuffer = [&](QOpenGLBuffer &buffer, std::size_t vertexCount) {
-    if (vertexCount == 0 || !buffer.isCreated() || !shaderProgram.isLinked())
+    if (vertexCount == 0 || !buffer.isCreated())
       return;
 
     shaderProgram.bind();
@@ -344,13 +1023,17 @@ void GLWidget::paintGL() {
     shaderProgram.release();
   };
 
-  // Рисуем Terrain.
+  // Сначала рельеф.
   if (meshReady)
     drawBuffer(vertexBuffer, vertices.size());
 
-  // Рисуем здания.
-  drawBuffer(buildingBuffer, buildingVertices.size());
+  // Затем здания и остальные OSM-объекты.
+  drawBuffer(featureBuffer, featureVertices.size());
 }
+
+// -----------------------------------------------------------------------------
+// Camera controls
+// -----------------------------------------------------------------------------
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {
   lastMousePosition = event->position().toPoint();
@@ -358,20 +1041,23 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
   const QPoint current = event->position().toPoint();
+
   const QPoint delta = current - lastMousePosition;
 
   if (event->buttons() & Qt::LeftButton) {
     rotationZ += delta.x() * 0.5f;
     rotationX += delta.y() * 0.5f;
+
     update();
   }
 
   if (event->buttons() & Qt::RightButton) {
     const float worldPerPixel =
-        (2.0f * zoom * 0.41421356f) / std::max(1, height());
+        (2.0f * zoom * 0.41421356f) / static_cast<float>(std::max(1, height()));
 
     panX += delta.x() * worldPerPixel;
     panY -= delta.y() * worldPerPixel;
+
     update();
   }
 
@@ -380,252 +1066,15 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
   zoom -= event->angleDelta().y() / 120.0f * 0.25f;
+
   zoom = std::clamp(zoom, 0.01f, 15.0f);
-  update();
-}
-
-void GLWidget::setBuildings(
-    const std::vector<BuildingFootprint> &newBuildings) {
-  buildings = newBuildings;
-
-  qDebug() << "setBuildings:" << buildings.size();
-
-  rebuildBuildingMesh();
 
   update();
 }
 
-void GLWidget::rebuildBuildingMesh() {
-  buildingVertices.clear();
-
-  const int width = dem.width;
-  const int height = dem.height;
-
-  if (width < 2 || height < 2 ||
-      dem.elevation.size() < static_cast<std::size_t>(width) * height) {
-    qDebug() << "DEM ещё не загружен";
-    return;
-  }
-
-  const double *gt = dem.geoTransform;
-
-  const double determinant = gt[1] * gt[5] - gt[2] * gt[4];
-
-  if (std::abs(determinant) < 1e-15)
-    return;
-
-  const float elevationRange = dem.maxElevation - dem.minElevation;
-
-  const float verticalScale =
-      elevationRange > 0.0f ? 0.12f / elevationRange : 0.001f;
-
-  const TerrainSize terrainSize = calculateTerrainSize();
-
-  const float terrainWidth = terrainSize.width;
-  const float terrainHeight = terrainSize.height;
-
-  // Географические координаты -> координаты пикселя.
-  auto geoToPixel = [&](double lat, double lon, double &px, double &py) {
-    const double dx = lon - gt[0];
-    const double dy = lat - gt[3];
-
-    px = (gt[5] * dx - gt[2] * dy) / determinant - 0.5;
-
-    py = (-gt[4] * dx + gt[1] * dy) / determinant - 0.5;
-
-    return px >= 0.0 && py >= 0.0 && px <= width - 1 && py <= height - 1;
-  };
-
-  // Получение высоты с билинейной интерполяцией.
-  auto sampleElevation = [&](double px, double py, float &result) {
-    if (px < 0.0 || py < 0.0 || px > width - 1 || py > height - 1)
-      return false;
-
-    const int x0 = static_cast<int>(std::floor(px));
-    const int y0 = static_cast<int>(std::floor(py));
-
-    const int x1 = std::min(x0 + 1, width - 1);
-    const int y1 = std::min(y0 + 1, height - 1);
-
-    const float fx = static_cast<float>(px - x0);
-    const float fy = static_cast<float>(py - y0);
-
-    const auto at = [&](int x, int y) {
-      return dem.elevation[static_cast<std::size_t>(y) * width + x];
-    };
-
-    const float z00 = at(x0, y0);
-    const float z10 = at(x1, y0);
-    const float z01 = at(x0, y1);
-    const float z11 = at(x1, y1);
-
-    if (!std::isfinite(z00) || !std::isfinite(z10) || !std::isfinite(z01) ||
-        !std::isfinite(z11))
-      return false;
-
-    const float z0 = z00 * (1.0f - fx) + z10 * fx;
-    const float z1 = z01 * (1.0f - fx) + z11 * fx;
-
-    result = z0 * (1.0f - fy) + z1 * fy;
-
-    return true;
-  };
-
-  auto addVertex = [&](const QVector2D &p, float y, float r, float g, float b) {
-    buildingVertices.push_back({p.x(), y, p.y(), r, g, b});
-  };
-
-  int skippedBuildings = 0;
-
-  for (const BuildingFootprint &building : buildings) {
-    if (building.outline.size() < 3)
-      continue;
-
-    std::vector<QVector2D> points;
-
-    double elevationSum = 0.0;
-    int elevationCount = 0;
-
-    std::size_t pointCount = building.outline.size();
-
-    // Убираем повтор первой точки в конце замкнутого контура.
-    if (pointCount >= 2) {
-      const auto &first = building.outline.front();
-      const auto &last = building.outline.back();
-
-      if (std::abs(first.lat - last.lat) < 1e-10 &&
-          std::abs(first.lon - last.lon) < 1e-10) {
-        --pointCount;
-      }
-    }
-
-    bool valid = true;
-
-    for (std::size_t i = 0; i < pointCount; ++i) {
-      const GeoPoint &p = building.outline[i];
-
-      double px = 0.0;
-      double py = 0.0;
-
-      if (!geoToPixel(p.lat, p.lon, px, py)) {
-        valid = false;
-        break;
-      }
-
-      float elevation = 0.0f;
-
-      if (!sampleElevation(px, py, elevation)) {
-        valid = false;
-        break;
-      }
-
-      const float sceneX =
-          (static_cast<float>(px) / (width - 1) - 0.5f) * terrainWidth;
-
-      const float sceneZ =
-          (0.5f - static_cast<float>(py) / (height - 1)) * terrainHeight;
-
-      points.emplace_back(sceneX, sceneZ);
-
-      elevationSum += elevation;
-      ++elevationCount;
-    }
-
-    if (!valid || points.size() < 3 || elevationCount == 0) {
-      ++skippedBuildings;
-      continue;
-    }
-
-    // Убираем совпадающие соседние вершины.
-    std::vector<QVector2D> cleanPoints;
-
-    for (const QVector2D &p : points) {
-      if (cleanPoints.empty() ||
-          (p - cleanPoints.back()).lengthSquared() > 1e-12f) {
-        cleanPoints.push_back(p);
-      }
-    }
-
-    if (cleanPoints.size() < 3) {
-      ++skippedBuildings;
-      continue;
-    }
-
-    const auto roofTriangles = triangulatePolygon(cleanPoints);
-
-    if (roofTriangles.empty()) {
-      ++skippedBuildings;
-      continue;
-    }
-
-    // Средняя высота земли под контуром.
-    const float groundElevation =
-        static_cast<float>(elevationSum / elevationCount);
-
-    const float baseY = (groundElevation - dem.minElevation) * verticalScale;
-
-    const float roofY = baseY + building.heightMeters * verticalScale;
-
-    // Цвета стен и крыш.
-    constexpr float wallR = 0.58f;
-    constexpr float wallG = 0.63f;
-    constexpr float wallB = 0.70f;
-
-    constexpr float roofR = 0.28f;
-    constexpr float roofG = 0.36f;
-    constexpr float roofB = 0.28f;
-
-    const int n = static_cast<int>(cleanPoints.size());
-
-    // Стены: два треугольника на каждую сторону.
-    for (int i = 0; i < n; ++i) {
-      const int next = (i + 1) % n;
-
-      const auto &p0 = cleanPoints[i];
-      const auto &p1 = cleanPoints[next];
-
-      addVertex(p0, baseY, wallR, wallG, wallB);
-      addVertex(p1, baseY, wallR, wallG, wallB);
-      addVertex(p1, roofY, wallR, wallG, wallB);
-
-      addVertex(p0, baseY, wallR, wallG, wallB);
-      addVertex(p1, roofY, wallR, wallG, wallB);
-      addVertex(p0, roofY, wallR, wallG, wallB);
-    }
-
-    // Треугольники крыши.
-    for (const auto &triangle : roofTriangles) {
-      for (int index : triangle) {
-        addVertex(cleanPoints[index], roofY, roofR, roofG, roofB);
-      }
-    }
-  }
-
-  qDebug() << "Building vertices:" << buildingVertices.size();
-  qDebug() << "Buildings skipped:" << skippedBuildings;
-
-  // Загружаем геометрию в GPU.
-  if (context() && context()->isValid()) {
-    makeCurrent();
-
-    if (!buildingBuffer.isCreated())
-      buildingBuffer.create();
-
-    if (!buildingVertices.empty()) {
-      buildingBuffer.bind();
-
-      buildingBuffer.allocate(
-          buildingVertices.data(),
-          static_cast<int>(buildingVertices.size() * sizeof(Vertex)));
-
-      buildingBuffer.release();
-    }
-
-    doneCurrent();
-  }
-
-  update();
-}
+// -----------------------------------------------------------------------------
+// DEM physical dimensions
+// -----------------------------------------------------------------------------
 
 GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
   TerrainSize result;
@@ -635,17 +1084,14 @@ GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
 
   const double *gt = dem.geoTransform;
 
-  // Широта центра растра
   const double centerLat =
       gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
 
-  // Длина одного градуса в метрах
   const double metersPerDegreeLat = 111132.0;
 
   const double metersPerDegreeLon =
       111320.0 * std::cos(qDegreesToRadians(centerLat));
 
-  // Физическая ширина и высота DEM
   const double dxLon = (dem.width - 1) * gt[1];
   const double dxLat = (dem.width - 1) * gt[4];
 
@@ -663,10 +1109,9 @@ GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
   if (maxDimension <= 0.0)
     return result;
 
-  // Нормализуем размеры для OpenGL
-  result.width = static_cast<float>(-2.0 * physicalWidth / maxDimension);
+  result.width = static_cast<float>(2.0 * physicalWidth / maxDimension);
 
-  result.height = static_cast<float>(-2.0 * physicalHeight / maxDimension);
+  result.height = static_cast<float>(2.0 * physicalHeight / maxDimension);
 
   return result;
 }

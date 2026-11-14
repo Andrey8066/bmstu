@@ -5,16 +5,23 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   CMakeFiles/4.4.3/CMakeCXXCompiler.cmake \
   CMakeFiles/4.4.3/CMakeSystem.cmake \
   osm_loader_autogen/moc_predefs.h \
-  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp \
-  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.hpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/geo_utils.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp \
-  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp \
-  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.hpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.hpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.hpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.hpp \
+  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmfeature.hpp \
   /usr/bin/cmake \
   /usr/include/alloca.h \
   /usr/include/asm-generic/bitsperlong.h \
@@ -291,6 +298,7 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/pthread.h \
   /usr/include/qt6/QtCore/QFlags \
   /usr/include/qt6/QtCore/QIODevice \
+  /usr/include/qt6/QtCore/QJsonArray \
   /usr/include/qt6/QtCore/QList \
   /usr/include/qt6/QtCore/QMetaType \
   /usr/include/qt6/QtCore/QObject \
@@ -325,6 +333,8 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/qt6/QtCore/qbytearraylist.h \
   /usr/include/qt6/QtCore/qbytearrayview.h \
   /usr/include/qt6/QtCore/qcalendar.h \
+  /usr/include/qt6/QtCore/qcborcommon.h \
+  /usr/include/qt6/QtCore/qcborvalue.h \
   /usr/include/qt6/QtCore/qchar.h \
   /usr/include/qt6/QtCore/qcheckedint_impl.h \
   /usr/include/qt6/QtCore/qcompare.h \
@@ -342,6 +352,7 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/qt6/QtCore/qdatastream.h \
   /usr/include/qt6/QtCore/qdatetime.h \
   /usr/include/qt6/QtCore/qdebug.h \
+  /usr/include/qt6/QtCore/qendian.h \
   /usr/include/qt6/QtCore/qexceptionhandling.h \
   /usr/include/qt6/QtCore/qflags.h \
   /usr/include/qt6/QtCore/qfloat16.h \
@@ -357,7 +368,12 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/qt6/QtCore/qiodevicebase.h \
   /usr/include/qt6/QtCore/qiterable.h \
   /usr/include/qt6/QtCore/qiterator.h \
+  /usr/include/qt6/QtCore/qjsonarray.h \
+  /usr/include/qt6/QtCore/qjsondocument.h \
+  /usr/include/qt6/QtCore/qjsonparseerror.h \
+  /usr/include/qt6/QtCore/qjsonvalue.h \
   /usr/include/qt6/QtCore/qlatin1stringview.h \
+  /usr/include/qt6/QtCore/qline.h \
   /usr/include/qt6/QtCore/qlist.h \
   /usr/include/qt6/QtCore/qlocale.h \
   /usr/include/qt6/QtCore/qlogging.h \
@@ -381,6 +397,7 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/qt6/QtCore/qprocessordetection.h \
   /usr/include/qt6/QtCore/qrect.h \
   /usr/include/qt6/QtCore/qrefcount.h \
+  /usr/include/qt6/QtCore/qregularexpression.h \
   /usr/include/qt6/QtCore/qscopedpointer.h \
   /usr/include/qt6/QtCore/qscopeguard.h \
   /usr/include/qt6/QtCore/qset.h \
@@ -428,11 +445,37 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/qt6/QtCore/qtypes.h \
   /usr/include/qt6/QtCore/qurl.h \
   /usr/include/qt6/QtCore/qutf8stringview.h \
+  /usr/include/qt6/QtCore/quuid.h \
   /usr/include/qt6/QtCore/qvariant.h \
   /usr/include/qt6/QtCore/qvarlengtharray.h \
   /usr/include/qt6/QtCore/qversiontagging.h \
   /usr/include/qt6/QtCore/qxptype_traits.h \
   /usr/include/qt6/QtCore/qyieldcpu.h \
+  /usr/include/qt6/QtGui/qaction.h \
+  /usr/include/qt6/QtGui/qbitmap.h \
+  /usr/include/qt6/QtGui/qbrush.h \
+  /usr/include/qt6/QtGui/qcolor.h \
+  /usr/include/qt6/QtGui/qcursor.h \
+  /usr/include/qt6/QtGui/qfont.h \
+  /usr/include/qt6/QtGui/qfontinfo.h \
+  /usr/include/qt6/QtGui/qfontmetrics.h \
+  /usr/include/qt6/QtGui/qfontvariableaxis.h \
+  /usr/include/qt6/QtGui/qicon.h \
+  /usr/include/qt6/QtGui/qimage.h \
+  /usr/include/qt6/QtGui/qkeysequence.h \
+  /usr/include/qt6/QtGui/qpaintdevice.h \
+  /usr/include/qt6/QtGui/qpalette.h \
+  /usr/include/qt6/QtGui/qpixelformat.h \
+  /usr/include/qt6/QtGui/qpixmap.h \
+  /usr/include/qt6/QtGui/qpolygon.h \
+  /usr/include/qt6/QtGui/qregion.h \
+  /usr/include/qt6/QtGui/qrgb.h \
+  /usr/include/qt6/QtGui/qrgba64.h \
+  /usr/include/qt6/QtGui/qtgui-config.h \
+  /usr/include/qt6/QtGui/qtguiexports.h \
+  /usr/include/qt6/QtGui/qtguiglobal.h \
+  /usr/include/qt6/QtGui/qtransform.h \
+  /usr/include/qt6/QtGui/qwindowdefs.h \
   /usr/include/qt6/QtNetwork/QNetworkAccessManager \
   /usr/include/qt6/QtNetwork/QNetworkReply \
   /usr/include/qt6/QtNetwork/QNetworkRequest \
@@ -454,6 +497,14 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/include/qt6/QtNetwork/qtnetwork-config.h \
   /usr/include/qt6/QtNetwork/qtnetworkexports.h \
   /usr/include/qt6/QtNetwork/qtnetworkglobal.h \
+  /usr/include/qt6/QtWidgets/QMainWindow \
+  /usr/include/qt6/QtWidgets/qmainwindow.h \
+  /usr/include/qt6/QtWidgets/qsizepolicy.h \
+  /usr/include/qt6/QtWidgets/qtabwidget.h \
+  /usr/include/qt6/QtWidgets/qtwidgets-config.h \
+  /usr/include/qt6/QtWidgets/qtwidgetsexports.h \
+  /usr/include/qt6/QtWidgets/qtwidgetsglobal.h \
+  /usr/include/qt6/QtWidgets/qwidget.h \
   /usr/include/sched.h \
   /usr/include/stdc-predef.h \
   /usr/include/stdint.h \
@@ -1004,8 +1055,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/share/cmake/Modules/FindGDAL.cmake:
 
-/usr/share/cmake/Modules/Compiler/GNU.cmake:
-
 /usr/share/cmake/Modules/Compiler/GNU-CXX.cmake:
 
 /usr/share/cmake/Modules/Compiler/CMakeCommonCompilerMacros.cmake:
@@ -1039,8 +1088,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/lib/cmake/Qt6Widgets/Qt6WidgetsMacros.cmake:
 
 /usr/lib/cmake/Qt6Widgets/Qt6WidgetsDependencies.cmake:
-
-/usr/lib/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake:
 
 /usr/lib/cmake/Qt6Widgets/Qt6WidgetsAdditionalTargetInfo.cmake:
 
@@ -1083,8 +1130,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/lib/cmake/Qt6OpenGL/Qt6OpenGLTargets-relwithdebinfo.cmake:
 
 /usr/lib/cmake/Qt6OpenGL/Qt6OpenGLDependencies.cmake:
-
-/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake:
 
 /usr/lib/cmake/Qt6Sql/Qt6SqlTargets-relwithdebinfo.cmake:
 
@@ -1156,10 +1201,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/lib/cmake/Qt6Gui/Qt6QXdgDesktopPortalThemePluginTargets.cmake:
 
-/usr/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QXdgDesktopPortalThemePluginTargets-relwithdebinfo.cmake:
-
 /usr/lib/cmake/Qt6Gui/Qt6QXdgDesktopPortalThemePluginAdditionalTargetInfo.cmake:
 
 /usr/share/cmake/Modules/CMakeCXXInformation.cmake:
@@ -1224,8 +1265,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/lib/cmake/Qt6Gui/Qt6QWaylandFullScreenShellV1IntegrationPluginTargetsPrecheck.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandFullScreenShellV1IntegrationPluginTargets.cmake:
-
 /usr/lib/cmake/Qt6Gui/Qt6QWaylandFullScreenShellV1IntegrationPluginTargets-relwithdebinfo.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QWaylandEglClientBufferPluginTargetsPrecheck.cmake:
@@ -1255,8 +1294,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginConfig.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QVncIntegrationPluginAdditionalTargetInfo.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginTargetsPrecheck.cmake:
 
 /usr/lib/cmake/Qt6Sql/Qt6QIBaseDriverPluginTargets.cmake:
 
@@ -1324,8 +1361,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginAdditionalTargetInfo.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QMngPluginTargets.cmake:
-
 /usr/lib/cmake/Qt6Gui/Qt6QMngPluginTargets-relwithdebinfo.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QMngPluginAdditionalTargetInfo.cmake:
@@ -1389,8 +1424,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/lib/cmake/Qt6Gui/Qt6QICNSPluginConfig.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QICNSPluginAdditionalTargetInfo.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargetsPrecheck.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargets.cmake:
 
@@ -1516,10 +1549,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/lib/cmake/Qt6Gui/Qt6DmaBufServerBufferPluginAdditionalTargetInfo.cmake:
 
-/usr/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets-relwithdebinfo.cmake:
-
-/usr/lib/cmake/Qt6DBusTools/Qt6DBusToolsVersionlessTargets.cmake:
-
 /usr/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginConfig.cmake:
 
 /usr/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginConfig.cmake:
@@ -1558,27 +1587,81 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/lib/cmake/Qt6DBus/Qt6DBusConfigVersionImpl.cmake:
 
-/usr/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets-relwithdebinfo.cmake:
+/usr/lib/cmake/Qt6DBus/Qt6DBusConfigVersion.cmake:
 
-/usr/include/c++/16/typeinfo:
+/usr/lib/cmake/Qt6DBus/Qt6DBusAdditionalTargetInfo.cmake:
 
-/usr/include/c++/16/tr1/special_function_util.h:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargetsPrecheck.cmake:
 
-/usr/include/qt6/QtCore/qcheckedint_impl.h:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginTargets.cmake:
+/usr/lib/cmake/Qt6DBus/Qt6DBusDependencies.cmake:
 
-/usr/include/c++/16/tr1/poly_laguerre.tcc:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets-relwithdebinfo.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandIviShellIntegrationPluginTargetsPrecheck.cmake:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake:
 
-/usr/include/c++/16/bits/stl_numeric.h:
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandQtShellIntegrationPluginConfig.cmake:
 
-/usr/include/c++/16/tr1/poly_hermite.tcc:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake:
 
-/usr/include/bits/types/error_t.h:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake:
 
-/usr/include/qt6/QtCore/qstringalgorithms.h:
+/usr/lib/cmake/Qt6Core/Qt6CoreVersionlessAliasTargets.cmake:
+
+/usr/lib/cmake/Qt6Core/Qt6CoreTargetsPrecheck.cmake:
+
+/usr/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:
+
+/usr/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginTargets.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicWindowsHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicTestHelpers.cmake:
+
+/usr/lib/cmake/Qt6Widgets/Qt6WidgetsVersionlessAliasTargets.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6GuiVersionlessAliasTargets.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomQtEntityHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomGenerationHelpers.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QTiffPluginTargets-relwithdebinfo.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomExternalReferenceHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomCycloneDXHelpers.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWebpPluginTargetsPrecheck.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginTargets.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomCommonGenerationHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomBuildToolHelpers.cmake:
+
+/usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomAttributionHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomDocumentNamespaceHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicPluginHelpers_v2.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicJsonHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicGitHelpers.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomRelationshipHelpers.cmake:
+
+/usr/include/c++/16/tr1/legendre_function.tcc:
 
 /usr/lib/cmake/Qt6Gui/Qt6QWaylandIviShellIntegrationPluginTargets.cmake:
 
@@ -1594,10 +1677,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/bits/erase_if.h:
 
-/usr/include/c++/16/tr1/exp_integral.tcc:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreConfigExtras.cmake:
-
 /usr/include/c++/16/stdexcept:
 
 /usr/include/bits/wordsize.h:
@@ -1608,11 +1687,9 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/bits/types/struct_timeval.h:
 
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.hpp:
+/usr/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake:
 
-/usr/lib/gcc/x86_64-pc-linux-gnu/16/include/stddef.h:
-
-/usr/include/c++/16/optional:
+/usr/include/c++/16/pstl/glue_numeric_defs.h:
 
 /usr/include/c++/16/bits/stl_algo.h:
 
@@ -1628,6 +1705,8 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/bits/types/struct_tm.h:
 
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.hpp:
+
 /usr/include/bits/thread-shared-types.h:
 
 /usr/include/c++/16/ext/string_conversions.h:
@@ -1636,11 +1715,7 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/bits/charconv.h:
 
-/usr/lib/cmake/Qt6/QtPublicSbomBuildToolHelpers.cmake:
-
 /usr/include/c++/16/ext/concurrence.h:
-
-/usr/include/c++/16/exception:
 
 /usr/include/c++/16/debug/debug.h:
 
@@ -1668,8 +1743,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/qt6/QtCore/qmargins.h:
 
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.hpp:
-
 /usr/include/linux/sched/types.h:
 
 /usr/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginAdditionalTargetInfo.cmake:
@@ -1690,27 +1763,15 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/utility:
 
-/usr/include/c++/16/pstl/glue_numeric_defs.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomPurlHelpers.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QXcbIntegrationPluginTargetsPrecheck.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake:
-
-/usr/include/c++/16/tuple:
-
-/usr/include/c++/16/limits:
-
 /usr/lib/cmake/Qt6/QtPublicFindPackageHelpers.cmake:
 
-/usr/include/c++/16/cmath:
+/usr/include/qt6/QtCore/qcborvalue.h:
+
+/usr/include/qt6/QtGui/qfontvariableaxis.h:
 
 /usr/include/c++/16/functional:
 
 /usr/include/c++/16/climits:
-
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp:
 
 /usr/lib/cmake/Qt6Sql/Qt6SqlAdditionalTargetInfo.cmake:
 
@@ -1728,11 +1789,7 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/bits/stl_vector.h:
 
-/usr/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake:
-
-/usr/include/c++/16/bits/enable_special_members.h:
-
-/usr/include/qt6/QtCore/q17memory.h:
+/usr/include/qt6/QtGui/qtgui-config.h:
 
 /usr/include/qt6/QtCore/q26numeric.h:
 
@@ -1740,7 +1797,13 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/bits/stl_pair.h:
 
-/usr/include/c++/16/bits/stl_multimap.h:
+/usr/lib/cmake/Qt6Core/Qt6CoreDependencies.cmake:
+
+/usr/include/bits/locale.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QOffscreenIntegrationPluginTargets.cmake:
+
+/usr/include/c++/16/tr1/poly_laguerre.tcc:
 
 /usr/lib/cmake/Qt6Gui/Qt6QVncIntegrationPluginTargets-relwithdebinfo.cmake:
 
@@ -1778,13 +1841,13 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/cstring:
 
+/usr/include/qt6/QtGui/qicon.h:
+
 /usr/lib/cmake/Qt6Sql/Qt6QMYSQLDriverPluginTargets-relwithdebinfo.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QICOPluginTargets.cmake:
 
 /usr/include/c++/16/bits/specfun.h:
-
-/usr/lib/cmake/Qt6/QtPublicToolHelpers.cmake:
 
 /usr/include/c++/16/tr1/bessel_function.tcc:
 
@@ -1797,10 +1860,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/include/c++/16/bits/shared_ptr_base.h:
 
 /usr/include/bits/stdint-least.h:
-
-/usr/include/c++/16/type_traits:
-
-/usr/include/c++/16/bits/shared_ptr.h:
 
 /usr/include/c++/16/cwchar:
 
@@ -1826,7 +1885,13 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/bits/node_handle.h:
 
-/usr/lib/cmake/Qt6/QtPublicSbomHelpers.cmake:
+/usr/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake:
+
+/usr/include/c++/16/bits/new_except.h:
+
+/usr/lib/cmake/Qt6/QtPublicSbomSystemDepHelpers.cmake:
+
+/usr/include/c++/16/bits/new_allocator.h:
 
 /usr/lib/cmake/Qt6Network/Qt6QConnManNetworkInformationPluginAdditionalTargetInfo.cmake:
 
@@ -1848,8 +1913,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/qt6/QtCore/qfunctionpointer.h:
 
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersionImpl.cmake:
-
 /usr/lib/cmake/Qt6Gui/Qt6QEglFSKmsEglDeviceIntegrationPluginAdditionalTargetInfo.cmake:
 
 /usr/include/c++/16/bits/move.h:
@@ -1864,43 +1927,17 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/bits/monostate.h:
 
-/usr/include/c++/16/bits/string_view.tcc:
+/usr/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginTargets.cmake:
 
-/usr/include/c++/16/ext/atomicity.h:
+/usr/lib/cmake/Qt6Gui/Qt6QXdgDesktopPortalThemePluginTargets-relwithdebinfo.cmake:
 
-/usr/include/qt6/QtCore/qyieldcpu.h:
+/usr/include/qt6/QtWidgets/qmainwindow.h:
 
-/usr/include/c++/16/bits/shared_ptr_atomic.h:
+/usr/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake:
 
-/usr/include/pthread.h:
-
-/usr/include/c++/16/bits/localefwd.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandEglClientBufferPluginConfig.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecorationPluginTargets-relwithdebinfo.cmake:
-
-/usr/include/c++/16/unordered_map:
-
-/usr/include/bits/types/time_t.h:
-
-/usr/include/c++/16/bits/stl_tree.h:
-
-/usr/include/bits/types/__FILE.h:
-
-/usr/include/c++/16/bits/locale_classes.tcc:
-
-/usr/share/cmake/Modules/CheckLibraryExists.cmake:
-
-/usr/include/c++/16/bits/stl_list.h:
+/usr/lib/cmake/Qt6/QtPublicExternalProjectHelpers.cmake:
 
 /usr/include/c++/16/bits/stdexcept_throwfwd.h:
-
-/usr/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake:
-
-/usr/include/bits/floatn-common.h:
-
-/usr/include/c++/16/bits/invoke.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QMinimalEglIntegrationPluginAdditionalTargetInfo.cmake:
 
@@ -1909,6 +1946,38 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginConfig.cmake:
 
 /usr/include/qt6/QtCore/qprocessordetection.h:
+
+/usr/lib/cmake/Qt6OpenGL/Qt6OpenGLConfigVersionImpl.cmake:
+
+/usr/include/qt6/QtGui/qkeysequence.h:
+
+/usr/include/qt6/QtGui/qpixelformat.h:
+
+/usr/include/c++/16/bits/hashtable_policy.h:
+
+/usr/include/c++/16/bits/functexcept.h:
+
+/usr/include/c++/16/bits/locale_classes.tcc:
+
+/usr/lib/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomDepHelpers.cmake:
+
+/usr/include/bits/stdint-intn.h:
+
+/usr/share/cmake/Modules/CheckLibraryExists.cmake:
+
+/usr/include/c++/16/bits/stl_list.h:
+
+/usr/include/bits/types/error_t.h:
+
+/usr/include/qt6/QtCore/qstringalgorithms.h:
+
+/usr/lib/cmake/Qt6Core/Qt6CoreConfigVersionImpl.cmake:
+
+/usr/include/qt6/QtGui/qfontinfo.h:
+
+/usr/include/qt6/QtGui/qbitmap.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QTsLibPluginTargets-relwithdebinfo.cmake:
 
@@ -1928,6 +1997,10 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/qt6/QtCore/qforeach.h:
 
+/usr/include/bits/types/__FILE.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.hpp:
+
 /usr/include/c++/16/debug/assertions.h:
 
 /usr/include/c++/16/pstl/execution_defs.h:
@@ -1946,14 +2019,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/c++/16/backward/auto_ptr.h:
 
-/usr/lib/cmake/Qt6Core/Qt6CoreConfigVersion.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicExternalProjectHelpers.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginTargets.cmake:
-
-/usr/include/bits/pthread_stack_min-dynamic.h:
-
 /usr/include/c++/16/cctype:
 
 /usr/include/bits/posix1_lim.h:
@@ -1963,6 +2028,14 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 /usr/lib/cmake/Qt6Gui/Qt6ShmServerBufferPluginTargetsPrecheck.cmake:
 
 /usr/include/bits/long-double.h:
+
+/usr/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake:
+
+/usr/include/qt6/QtCore/q17memory.h:
+
+/usr/include/c++/16/bits/enable_special_members.h:
+
+/usr/include/c++/16/tr1/exp_integral.tcc:
 
 /usr/include/bits/floatn.h:
 
@@ -1976,14 +2049,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/bits/endianness.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6DmaBufServerBufferPluginTargetsPrecheck.cmake:
-
-/usr/include/bits/struct_mutex.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QEvdevMousePluginTargets-relwithdebinfo.cmake:
-
-/usr/include/c++/16/bits/allocated_ptr.h:
-
 /usr/include/bits/typesizes.h:
 
 /usr/include/bits/uintn-identity.h:
@@ -1994,10 +2059,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/qt6/QtCore/qlist.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargets-relwithdebinfo.cmake:
-
-/usr/include/bits/time.h:
-
 /usr/lib/cmake/Qt6Gui/Qt6QMinimalEglIntegrationPluginTargetsPrecheck.cmake:
 
 /usr/include/c++/16/bits/requires_hosted.h:
@@ -2006,13 +2067,11 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/bits/byteswap.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QEglFSX11IntegrationPluginTargets.cmake:
+/usr/include/bits/local_lim.h:
 
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp:
+/usr/lib/cmake/Qt6Gui/Qt6QEglFSEmulatorIntegrationPluginTargets-relwithdebinfo.cmake:
 
-/usr/include/c++/16/bits/version.h:
-
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp:
+/usr/include/qt6/QtCore/qtcoreexports.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QMngPluginTargetsPrecheck.cmake:
 
@@ -2024,76 +2083,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/qt6/QtCore/qbytearray.h:
 
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.hpp:
-
-/usr/include/c++/16/bits/stl_raw_storage_iter.h:
-
-/usr/include/bits/endian.h:
-
-/usr/include/asm/errno.h:
-
-/usr/include/c++/16/bits/unique_ptr.h:
-
-/usr/include/qt6/QtCore/qcomparehelpers.h:
-
-/usr/include/bits/pthreadtypes.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QEvdevTabletPluginConfig.cmake:
-
-/usr/include/qt6/QtCore/QUrl:
-
-/usr/include/asm/bitsperlong.h:
-
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLists.txt:
-
-/usr/include/linux/posix_types.h:
-
-/usr/include/c++/16/tr1/beta_function.tcc:
-
-/usr/include/qt6/QtCore/q23utility.h:
-
-/usr/include/bits/types/__locale_t.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandXdgShellIntegrationPluginTargetsPrecheck.cmake:
-
-/usr/include/bits/setjmp.h:
-
-/usr/include/c++/16/x86_64-pc-linux-gnu/bits/c++config.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginTargets-relwithdebinfo.cmake:
-
-/usr/include/qt6/QtCore/QList:
-
-/usr/share/cmake/Modules/FindOpenGL.cmake:
-
-/usr/include/bits/types/struct___jmp_buf_tag.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QEvdevKeyboardPluginTargetsPrecheck.cmake:
-
-/usr/include/bits/wchar.h:
-
-/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake:
-
-/usr/lib/cmake/Qt6Network/Qt6QGlibNetworkInformationPluginAdditionalTargetInfo.cmake:
-
-/usr/include/bits/waitstatus.h:
-
-/usr/include/sched.h:
-
-/usr/include/c++/16/bits/hashtable.h:
-
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/geo_utils.hpp:
-
-/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake:
-
-/usr/include/bits/timex.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QIbusPlatformInputContextPluginTargets-relwithdebinfo.cmake:
-
-/usr/include/qt6/QtCore/QIODevice:
-
-/usr/include/alloca.h:
-
 /usr/lib/cmake/Qt6Core/Qt6CoreConfig.cmake:
 
 /usr/include/asm/types.h:
@@ -2102,29 +2091,75 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
 
 /usr/include/qt6/QtNetwork/QNetworkAccessManager:
 
+/usr/include/c++/16/bits/string_view.tcc:
+
+/usr/include/c++/16/ext/atomicity.h:
+
+/usr/include/qt6/QtCore/qyieldcpu.h:
+
+/usr/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:
+
+/usr/include/c++/16/bits/stdexcept_except.h:
+
+/usr/include/c++/16/bits/stl_multimap.h:
+
+/usr/include/qt6/QtCore/qjsonarray.h:
+
 /usr/lib/cmake/Qt6Gui/Qt6QSvgPluginConfig.cmake:
 
 /usr/include/qt6/QtNetwork/QNetworkRequest:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWebpPluginTargetsPrecheck.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginTargets.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomCommonGenerationHelpers.cmake:
-
 /usr/include/bits/types/struct_FILE.h:
 
-/usr/include/c++/16/bits/stl_multiset.h:
+/usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargets-relwithdebinfo.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QWbmpPluginConfig.cmake:
+/usr/include/bits/time.h:
 
-/usr/include/asm-generic/errno-base.h:
+/usr/include/bits/stdio_lim.h:
 
-/usr/lib/cmake/Qt6Network/Qt6QGlibNetworkInformationPluginTargets-relwithdebinfo.cmake:
+/usr/include/c++/16/bits/stream_iterator.h:
 
-/usr/include/c++/16/clocale:
+/usr/include/bits/types/__mbstate_t.h:
 
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp:
+/usr/include/asm/errno.h:
+
+/usr/include/c++/16/bits/stl_raw_storage_iter.h:
+
+/usr/include/bits/endian.h:
+
+/usr/lib/cmake/Qt6Sql/Qt6SqlTargetsPrecheck.cmake:
+
+/usr/include/c++/16/ratio:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVncIntegrationPluginConfig.cmake:
+
+/usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.hpp:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp:
+
+/usr/include/c++/16/bits/version.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp:
+
+/usr/include/c++/16/bits/unique_ptr.h:
+
+/usr/include/qt6/QtCore/qcomparehelpers.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginTargets.cmake:
+
+/usr/include/bits/pthread_stack_min-dynamic.h:
+
+/usr/include/c++/16/limits:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp:
+
+/usr/include/c++/16/ext/type_traits.h:
+
+/usr/include/bits/uio_lim.h:
 
 /usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsVersionlessAliasTargets.cmake:
 
@@ -2142,25 +2177,181 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/qt6/QtCore/qdatetime.h:
 
-/usr/include/c++/16/bits/stl_map.h:
+/usr/lib/cmake/Qt6/QtPublicSbomLicenseHelpers.cmake:
+
+/usr/include/qt6/QtCore/qxptype_traits.h:
+
+/usr/include/c++/16/bits/shared_ptr_atomic.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QEvdevTabletPluginConfig.cmake:
+
+/usr/include/qt6/QtCore/QUrl:
+
+/usr/include/asm/bitsperlong.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLists.txt:
+
+/usr/include/linux/posix_types.h:
+
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake:
+
+/usr/include/qt6/QtCore/QObject:
+
+/usr/include/c++/16/tr1/beta_function.tcc:
+
+/usr/include/qt6/QtCore/q23utility.h:
+
+/usr/include/bits/types/__locale_t.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QEglFSX11IntegrationPluginTargets.cmake:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp:
+
+/usr/include/bits/errno.h:
+
+/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets.cmake:
+
+/usr/include/bits/timex.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/geo_utils.hpp:
+
+/usr/lib/cmake/Qt6Gui/Qt6QIbusPlatformInputContextPluginTargets-relwithdebinfo.cmake:
+
+/usr/include/qt6/QtCore/QIODevice:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandXdgShellIntegrationPluginTargetsPrecheck.cmake:
+
+/usr/include/bits/setjmp.h:
+
+/usr/include/c++/16/x86_64-pc-linux-gnu/bits/c++config.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVirtualKeyboardPluginTargets-relwithdebinfo.cmake:
+
+/usr/include/qt6/QtCore/QList:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp:
+
+/usr/share/cmake/Modules/FindOpenGL.cmake:
+
+/usr/include/bits/types/struct___jmp_buf_tag.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QEvdevKeyboardPluginTargetsPrecheck.cmake:
+
+/usr/include/bits/wchar.h:
+
+/usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfig.cmake:
+
+/usr/lib/cmake/Qt6Network/Qt6QGlibNetworkInformationPluginAdditionalTargetInfo.cmake:
+
+/usr/include/bits/waitstatus.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmfeature.hpp:
+
+/usr/include/qt6/QtCore/quuid.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.hpp:
+
+/usr/include/c++/16/bits/refwrap.h:
+
+/usr/include/c++/16/x86_64-pc-linux-gnu/bits/gthr-default.h:
+
+/usr/include/bits/pthreadtypes-arch.h:
+
+/usr/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargetsPrecheck.cmake:
+
+/usr/include/c++/16/bits/exception.h:
+
+/usr/include/c++/16/bits/std_function.h:
+
+/usr/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake:
+
+/usr/include/c++/16/iterator:
+
+/usr/include/endian.h:
+
+/usr/include/qt6/QtCore/qstringbuilder.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandIviShellIntegrationPluginTargetsPrecheck.cmake:
+
+/usr/include/c++/16/bits/stl_numeric.h:
+
+/usr/include/qt6/QtGui/qregion.h:
+
+/usr/include/stdint.h:
+
+/usr/include/c++/16/bits/stl_multiset.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWbmpPluginConfig.cmake:
+
+/usr/include/asm-generic/errno-base.h:
+
+/usr/lib/cmake/Qt6Network/Qt6QGlibNetworkInformationPluginTargets-relwithdebinfo.cmake:
+
+/usr/include/c++/16/clocale:
 
 /usr/include/c++/16/bits/stl_bvector.h:
 
 /usr/include/c++/16/bits/functional_hash.h:
 
-/usr/include/bits/local_lim.h:
+/usr/lib/cmake/Qt6WidgetsTools/Qt6WidgetsToolsTargets-relwithdebinfo.cmake:
 
-/usr/lib/cmake/Qt6Gui/Qt6QEglFSEmulatorIntegrationPluginTargets-relwithdebinfo.cmake:
+/usr/lib/cmake/Qt6DBusTools/Qt6DBusToolsVersionlessTargets.cmake:
 
-/usr/include/qt6/QtCore/qtcoreexports.h:
+/usr/include/qt6/QtGui/qaction.h:
 
-/usr/include/bits/stdio_lim.h:
+/usr/share/cmake/Modules/Compiler/GNU.cmake:
 
-/usr/include/c++/16/bits/stream_iterator.h:
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp:
 
-/usr/include/bits/types/__mbstate_t.h:
+/usr/include/c++/16/bits/stl_tempbuf.h:
 
-/usr/include/bits/errno.h:
+/usr/share/cmake/Modules/CMakeGenericSystem.cmake:
+
+/usr/include/ctype.h:
+
+/usr/include/sched.h:
+
+/usr/include/c++/16/bits/hashtable.h:
+
+/usr/include/alloca.h:
+
+/usr/include/c++/16/bits/stl_map.h:
+
+/usr/include/bits/time64.h:
+
+/usr/lib/cmake/Qt6Core/Qt6CoreTargets.cmake:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginAdditionalTargetInfo.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomGenerationCycloneDXHelpers.cmake:
+
+/usr/include/c++/16/cerrno:
+
+/usr/include/c++/16/bits/stl_tree.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6DmaBufServerBufferPluginTargetsPrecheck.cmake:
+
+/usr/include/bits/struct_mutex.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QEvdevMousePluginTargets-relwithdebinfo.cmake:
+
+/usr/include/c++/16/bits/allocated_ptr.h:
+
+/usr/include/pthread.h:
+
+/usr/include/c++/16/bits/localefwd.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandEglClientBufferPluginConfig.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecorationPluginTargets-relwithdebinfo.cmake:
+
+/usr/include/c++/16/unordered_map:
+
+/usr/include/bits/types/time_t.h:
 
 /usr/include/bits/types.h:
 
@@ -2172,29 +2363,31 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/bits/types/__fpos_t.h:
 
+/usr/lib/cmake/Qt6Gui/Qt6QEglFSKmsGbmIntegrationPluginTargetsPrecheck.cmake:
+
+/usr/lib/cmake/Qt6Core/Qt6CoreTargets-relwithdebinfo.cmake:
+
+/usr/include/c++/16/bits/char_traits.h:
+
 /usr/include/bits/types/clock_t.h:
-
-/usr/share/cmake/Modules/Platform/Linker/Linux-GNU.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomAttributionHelpers.cmake:
 
 /usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsTargets-relwithdebinfo.cmake:
 
 /usr/include/c++/16/bits/unordered_set.h:
 
-/usr/include/c++/16/bits/stl_tempbuf.h:
+/usr/lib/cmake/Qt6DBus/Qt6DBusConfig.cmake:
 
-/usr/share/cmake/Modules/CMakeGenericSystem.cmake:
+/usr/lib/cmake/Qt6/QtPublicSbomCpeHelpers.cmake:
 
-/usr/include/ctype.h:
-
-/usr/lib/cmake/Qt6GuiTools/Qt6GuiToolsDependencies.cmake:
-
-/usr/bin/cmake:
+/usr/include/c++/16/bits/exception_ptr.h:
 
 /usr/include/qt6/QtCore/qsharedpointer.h:
 
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets.cmake:
+/usr/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake:
+
+/usr/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake:
+
+/usr/include/bits/types/locale_t.h:
 
 /usr/lib/cmake/Qt6/QtPublicSbomFileHelpers.cmake:
 
@@ -2202,33 +2395,29 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/qt6/QtCore/qsystemdetection.h:
 
-/usr/lib/cmake/Qt6/QtPublicSbomCpeHelpers.cmake:
-
-/usr/include/c++/16/bits/exception_ptr.h:
-
-/usr/lib/cmake/Qt6DBus/Qt6DBusConfig.cmake:
-
 /usr/include/bits/types/mbstate_t.h:
 
 /usr/include/c++/16/bits/memory_resource.h:
 
-/usr/lib/cmake/Qt6Widgets/Qt6WidgetsTargetsPrecheck.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginConfig.cmake:
-
-/usr/include/qt6/QtNetwork/qsslerror.h:
-
 /usr/include/bits/types/sigset_t.h:
 
 /usr/include/c++/16/bits/std_abs.h:
-
-/usr/include/bits/types/struct_itimerspec.h:
 
 /usr/include/qt6/QtCore/q20type_traits.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6DmaBufServerBufferPluginTargets-relwithdebinfo.cmake:
 
 /usr/include/bits/waitflags.h:
+
+/usr/lib/cmake/Qt6Widgets/Qt6WidgetsTargetsPrecheck.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandIntegrationPluginConfig.cmake:
+
+/usr/include/qt6/QtGui/qtransform.h:
+
+/usr/include/qt6/QtNetwork/qsslerror.h:
+
+/usr/include/qt6/QtCore/qcborcommon.h:
 
 /usr/lib/cmake/Qt6OpenGLWidgets/Qt6OpenGLWidgetsConfigVersion.cmake:
 
@@ -2247,10 +2436,6 @@ osm_loader_autogen/moc_predefs.h:
 /usr/include/bits/types/timer_t.h:
 
 /usr/include/qt6/QtCore/qvariant.h:
-
-/usr/include/c++/16/ext/type_traits.h:
-
-/usr/include/bits/uio_lim.h:
 
 /usr/include/c++/16/string:
 
@@ -2280,15 +2465,13 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/c++/16/bits/alloc_traits.h:
 
-/usr/lib/cmake/Qt6Sql/Qt6SqlTargetsPrecheck.cmake:
+/usr/lib/cmake/Qt6Sql/Qt6SqlTargets.cmake:
 
-/usr/include/c++/16/ratio:
+/usr/include/c++/16/bits/invoke.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QVncIntegrationPluginConfig.cmake:
+/usr/include/bits/floatn-common.h:
 
-/usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h:
-
-/usr/include/bits/time64.h:
+/usr/include/qt6/QtWidgets/qtabwidget.h:
 
 /usr/include/c++/16/bits/atomic_base.h:
 
@@ -2326,21 +2509,13 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/c++/16/bits/chrono.h:
 
-/usr/include/c++/16/bits/std_function.h:
+/usr/lib/cmake/Qt6Gui/Qt6QMngPluginTargets.cmake:
 
-/usr/lib/cmake/Qt6Sql/Qt6QSQLiteDriverPluginTargetsPrecheck.cmake:
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.hpp:
 
-/usr/include/c++/16/bits/exception.h:
+/usr/include/qt6/QtWidgets/qwidget.h:
 
-/usr/lib/cmake/Qt6Sql/Qt6QPSQLDriverPluginAdditionalTargetInfo.cmake:
-
-/usr/include/c++/16/iterator:
-
-/usr/include/endian.h:
-
-/usr/include/qt6/QtCore/qstringbuilder.h:
-
-/usr/include/stdint.h:
+/usr/lib/cmake/Qt6/Qt6VersionlessAliasTargets.cmake:
 
 /usr/include/c++/16/bits/concept_check.h:
 
@@ -2354,9 +2529,17 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/c++/16/bits/cxxabi_init_exception.h:
 
-/usr/include/bits/pthreadtypes-arch.h:
+/usr/lib/cmake/Qt6Gui/Qt6QXcbGlxIntegrationPluginTargetsPrecheck.cmake:
 
-/usr/lib/cmake/Qt6Core/Qt6CoreTargetsPrecheck.cmake:
+/usr/include/c++/16/bits/utility.h:
+
+/usr/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake:
+
+/usr/include/c++/16/bits/hash_bytes.h:
+
+/usr/include/features.h:
+
+/usr/include/qt6/QtCore/q20iterator.h:
 
 /usr/include/qt6/QtCore/qgenericatomic.h:
 
@@ -2382,23 +2565,23 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/lib/cmake/Qt6/QtPublicFinalizerHelpers.cmake:
 
-/usr/include/c++/16/bits/functexcept.h:
+/usr/include/c++/16/tr1/special_function_util.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QXcbGlxIntegrationPluginTargetsPrecheck.cmake:
+/usr/include/qt6/QtCore/qcheckedint_impl.h:
 
-/usr/include/c++/16/bits/utility.h:
+/usr/lib/cmake/Qt6Gui/Qt6QXcbIntegrationPluginTargetsPrecheck.cmake:
 
-/usr/lib/cmake/Qt6/FindWrapVulkanHeaders.cmake:
+/usr/lib/cmake/Qt6Gui/Qt6GuiDependencies.cmake:
 
-/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp:
+/usr/include/c++/16/tuple:
 
-/usr/include/c++/16/bits/hash_bytes.h:
+/usr/include/c++/16/bits/shared_ptr.h:
 
-/usr/include/features.h:
+/usr/include/c++/16/type_traits:
 
-/usr/include/qt6/QtCore/q20iterator.h:
+/usr/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets-relwithdebinfo.cmake:
 
-/usr/include/c++/16/bits/hashtable_policy.h:
+/usr/include/c++/16/typeinfo:
 
 /usr/include/c++/16/unordered_set:
 
@@ -2410,6 +2593,10 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/c++/16/x86_64-pc-linux-gnu/bits/c++locale.h:
 
+/usr/lib/cmake/Qt6Gui/Qt6QWaylandFullScreenShellV1IntegrationPluginTargets.cmake:
+
+/usr/include/qt6/QtGui/qcursor.h:
+
 /usr/lib/cmake/Qt6Network/Qt6NetworkDependencies.cmake:
 
 /usr/include/qt6/QtCore/qstdlibdetection.h:
@@ -2418,13 +2605,7 @@ osm_loader_autogen/moc_predefs.h:
 
 /usr/include/c++/16/x86_64-pc-linux-gnu/bits/error_constants.h:
 
-/usr/include/c++/16/bits/refwrap.h:
-
-/usr/include/c++/16/x86_64-pc-linux-gnu/bits/gthr-default.h:
-
 /usr/include/c++/16/x86_64-pc-linux-gnu/bits/gthr.h:
-
-/usr/lib/cmake/Qt6/QtPublicJsonHelpers.cmake:
 
 CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
@@ -2460,9 +2641,9 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/linux/errno.h:
 
-/usr/include/bits/locale.h:
+/usr/include/c++/16/cmath:
 
-/usr/lib/cmake/Qt6Core/Qt6CoreDependencies.cmake:
+/usr/include/qt6/QtWidgets/qtwidgets-config.h:
 
 /usr/include/linux/limits.h:
 
@@ -2484,19 +2665,31 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/QFlags:
 
-/usr/lib/cmake/Qt6/QtPublicGitHelpers.cmake:
+/usr/include/qt6/QtCore/QJsonArray:
+
+/usr/lib/cmake/Qt6Network/Qt6QConnManNetworkInformationPluginConfig.cmake:
+
+/usr/lib/cmake/Qt6Gui/Qt6QLinuxFbIntegrationPluginTargets.cmake:
+
+/usr/include/bits/posix2_lim.h:
+
+/usr/lib/cmake/Qt6/QtFeatureCommon.cmake:
 
 /usr/include/qt6/QtCore/QRect:
 
 /usr/include/qt6/QtCore/QVariant:
 
-/usr/lib/cmake/Qt6Core/Qt6CoreMacros.cmake:
-
-/usr/include/qt6/QtCore/q20bit.h:
-
 /usr/lib/cmake/Qt6Gui/Qt6QEvdevKeyboardPluginConfig.cmake:
 
 /usr/include/qt6/QtCore/q20functional.h:
+
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
+
+/usr/include/qt6/QtCore/q20memory.h:
+
+/usr/include/c++/16/tr1/poly_hermite.tcc:
+
+/usr/include/qt6/QtGui/qimage.h:
 
 /usr/include/qt6/QtCore/q20utility.h:
 
@@ -2505,6 +2698,8 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 /usr/lib/cmake/Qt6Gui/Qt6QTgaPluginTargetsPrecheck.cmake:
 
 /usr/include/qt6/QtCore/q23type_traits.h:
+
+/usr/include/qt6/QtGui/qwindowdefs.h:
 
 /usr/include/qt6/QtCore/qalgorithms.h:
 
@@ -2524,8 +2719,6 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/qflags.h:
 
-/usr/lib/cmake/Qt6DBus/Qt6DBusAdditionalTargetInfo.cmake:
-
 /usr/lib/cmake/Qt6Gui/Qt6DrmEglServerBufferPluginTargets-relwithdebinfo.cmake:
 
 /usr/include/qt6/QtCore/qassert.h:
@@ -2533,10 +2726,6 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 /usr/lib/cmake/Qt6DBusTools/Qt6DBusToolsTargetsPrecheck.cmake:
 
 /usr/include/qt6/QtCore/qatomic_cxx11.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginTargets.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicWindowsHelpers.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QEglFSKmsGbmIntegrationPluginTargets-relwithdebinfo.cmake:
 
@@ -2554,6 +2743,10 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/qbytearrayview.h:
 
+/usr/lib/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake:
+
+/usr/include/qt6/QtCore/qjsondocument.h:
+
 /usr/lib/cmake/Qt6/Qt6Targets.cmake:
 
 /usr/include/qt6/QtCore/qstringview.h:
@@ -2561,12 +2754,6 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 /usr/include/qt6/QtCore/qchar.h:
 
 /usr/include/qt6/QtCore/qcompare.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QEglFSKmsGbmIntegrationPluginTargetsPrecheck.cmake:
-
-/usr/include/c++/16/bits/char_traits.h:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreTargets-relwithdebinfo.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QEglFSIntegrationPluginTargets.cmake:
 
@@ -2579,10 +2766,6 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 /usr/include/qt6/QtCore/qcontainerfwd.h:
 
 /usr/include/qt6/QtCore/qcontainerinfo.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6QTiffPluginTargets-relwithdebinfo.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomExternalReferenceHelpers.cmake:
 
 /usr/lib/cmake/Qt6DBus/Qt6DBusTargets.cmake:
 
@@ -2602,7 +2785,9 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/qdatastream.h:
 
-/usr/lib/cmake/Qt6/QtPublicSbomGenerationHelpers.cmake:
+/usr/include/c++/16/exception:
+
+/usr/include/qt6/QtCore/qendian.h:
 
 /usr/lib/cmake/Qt6Gui/Qt6QWbmpPluginAdditionalTargetInfo.cmake:
 
@@ -2614,21 +2799,11 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/qlatin1stringview.h:
 
-/usr/lib/cmake/Qt6Gui/Qt6QEglFSKmsEglDeviceIntegrationPluginConfig.cmake:
-
-/usr/include/qt6/QtCore/qfunctionaltools_impl.h:
-
 /usr/include/qt6/QtCore/qsharedpointer_impl.h:
 
 /usr/include/c++/16/array:
 
 /usr/include/qt6/QtCore/qglobal.h:
-
-/usr/lib/cmake/Qt6Gui/Qt6GuiConfigVersionImpl.cmake:
-
-/usr/include/bits/stdint-intn.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomDepHelpers.cmake:
 
 /usr/include/qt6/QtCore/qhash.h:
 
@@ -2640,6 +2815,16 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/qiterator.h:
 
+/usr/include/qt6/QtCore/qjsonparseerror.h:
+
+/usr/include/qt6/QtCore/qtcore-config.h:
+
+/usr/include/bits/types/struct_itimerspec.h:
+
+/usr/include/qt6/QtCore/qjsonvalue.h:
+
+/usr/include/qt6/QtCore/qline.h:
+
 /usr/lib/cmake/Qt6Gui/Qt6QEvdevTabletPluginTargets.cmake:
 
 /usr/include/bits/stdint-uintn.h:
@@ -2648,13 +2833,21 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/stdio.h:
 
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp:
+
 /usr/include/qt6/QtNetwork/qnetworkreply.h:
 
 /usr/include/qt6/QtCore/qmalloc.h:
 
+/usr/include/qt6/QtGui/qrgba64.h:
+
 /usr/include/qt6/QtCore/qmap.h:
 
 /usr/include/qt6/QtCore/qmath.h:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp:
+
+/usr/include/qt6/QtWidgets/qsizepolicy.h:
 
 /usr/include/qt6/QtCore/qmetacontainer.h:
 
@@ -2694,15 +2887,15 @@ CMakeFiles/4.4.3/CMakeCXXCompiler.cmake:
 
 /usr/include/qt6/QtCore/qpoint.h:
 
-CMakeFiles/4.4.3/CMakeSystem.cmake:
-
-/usr/include/qt6/QtCore/qscopedpointer.h:
+/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
 
 /usr/include/qt6/QtCore/qcalendar.h:
 
 /usr/include/qt6/QtCore/qrefcount.h:
 
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfig.cmake:
+CMakeFiles/4.4.3/CMakeSystem.cmake:
+
+/usr/include/qt6/QtCore/qscopedpointer.h:
 
 /usr/include/c++/16/algorithm:
 
@@ -2712,15 +2905,17 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 
 /usr/include/qt6/QtCore/qstring.h:
 
-/usr/include/qt6/QtCore/qstringconverter.h:
+/usr/include/qt6/QtCore/qregularexpression.h:
 
-/usr/include/qt6/QtCore/qstringconverter_base.h:
+/usr/include/qt6/QtCore/qstringconverter.h:
 
 /usr/include/qt6/QtCore/qstringfwd.h:
 
 /usr/include/c++/16/streambuf:
 
 /usr/lib/cmake/Qt6/Qt6Config.cmake:
+
+/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp:
 
 /usr/lib/cmake/Qt6/Qt6ConfigVersion.cmake:
 
@@ -2734,15 +2929,11 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 
 /usr/include/qt6/QtCore/qsysinfo.h:
 
-/usr/lib/cmake/Qt6/QtPublicTestHelpers.cmake:
-
 /usr/lib/cmake/Qt6Widgets/Qt6WidgetsConfigVersion.cmake:
 
 /usr/include/gnu/stubs.h:
 
 /usr/include/qt6/QtCore/qtconfigmacros.h:
-
-/usr/include/qt6/QtCore/qtcore-config.h:
 
 /usr/include/qt6/QtCore/qtcoreglobal.h:
 
@@ -2752,13 +2943,9 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 
 /usr/include/qt6/QtCore/qtdeprecationmarkers.h:
 
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsAdditionalTargetInfo.cmake:
-
 /usr/include/qt6/QtCore/qtextstream.h:
 
 /usr/include/qt6/QtNetwork/qhostaddress.h:
-
-/usr/lib/cmake/Qt6/QtFeature.cmake:
 
 /usr/include/c++/16/numeric:
 
@@ -2768,10 +2955,6 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 
 /usr/include/qt6/QtCore/qtmetamacros.h:
 
-/usr/include/c++/16/bits/new_allocator.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomSystemDepHelpers.cmake:
-
 /usr/include/c++/16/bits/nested_exception.h:
 
 /usr/include/qt6/QtCore/qtpreprocessorsupport.h:
@@ -2779,6 +2962,10 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 /usr/include/c++/16/bit:
 
 /usr/include/qt6/QtCore/qtypeinfo.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QGtk3ThemePluginTargetsPrecheck.cmake:
+
+/usr/include/qt6/QtGui/qpalette.h:
 
 /usr/include/bits/libc-header-start.h:
 
@@ -2806,6 +2993,46 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 
 /usr/include/qt6/QtCore/qvarlengtharray.h:
 
+/usr/include/qt6/QtCore/q20bit.h:
+
+/usr/include/qt6/QtGui/qbrush.h:
+
+/usr/include/qt6/QtGui/qcolor.h:
+
+/usr/lib/cmake/Qt6/QtPublicToolHelpers.cmake:
+
+/usr/include/qt6/QtGui/qfontmetrics.h:
+
+/usr/lib/cmake/Qt6/QtFeature.cmake:
+
+/usr/include/qt6/QtGui/qpaintdevice.h:
+
+/usr/include/qt6/QtCore/qstringconverter_base.h:
+
+/usr/include/qt6/QtGui/qpixmap.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QEglFSKmsEglDeviceIntegrationPluginConfig.cmake:
+
+/usr/include/qt6/QtCore/qfunctionaltools_impl.h:
+
+/usr/include/qt6/QtGui/qpolygon.h:
+
+/usr/lib/cmake/Qt6GuiTools/Qt6GuiToolsDependencies.cmake:
+
+/usr/bin/cmake:
+
+/usr/include/qt6/QtGui/qrgb.h:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/16/include/stddef.h:
+
+/usr/include/c++/16/optional:
+
+/usr/include/qt6/QtGui/qtguiexports.h:
+
+/usr/include/qt6/QtGui/qfont.h:
+
+/usr/include/qt6/QtGui/qtguiglobal.h:
+
 /usr/include/features-time64.h:
 
 /usr/include/qt6/QtNetwork/QSslConfiguration:
@@ -2817,10 +3044,6 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 /usr/include/qt6/QtNetwork/qabstractsocket.h:
 
 /usr/include/qt6/QtNetwork/qnetworkaccessmanager.h:
-
-/usr/include/qt6/QtCore/QObject:
-
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsDependencies.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QMinimalIntegrationPluginTargets.cmake:
 
@@ -2837,6 +3060,14 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 /usr/include/qt6/QtNetwork/qtnetwork-config.h:
 
 /usr/include/qt6/QtNetwork/qtnetworkglobal.h:
+
+/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginTargetsPrecheck.cmake:
+
+/usr/include/qt6/QtWidgets/QMainWindow:
+
+/usr/include/qt6/QtWidgets/qtwidgetsexports.h:
+
+/usr/include/qt6/QtWidgets/qtwidgetsglobal.h:
 
 /usr/include/qt6/QtCore/qrect.h:
 
@@ -2858,9 +3089,9 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 
 /usr/lib/cmake/Qt6/Qt6ConfigExtras.cmake:
 
-/usr/include/qt6/QtCore/qshareddata_impl.h:
-
 /usr/include/bits/sched.h:
+
+/usr/include/qt6/QtCore/qshareddata_impl.h:
 
 /usr/include/qt6/QtCore/qconfig.h:
 
@@ -2869,16 +3100,6 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 /usr/lib/cmake/Qt6/Qt6ConfigVersionImpl.cmake:
 
 /usr/lib/cmake/Qt6/Qt6Dependencies.cmake:
-
-/usr/lib/cmake/Qt6/Qt6VersionlessAliasTargets.cmake:
-
-/usr/lib/cmake/Qt6Network/Qt6QConnManNetworkInformationPluginConfig.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QLinuxFbIntegrationPluginTargets.cmake:
-
-/usr/include/bits/posix2_lim.h:
-
-/usr/lib/cmake/Qt6/QtFeatureCommon.cmake:
 
 /usr/lib/cmake/Qt6Gui/Qt6QVncIntegrationPluginTargetsPrecheck.cmake:
 
@@ -2895,71 +3116,3 @@ CMakeFiles/4.4.3/CMakeSystem.cmake:
 /usr/lib/cmake/Qt6/Qt6TargetsPrecheck.cmake:
 
 /usr/lib/cmake/Qt6/QtPublicCMakeVersionHelpers.cmake:
-
-/usr/lib/cmake/Qt6Sql/Qt6QODBCDriverPluginTargets.cmake:
-
-/usr/include/c++/16/bits/stdexcept_except.h:
-
-/usr/lib/cmake/Qt6/QtPublicPluginHelpers.cmake:
-
-/usr/lib/cmake/Qt6DBus/Qt6DBusDependencies.cmake:
-
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargets-relwithdebinfo.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomCycloneDXHelpers.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicPluginHelpers_v2.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomDocumentNamespaceHelpers.cmake:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreConfigVersionImpl.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QVkKhrDisplayIntegrationPluginAdditionalTargetInfo.cmake:
-
-/usr/include/c++/16/cerrno:
-
-/usr/lib/cmake/Qt6/QtPublicSbomGenerationCycloneDXHelpers.cmake:
-
-/usr/include/qt6/QtCore/qxptype_traits.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomLicenseHelpers.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomOpsHelpers.cmake:
-
-/usr/lib/cmake/Qt6Widgets/Qt6WidgetsVersionlessAliasTargets.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6GuiVersionlessAliasTargets.cmake:
-
-/usr/lib/cmake/Qt6/QtPublicSbomQtEntityHelpers.cmake:
-
-/usr/include/c++/16/tr1/legendre_function.tcc:
-
-/usr/lib/cmake/Qt6/QtPublicSbomRelationshipHelpers.cmake:
-
-/usr/include/c++/16/bits/new_except.h:
-
-/usr/lib/cmake/Qt6/QtPublicWalkLibsHelpers.cmake:
-
-/usr/include/bits/types/locale_t.h:
-
-/usr/lib/cmake/Qt6/QtPublicSbomPythonHelpers.cmake:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreAdditionalTargetInfo.cmake:
-
-/usr/include/bits/stdlib-float.h:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreTargets.cmake:
-
-/usr/lib/cmake/Qt6Core/Qt6CoreVersionlessAliasTargets.cmake:
-
-/usr/lib/cmake/Qt6Gui/Qt6QWaylandQtShellIntegrationPluginConfig.cmake:
-
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsConfigVersion.cmake:
-
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsTargetsPrecheck.cmake:
-
-/usr/include/qt6/QtCore/q20memory.h:
-
-/usr/lib/cmake/Qt6CoreTools/Qt6CoreToolsVersionlessTargets.cmake:
-
-/usr/lib/cmake/Qt6DBus/Qt6DBusConfigVersion.cmake:

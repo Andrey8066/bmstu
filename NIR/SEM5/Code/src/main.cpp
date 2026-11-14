@@ -1,5 +1,3 @@
-#include "dem_reader.hpp"
-#include "osm_data_loader.hpp"
 #include <QApplication>
 #include <QDebug>
 #include <QDir>

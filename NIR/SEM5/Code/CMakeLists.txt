@@ -8,14 +8,23 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Добавляем исходные файлы для загрузки OSM данных
 add_executable(osm_loader
-    src/main.cpp
-    src/osm_data_loader.cpp
-    src/dem_reader.cpp
-    src/mainwindow.hpp
-    src/mainwindow.cpp
-    src/glwidget.hpp
-    src/glwidget.cpp
+    src/demreader.cpp
+    src/featuredispatcher.cpp
     src/geo_utils.hpp
+    src/glwidget.hpp
+    src/mainwindow.cpp
+    src/osmclassifier.cpp
+    src/osmdataloader.cpp
+    src/osmdataparser.cpp
+    src/osmfeature.hpp
+    src/demreader.hpp
+    src/featuredispatcher.hpp
+    src/glwidget.cpp
+    src/main.cpp
+    src/mainwindow.hpp
+    src/osmclassifier.hpp
+    src/osmdataloader.hpp
+    src/osmdataparser.hpp
 )
 
 # Подключение Qt

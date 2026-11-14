@@ -92,52 +92,38 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/mocs_compilation.cpp" -o CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.s
 
-CMakeFiles/osm_loader.dir/src/main.cpp.o: CMakeFiles/osm_loader.dir/flags.make
-CMakeFiles/osm_loader.dir/src/main.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp
-CMakeFiles/osm_loader.dir/src/main.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/osm_loader.dir/src/main.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/main.cpp.o -MF CMakeFiles/osm_loader.dir/src/main.cpp.o.d -o CMakeFiles/osm_loader.dir/src/main.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp
+CMakeFiles/osm_loader.dir/src/demreader.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/demreader.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp
+CMakeFiles/osm_loader.dir/src/demreader.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/osm_loader.dir/src/demreader.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/demreader.cpp.o -MF CMakeFiles/osm_loader.dir/src/demreader.cpp.o.d -o CMakeFiles/osm_loader.dir/src/demreader.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp
 
-CMakeFiles/osm_loader.dir/src/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/main.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp > CMakeFiles/osm_loader.dir/src/main.cpp.i
+CMakeFiles/osm_loader.dir/src/demreader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/demreader.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp > CMakeFiles/osm_loader.dir/src/demreader.cpp.i
 
-CMakeFiles/osm_loader.dir/src/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/main.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp -o CMakeFiles/osm_loader.dir/src/main.cpp.s
+CMakeFiles/osm_loader.dir/src/demreader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/demreader.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp -o CMakeFiles/osm_loader.dir/src/demreader.cpp.s
 
-CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o: CMakeFiles/osm_loader.dir/flags.make
-CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp
-CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o -MF CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o.d -o CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp
+CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp
+CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o -MF CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o.d -o CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp
 
-CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp > CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.i
+CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp > CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.i
 
-CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp -o CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.s
-
-CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o: CMakeFiles/osm_loader.dir/flags.make
-CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp
-CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o -MF CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o.d -o CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp
-
-CMakeFiles/osm_loader.dir/src/dem_reader.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/dem_reader.cpp.i"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp > CMakeFiles/osm_loader.dir/src/dem_reader.cpp.i
-
-CMakeFiles/osm_loader.dir/src/dem_reader.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/dem_reader.cpp.s"
-	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp -o CMakeFiles/osm_loader.dir/src/dem_reader.cpp.s
+CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp -o CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.s
 
 CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o: CMakeFiles/osm_loader.dir/flags.make
 CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp
 CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o -MF CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o.d -o CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp
 
 CMakeFiles/osm_loader.dir/src/mainwindow.cpp.i: cmake_force
@@ -148,10 +134,52 @@ CMakeFiles/osm_loader.dir/src/mainwindow.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/mainwindow.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp -o CMakeFiles/osm_loader.dir/src/mainwindow.cpp.s
 
+CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp
+CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o -MF CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o.d -o CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp
+
+CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp > CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.i
+
+CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp -o CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.s
+
+CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp
+CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o -MF CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o.d -o CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp
+
+CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp > CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.i
+
+CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp -o CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.s
+
+CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp
+CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o -MF CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o.d -o CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp
+
+CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp > CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.i
+
+CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp -o CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.s
+
 CMakeFiles/osm_loader.dir/src/glwidget.cpp.o: CMakeFiles/osm_loader.dir/flags.make
 CMakeFiles/osm_loader.dir/src/glwidget.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp
 CMakeFiles/osm_loader.dir/src/glwidget.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/osm_loader.dir/src/glwidget.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/osm_loader.dir/src/glwidget.cpp.o"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/glwidget.cpp.o -MF CMakeFiles/osm_loader.dir/src/glwidget.cpp.o.d -o CMakeFiles/osm_loader.dir/src/glwidget.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp
 
 CMakeFiles/osm_loader.dir/src/glwidget.cpp.i: cmake_force
@@ -162,24 +190,44 @@ CMakeFiles/osm_loader.dir/src/glwidget.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/glwidget.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp -o CMakeFiles/osm_loader.dir/src/glwidget.cpp.s
 
+CMakeFiles/osm_loader.dir/src/main.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/main.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp
+CMakeFiles/osm_loader.dir/src/main.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/osm_loader.dir/src/main.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/main.cpp.o -MF CMakeFiles/osm_loader.dir/src/main.cpp.o.d -o CMakeFiles/osm_loader.dir/src/main.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp
+
+CMakeFiles/osm_loader.dir/src/main.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/main.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp > CMakeFiles/osm_loader.dir/src/main.cpp.i
+
+CMakeFiles/osm_loader.dir/src/main.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/main.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp -o CMakeFiles/osm_loader.dir/src/main.cpp.s
+
 # Object files for target osm_loader
 osm_loader_OBJECTS = \
 "CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o" \
-"CMakeFiles/osm_loader.dir/src/main.cpp.o" \
-"CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o" \
-"CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/demreader.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o" \
 "CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o" \
-"CMakeFiles/osm_loader.dir/src/glwidget.cpp.o"
+"CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/glwidget.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/main.cpp.o"
 
 # External object files for target osm_loader
 osm_loader_EXTERNAL_OBJECTS =
 
 osm_loader: CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o
-osm_loader: CMakeFiles/osm_loader.dir/src/main.cpp.o
-osm_loader: CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o
-osm_loader: CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/demreader.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/src/glwidget.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/main.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/build.make
 osm_loader: CMakeFiles/osm_loader.dir/compiler_depend.ts
 osm_loader: /usr/lib/libgdal.so
@@ -193,7 +241,7 @@ osm_loader: /usr/lib/libGLX.so
 osm_loader: /usr/lib/libOpenGL.so
 osm_loader: /usr/lib/libQt6Core.so.6.11.2
 osm_loader: CMakeFiles/osm_loader.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable osm_loader"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_11) "Linking CXX executable osm_loader"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/osm_loader.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

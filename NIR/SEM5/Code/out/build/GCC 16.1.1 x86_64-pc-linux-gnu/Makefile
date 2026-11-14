@@ -179,29 +179,53 @@ osm_loader_autogen/mocs_compilation.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.s
 .PHONY : osm_loader_autogen/mocs_compilation.cpp.s
 
-src/dem_reader.o: src/dem_reader.cpp.o
-.PHONY : src/dem_reader.o
+src/demreader.o: src/demreader.cpp.o
+.PHONY : src/demreader.o
 
 # target to build an object file
-src/dem_reader.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o
-.PHONY : src/dem_reader.cpp.o
+src/demreader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/demreader.cpp.o
+.PHONY : src/demreader.cpp.o
 
-src/dem_reader.i: src/dem_reader.cpp.i
-.PHONY : src/dem_reader.i
+src/demreader.i: src/demreader.cpp.i
+.PHONY : src/demreader.i
 
 # target to preprocess a source file
-src/dem_reader.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/dem_reader.cpp.i
-.PHONY : src/dem_reader.cpp.i
+src/demreader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/demreader.cpp.i
+.PHONY : src/demreader.cpp.i
 
-src/dem_reader.s: src/dem_reader.cpp.s
-.PHONY : src/dem_reader.s
+src/demreader.s: src/demreader.cpp.s
+.PHONY : src/demreader.s
 
 # target to generate assembly for a file
-src/dem_reader.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/dem_reader.cpp.s
-.PHONY : src/dem_reader.cpp.s
+src/demreader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/demreader.cpp.s
+.PHONY : src/demreader.cpp.s
+
+src/featuredispatcher.o: src/featuredispatcher.cpp.o
+.PHONY : src/featuredispatcher.o
+
+# target to build an object file
+src/featuredispatcher.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o
+.PHONY : src/featuredispatcher.cpp.o
+
+src/featuredispatcher.i: src/featuredispatcher.cpp.i
+.PHONY : src/featuredispatcher.i
+
+# target to preprocess a source file
+src/featuredispatcher.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.i
+.PHONY : src/featuredispatcher.cpp.i
+
+src/featuredispatcher.s: src/featuredispatcher.cpp.s
+.PHONY : src/featuredispatcher.s
+
+# target to generate assembly for a file
+src/featuredispatcher.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.s
+.PHONY : src/featuredispatcher.cpp.s
 
 src/glwidget.o: src/glwidget.cpp.o
 .PHONY : src/glwidget.o
@@ -275,29 +299,77 @@ src/mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/mainwindow.cpp.s
 .PHONY : src/mainwindow.cpp.s
 
-src/osm_data_loader.o: src/osm_data_loader.cpp.o
-.PHONY : src/osm_data_loader.o
+src/osmclassifier.o: src/osmclassifier.cpp.o
+.PHONY : src/osmclassifier.o
 
 # target to build an object file
-src/osm_data_loader.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o
-.PHONY : src/osm_data_loader.cpp.o
+src/osmclassifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o
+.PHONY : src/osmclassifier.cpp.o
 
-src/osm_data_loader.i: src/osm_data_loader.cpp.i
-.PHONY : src/osm_data_loader.i
+src/osmclassifier.i: src/osmclassifier.cpp.i
+.PHONY : src/osmclassifier.i
 
 # target to preprocess a source file
-src/osm_data_loader.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.i
-.PHONY : src/osm_data_loader.cpp.i
+src/osmclassifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.i
+.PHONY : src/osmclassifier.cpp.i
 
-src/osm_data_loader.s: src/osm_data_loader.cpp.s
-.PHONY : src/osm_data_loader.s
+src/osmclassifier.s: src/osmclassifier.cpp.s
+.PHONY : src/osmclassifier.s
 
 # target to generate assembly for a file
-src/osm_data_loader.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.s
-.PHONY : src/osm_data_loader.cpp.s
+src/osmclassifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.s
+.PHONY : src/osmclassifier.cpp.s
+
+src/osmdataloader.o: src/osmdataloader.cpp.o
+.PHONY : src/osmdataloader.o
+
+# target to build an object file
+src/osmdataloader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o
+.PHONY : src/osmdataloader.cpp.o
+
+src/osmdataloader.i: src/osmdataloader.cpp.i
+.PHONY : src/osmdataloader.i
+
+# target to preprocess a source file
+src/osmdataloader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.i
+.PHONY : src/osmdataloader.cpp.i
+
+src/osmdataloader.s: src/osmdataloader.cpp.s
+.PHONY : src/osmdataloader.s
+
+# target to generate assembly for a file
+src/osmdataloader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.s
+.PHONY : src/osmdataloader.cpp.s
+
+src/osmdataparser.o: src/osmdataparser.cpp.o
+.PHONY : src/osmdataparser.o
+
+# target to build an object file
+src/osmdataparser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o
+.PHONY : src/osmdataparser.cpp.o
+
+src/osmdataparser.i: src/osmdataparser.cpp.i
+.PHONY : src/osmdataparser.i
+
+# target to preprocess a source file
+src/osmdataparser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.i
+.PHONY : src/osmdataparser.cpp.i
+
+src/osmdataparser.s: src/osmdataparser.cpp.s
+.PHONY : src/osmdataparser.s
+
+# target to generate assembly for a file
+src/osmdataparser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.s
+.PHONY : src/osmdataparser.cpp.s
 
 # Help Target
 help:
@@ -313,9 +385,12 @@ help:
 	@echo "... osm_loader_autogen/mocs_compilation.o"
 	@echo "... osm_loader_autogen/mocs_compilation.i"
 	@echo "... osm_loader_autogen/mocs_compilation.s"
-	@echo "... src/dem_reader.o"
-	@echo "... src/dem_reader.i"
-	@echo "... src/dem_reader.s"
+	@echo "... src/demreader.o"
+	@echo "... src/demreader.i"
+	@echo "... src/demreader.s"
+	@echo "... src/featuredispatcher.o"
+	@echo "... src/featuredispatcher.i"
+	@echo "... src/featuredispatcher.s"
 	@echo "... src/glwidget.o"
 	@echo "... src/glwidget.i"
 	@echo "... src/glwidget.s"
@@ -325,9 +400,15 @@ help:
 	@echo "... src/mainwindow.o"
 	@echo "... src/mainwindow.i"
 	@echo "... src/mainwindow.s"
-	@echo "... src/osm_data_loader.o"
-	@echo "... src/osm_data_loader.i"
-	@echo "... src/osm_data_loader.s"
+	@echo "... src/osmclassifier.o"
+	@echo "... src/osmclassifier.i"
+	@echo "... src/osmclassifier.s"
+	@echo "... src/osmdataloader.o"
+	@echo "... src/osmdataloader.i"
+	@echo "... src/osmdataloader.s"
+	@echo "... src/osmdataparser.o"
+	@echo "... src/osmdataparser.i"
+	@echo "... src/osmdataparser.s"
 .PHONY : help
 
 

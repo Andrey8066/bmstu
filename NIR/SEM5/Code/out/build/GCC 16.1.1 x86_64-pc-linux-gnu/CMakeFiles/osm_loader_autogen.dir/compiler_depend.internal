@@ -6,16 +6,23 @@
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/4.4.3/CMakeCXXCompiler.cmake
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles/4.4.3/CMakeSystem.cmake
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/moc_predefs.h
- /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp
- /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.hpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/geo_utils.hpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.hpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp
- /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp
- /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmfeature.hpp
  /usr/bin/cmake
  /usr/include/alloca.h
  /usr/include/asm-generic/bitsperlong.h
@@ -292,6 +299,7 @@
  /usr/include/pthread.h
  /usr/include/qt6/QtCore/QFlags
  /usr/include/qt6/QtCore/QIODevice
+ /usr/include/qt6/QtCore/QJsonArray
  /usr/include/qt6/QtCore/QList
  /usr/include/qt6/QtCore/QMetaType
  /usr/include/qt6/QtCore/QObject
@@ -326,6 +334,8 @@
  /usr/include/qt6/QtCore/qbytearraylist.h
  /usr/include/qt6/QtCore/qbytearrayview.h
  /usr/include/qt6/QtCore/qcalendar.h
+ /usr/include/qt6/QtCore/qcborcommon.h
+ /usr/include/qt6/QtCore/qcborvalue.h
  /usr/include/qt6/QtCore/qchar.h
  /usr/include/qt6/QtCore/qcheckedint_impl.h
  /usr/include/qt6/QtCore/qcompare.h
@@ -343,6 +353,7 @@
  /usr/include/qt6/QtCore/qdatastream.h
  /usr/include/qt6/QtCore/qdatetime.h
  /usr/include/qt6/QtCore/qdebug.h
+ /usr/include/qt6/QtCore/qendian.h
  /usr/include/qt6/QtCore/qexceptionhandling.h
  /usr/include/qt6/QtCore/qflags.h
  /usr/include/qt6/QtCore/qfloat16.h
@@ -358,7 +369,12 @@
  /usr/include/qt6/QtCore/qiodevicebase.h
  /usr/include/qt6/QtCore/qiterable.h
  /usr/include/qt6/QtCore/qiterator.h
+ /usr/include/qt6/QtCore/qjsonarray.h
+ /usr/include/qt6/QtCore/qjsondocument.h
+ /usr/include/qt6/QtCore/qjsonparseerror.h
+ /usr/include/qt6/QtCore/qjsonvalue.h
  /usr/include/qt6/QtCore/qlatin1stringview.h
+ /usr/include/qt6/QtCore/qline.h
  /usr/include/qt6/QtCore/qlist.h
  /usr/include/qt6/QtCore/qlocale.h
  /usr/include/qt6/QtCore/qlogging.h
@@ -382,6 +398,7 @@
  /usr/include/qt6/QtCore/qprocessordetection.h
  /usr/include/qt6/QtCore/qrect.h
  /usr/include/qt6/QtCore/qrefcount.h
+ /usr/include/qt6/QtCore/qregularexpression.h
  /usr/include/qt6/QtCore/qscopedpointer.h
  /usr/include/qt6/QtCore/qscopeguard.h
  /usr/include/qt6/QtCore/qset.h
@@ -429,11 +446,37 @@
  /usr/include/qt6/QtCore/qtypes.h
  /usr/include/qt6/QtCore/qurl.h
  /usr/include/qt6/QtCore/qutf8stringview.h
+ /usr/include/qt6/QtCore/quuid.h
  /usr/include/qt6/QtCore/qvariant.h
  /usr/include/qt6/QtCore/qvarlengtharray.h
  /usr/include/qt6/QtCore/qversiontagging.h
  /usr/include/qt6/QtCore/qxptype_traits.h
  /usr/include/qt6/QtCore/qyieldcpu.h
+ /usr/include/qt6/QtGui/qaction.h
+ /usr/include/qt6/QtGui/qbitmap.h
+ /usr/include/qt6/QtGui/qbrush.h
+ /usr/include/qt6/QtGui/qcolor.h
+ /usr/include/qt6/QtGui/qcursor.h
+ /usr/include/qt6/QtGui/qfont.h
+ /usr/include/qt6/QtGui/qfontinfo.h
+ /usr/include/qt6/QtGui/qfontmetrics.h
+ /usr/include/qt6/QtGui/qfontvariableaxis.h
+ /usr/include/qt6/QtGui/qicon.h
+ /usr/include/qt6/QtGui/qimage.h
+ /usr/include/qt6/QtGui/qkeysequence.h
+ /usr/include/qt6/QtGui/qpaintdevice.h
+ /usr/include/qt6/QtGui/qpalette.h
+ /usr/include/qt6/QtGui/qpixelformat.h
+ /usr/include/qt6/QtGui/qpixmap.h
+ /usr/include/qt6/QtGui/qpolygon.h
+ /usr/include/qt6/QtGui/qregion.h
+ /usr/include/qt6/QtGui/qrgb.h
+ /usr/include/qt6/QtGui/qrgba64.h
+ /usr/include/qt6/QtGui/qtgui-config.h
+ /usr/include/qt6/QtGui/qtguiexports.h
+ /usr/include/qt6/QtGui/qtguiglobal.h
+ /usr/include/qt6/QtGui/qtransform.h
+ /usr/include/qt6/QtGui/qwindowdefs.h
  /usr/include/qt6/QtNetwork/QNetworkAccessManager
  /usr/include/qt6/QtNetwork/QNetworkReply
  /usr/include/qt6/QtNetwork/QNetworkRequest
@@ -455,6 +498,14 @@
  /usr/include/qt6/QtNetwork/qtnetwork-config.h
  /usr/include/qt6/QtNetwork/qtnetworkexports.h
  /usr/include/qt6/QtNetwork/qtnetworkglobal.h
+ /usr/include/qt6/QtWidgets/QMainWindow
+ /usr/include/qt6/QtWidgets/qmainwindow.h
+ /usr/include/qt6/QtWidgets/qsizepolicy.h
+ /usr/include/qt6/QtWidgets/qtabwidget.h
+ /usr/include/qt6/QtWidgets/qtwidgets-config.h
+ /usr/include/qt6/QtWidgets/qtwidgetsexports.h
+ /usr/include/qt6/QtWidgets/qtwidgetsglobal.h
+ /usr/include/qt6/QtWidgets/qwidget.h
  /usr/include/sched.h
  /usr/include/stdc-predef.h
  /usr/include/stdint.h

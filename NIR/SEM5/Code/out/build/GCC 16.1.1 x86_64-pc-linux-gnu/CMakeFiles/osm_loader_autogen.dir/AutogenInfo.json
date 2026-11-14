@@ -659,9 +659,15 @@
 	"HEADERS" : 
 	[
 		[
-			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.hpp",
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp",
 			"Mu",
-			"UVLADIE3JM/moc_dem_reader.cpp",
+			"UVLADIE3JM/moc_demreader.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_featuredispatcher.cpp",
 			null
 		],
 		[
@@ -683,9 +689,27 @@
 			null
 		],
 		[
-			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.hpp",
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.hpp",
 			"Mu",
-			"UVLADIE3JM/moc_osm_data_loader.cpp",
+			"UVLADIE3JM/moc_osmclassifier.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_osmdataloader.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_osmdataparser.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmfeature.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_osmfeature.cpp",
 			null
 		]
 	],
@@ -754,7 +778,12 @@
 	"SOURCES" : 
 	[
 		[
-			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/dem_reader.cpp",
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/featuredispatcher.cpp",
 			"Mu",
 			null
 		],
@@ -770,7 +799,17 @@
 			null
 		],
 		[
-			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osm_data_loader.cpp",
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp",
 			"Mu",
 			null
 		]

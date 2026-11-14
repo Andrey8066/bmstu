@@ -1,5 +1,5 @@
 
-#include "dem_reader.hpp"
+#include "demreader.hpp"
 
 #include <cpl_conv.h>
 #include <gdal_priv.h>

@@ -3,11 +3,14 @@ osm_loader: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/../../../../lib/crti.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/crtbeginS.o \
   CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o \
-  CMakeFiles/osm_loader.dir/src/main.cpp.o \
-  CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o \
-  CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o \
+  CMakeFiles/osm_loader.dir/src/demreader.cpp.o \
+  CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o \
   CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o \
+  CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o \
+  CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o \
+  CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o \
   CMakeFiles/osm_loader.dir/src/glwidget.cpp.o \
+  CMakeFiles/osm_loader.dir/src/main.cpp.o \
   /usr/lib/libgdal.so \
   /usr/lib/libQt6Network.so.6.11.2 \
   /usr/lib/libQt6Sql.so.6.11.2 \
@@ -199,15 +202,21 @@ osm_loader: \
 
 CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o:
 
-CMakeFiles/osm_loader.dir/src/main.cpp.o:
+CMakeFiles/osm_loader.dir/src/demreader.cpp.o:
 
-CMakeFiles/osm_loader.dir/src/osm_data_loader.cpp.o:
-
-CMakeFiles/osm_loader.dir/src/dem_reader.cpp.o:
+CMakeFiles/osm_loader.dir/src/featuredispatcher.cpp.o:
 
 CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o:
 
+CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o:
+
 CMakeFiles/osm_loader.dir/src/glwidget.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/main.cpp.o:
 
 /usr/lib/libgdal.so:
 

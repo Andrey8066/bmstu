@@ -1,4 +1,4 @@
-#include "osm_data_loader.hpp"
+#include "osmdataloader.hpp"
 
 #include <QDebug>
 #include <QEventLoop>
