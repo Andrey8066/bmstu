@@ -46,11 +46,15 @@ struct OSMFeature {
 
   QVector<GeoPoint> geometry;
 
+  // Внутренние кольца (отверстия), используются только зданиями.
+  QVector<QVector<GeoPoint>> innerRings;
+
   // Все исходные теги OSM
   QJsonObject tags;
 
   // Параметры геометрии
   float heightMeters = 0.0f;
+  float minHeightMeters = 0.0f;
   float widthMeters = 0.0f;
 
   Colors colors;

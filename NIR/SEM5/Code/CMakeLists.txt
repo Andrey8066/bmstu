@@ -25,6 +25,8 @@ add_executable(osm_loader
     src/osmclassifier.hpp
     src/osmdataloader.hpp
     src/osmdataparser.hpp
+    src/projectserializer.cpp
+    src/projectserializer.hpp
 )
 
 # Подключение Qt
@@ -35,6 +37,8 @@ target_link_libraries(osm_loader PRIVATE GDAL::GDAL Qt6::Core Qt6::Network Qt6::
 
 # Указываем директории исходных файлов
 target_include_directories(osm_loader PRIVATE src)
+target_include_directories(osm_loader PRIVATE third_party
+)
 
 
 

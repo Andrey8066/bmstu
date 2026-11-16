@@ -375,4 +375,9 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
  /usr/include/qt6/QtCore/QMetaType /usr/include/qt6/QtCore/QObject \
  /usr/include/qt6/QtCore/QRect /usr/include/qt6/QtCore/QString \
+ /usr/include/qt6/QtCore/QTimer /usr/include/qt6/QtCore/qtimer.h \
+ /usr/include/qt6/QtCore/qbasictimer.h \
+ /usr/include/qt6/QtCore/qabstracteventdispatcher.h \
+ /usr/include/qt6/QtCore/qeventloop.h \
+ /usr/include/qt6/QtCore/qdeadlinetimer.h \
  /usr/include/qt6/QtNetwork/QSslError

@@ -10,7 +10,9 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <mapbox/earcut.hpp>
 #include <numeric>
+#include <vector>
 
 namespace {
 
@@ -227,6 +229,23 @@ void GLWidget::addFeature(const OSMFeature &feature) {
   update();
 }
 
+const DEMData &GLWidget::getDEM() const { return dem; }
+
+const QVector<OSMFeature> &GLWidget::getFeatures() const { return features; }
+
+float GLWidget::getVerticalScale() const { return verticalScaleCoefficient; }
+
+void GLWidget::setVerticalScale(float value) {
+  if (!std::isfinite(value) || value <= 0.0f)
+    return;
+
+  verticalScaleCoefficient = value;
+
+  rebuildMesh();
+  rebuildFeatureMesh();
+
+  update();
+}
 // -----------------------------------------------------------------------------
 // FeatureDispatcher compatibility methods
 // -----------------------------------------------------------------------------
@@ -311,7 +330,7 @@ void GLWidget::rebuildMesh() {
     return;
   }
 
-  constexpr int maxDimension = 400;
+  constexpr int maxDimension = 10000;
 
   const int stepX =
       std::max(1, (width - 1 + maxDimension - 2) / (maxDimension - 1));
@@ -343,7 +362,10 @@ void GLWidget::rebuildMesh() {
                          1.0f)
             : 0.5f;
 
-    const float vertical = elevationRange > 0.0f ? normalized * 0.12f : 0.0f;
+    const float vertical = elevationRange > 0.0f
+                               ? (elevation - dem.minElevation) *
+                                     (verticalScaleCoefficient / elevationRange)
+                               : 0.0f;
 
     float r, g, b;
 
@@ -444,20 +466,23 @@ bool GLWidget::sampleElevation(double pixelX, double pixelY,
     return dem.elevation[static_cast<std::size_t>(y) * width + x];
   };
 
-  const float z00 = at(x0, y0);
-  const float z10 = at(x1, y0);
-  const float z01 = at(x0, y1);
-  const float z11 = at(x1, y1);
+  const float z00 = at(x0, y0); // a
+  const float z10 = at(x1, y0); // b
+  const float z01 = at(x0, y1); // c
+  const float z11 = at(x1, y1); // d
 
   if (!std::isfinite(z00) || !std::isfinite(z10) || !std::isfinite(z01) ||
       !std::isfinite(z11)) {
     return false;
   }
 
-  const float z0 = z00 * (1.0f - fx) + z10 * fx;
-  const float z1 = z01 * (1.0f - fx) + z11 * fx;
-
-  elevation = z0 * (1.0f - fy) + z1 * fy;
+  // Интерполяция по той же диагонали b-c,
+  // по которой строятся треугольники рельефа.
+  if (fx + fy <= 1.0f) {
+    elevation = z00 * (1.0f - fx - fy) + z10 * fx + z01 * fy;
+  } else {
+    elevation = z10 * (1.0f - fy) + z01 * (1.0f - fx) + z11 * (fx + fy - 1.0f);
+  }
 
   return true;
 }
@@ -501,8 +526,9 @@ bool GLWidget::geoToScene(const GeoPoint &point, ScenePoint &result) const {
 
   const float elevationRange = dem.maxElevation - dem.minElevation;
 
-  const float verticalScale =
-      elevationRange > 0.0f ? 0.12f / elevationRange : 0.001f;
+  const float verticalScale = elevationRange > 0.0f
+                                  ? verticalScaleCoefficient / elevationRange
+                                  : 0.001f;
 
   result.position = QVector2D(sceneX, sceneZ);
 
@@ -528,84 +554,152 @@ void GLWidget::appendBuilding(const OSMFeature &feature) {
   if (feature.geometry.size() < 3)
     return;
 
-  std::vector<ScenePoint> scenePoints;
-  scenePoints.reserve(feature.geometry.size());
+  // Преобразует географическое кольцо в координаты сцены.
+  auto convertRing = [&](const QVector<GeoPoint> &geoRing,
+                         std::vector<ScenePoint> &sceneRing) -> bool {
+    sceneRing.clear();
 
-  for (const GeoPoint &geo : feature.geometry) {
-    ScenePoint point;
+    for (const GeoPoint &geo : geoRing) {
+      ScenePoint point;
 
-    if (!geoToScene(geo, point))
-      return;
+      if (!geoToScene(geo, point))
+        return false;
 
-    scenePoints.push_back(point);
-  }
+      sceneRing.push_back(point);
+    }
 
-  if (scenePoints.size() >= 2 &&
-      sameGeoPoint(feature.geometry.first(), feature.geometry.last())) {
-    scenePoints.pop_back();
-  }
+    // Убираем повтор последней точки замкнутого кольца.
+    if (sceneRing.size() >= 2 &&
+        sameGeoPoint(geoRing.first(), geoRing.last())) {
+      sceneRing.pop_back();
+    }
 
-  if (scenePoints.size() < 3)
+    return sceneRing.size() >= 3;
+  };
+
+  std::vector<ScenePoint> outerScene;
+
+  if (!convertRing(feature.geometry, outerScene))
     return;
 
-  std::vector<QVector2D> polygon;
-  polygon.reserve(scenePoints.size());
+  // Все кольца: сначала outer, затем inner.
+  std::vector<std::vector<ScenePoint>> sceneRings;
+  sceneRings.push_back(outerScene);
 
+  for (const auto &innerGeo : feature.innerRings) {
+    std::vector<ScenePoint> innerScene;
+
+    if (!convertRing(innerGeo, innerScene))
+      continue;
+
+    sceneRings.push_back(std::move(innerScene));
+  }
+
+  // Формат для Mapbox Earcut.
+  std::vector<std::vector<std::array<double, 2>>> polygon;
+
+  // Плоский массив координат для последующего получения вершин крыши.
+  std::vector<QVector2D> roofPoints;
+
+  for (const auto &ring : sceneRings) {
+    std::vector<std::array<double, 2>> earcutRing;
+
+    for (const ScenePoint &point : ring) {
+      earcutRing.push_back({static_cast<double>(point.position.x()),
+                            static_cast<double>(point.position.y())});
+
+      roofPoints.push_back(point.position);
+    }
+
+    polygon.push_back(std::move(earcutRing));
+  }
+
+  if (roofPoints.size() < 3)
+    return;
+
+  const std::vector<unsigned int> indices =
+      mapbox::earcut<unsigned int>(polygon);
+
+  if (indices.empty())
+    return;
+
+  // Высота основания по внешнему контуру.
   float groundSum = 0.0f;
 
-  for (const ScenePoint &point : scenePoints) {
-    polygon.push_back(point.position);
+  for (const ScenePoint &point : outerScene)
     groundSum += point.groundY;
-  }
 
-  const auto triangles = triangulatePolygon(polygon);
-
-  if (triangles.empty())
-    return;
-
-  const float baseY = groundSum / static_cast<float>(scenePoints.size());
+  const float baseY = groundSum / static_cast<float>(outerScene.size());
 
   const float elevationRange = dem.maxElevation - dem.minElevation;
 
-  const float verticalScale =
-      elevationRange > 0.0f ? 0.12f / elevationRange : 0.001f;
+  const float verticalScale = elevationRange > 0.0f
+                                  ? verticalScaleCoefficient / elevationRange
+                                  : 0.001f;
 
-  const float buildingHeight = feature.heightMeters > 0.0
-                                   ? static_cast<float>(feature.heightMeters)
-                                   : 6.0f;
+  const bool isRoof = feature.tags.value("building").toString() == "roof";
 
-  const float roofY = baseY + buildingHeight * verticalScale;
+  const float buildingHeight =
+      feature.heightMeters > 0.0f ? feature.heightMeters : 6.0f;
+
+  const float baseBuildingY = baseY + feature.minHeightMeters * verticalScale;
+
+  // Для building=roof верхняя поверхность находится
+  // непосредственно на уровне building:min_level.
+  const float roofY =
+      isRoof ? baseBuildingY : baseBuildingY + buildingHeight * verticalScale;
 
   const Colors &color = feature.colors;
 
-  const int count = static_cast<int>(polygon.size());
+  // Стены внешнего и внутренних контуров.
+  if (!isRoof) {
+    for (const auto &ring : sceneRings) {
+      const int count = static_cast<int>(ring.size());
 
-  // Стены.
-  for (int i = 0; i < count; ++i) {
-    const int next = (i + 1) % count;
+      for (int i = 0; i < count; ++i) {
+        const ScenePoint &a = ring[i];
+        const ScenePoint &b = ring[(i + 1) % count];
 
-    const QVector2D &a = polygon[i];
-    const QVector2D &b = polygon[next];
+        // Индивидуальная высота основания каждой вершины.
+        const float bottomA =
+            a.groundY + feature.minHeightMeters * verticalScale;
 
-    addVertex(featureVertices, a, baseY, color.wallR, color.wallG, color.wallB);
+        const float bottomB =
+            b.groundY + feature.minHeightMeters * verticalScale;
 
-    addVertex(featureVertices, b, baseY, color.wallR, color.wallG, color.wallB);
+        const QVector2D &pa = a.position;
+        const QVector2D &pb = b.position;
 
-    addVertex(featureVertices, b, roofY, color.wallR, color.wallG, color.wallB);
+        // Первый треугольник.
+        addVertex(featureVertices, pa, bottomA, color.wallR, color.wallG,
+                  color.wallB);
 
-    addVertex(featureVertices, a, baseY, color.wallR, color.wallG, color.wallB);
+        addVertex(featureVertices, pb, bottomB, color.wallR, color.wallG,
+                  color.wallB);
 
-    addVertex(featureVertices, b, roofY, color.wallR, color.wallG, color.wallB);
+        addVertex(featureVertices, pb, roofY, color.wallR, color.wallG,
+                  color.wallB);
 
-    addVertex(featureVertices, a, roofY, color.wallR, color.wallG, color.wallB);
+        // Второй треугольник.
+        addVertex(featureVertices, pa, bottomA, color.wallR, color.wallG,
+                  color.wallB);
+
+        addVertex(featureVertices, pb, roofY, color.wallR, color.wallG,
+                  color.wallB);
+
+        addVertex(featureVertices, pa, roofY, color.wallR, color.wallG,
+                  color.wallB);
+      }
+    }
   }
 
-  // Крыша.
-  for (const auto &triangle : triangles) {
-    for (int index : triangle) {
-      addVertex(featureVertices, polygon[index], roofY, color.roofR,
-                color.roofG, color.roofB);
-    }
+  // Крыша с отверстиями.
+  for (unsigned int index : indices) {
+    if (index >= roofPoints.size())
+      continue;
+
+    addVertex(featureVertices, roofPoints[index], roofY, color.roofR,
+              color.roofG, color.roofB);
   }
 }
 
@@ -713,14 +807,50 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
 
   const float halfWidth = std::max(0.0001f, widthMeters * metersToScene * 0.5f);
 
+  const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
+
+  auto getGroundY = [&](const QVector2D &pos, float &y) -> bool {
+    const double pixelX = (pos.x() / terrainSize.width + 0.5) * (dem.width - 1);
+
+    const double pixelY =
+        (0.5 - pos.y() / (rowDirection * terrainSize.height)) *
+        (dem.height - 1);
+
+    float elevation = 0.0f;
+
+    if (!sampleElevation(pixelX, pixelY, elevation))
+      return false;
+
+    const float elevationRange = dem.maxElevation - dem.minElevation;
+
+    const float verticalScale = elevationRange > 0.0f
+                                    ? verticalScaleCoefficient / elevationRange
+                                    : 0.001f;
+
+    y = (elevation - dem.minElevation) * verticalScale;
+
+    return true;
+  };
+
   const Colors &color = feature.colors;
+
+  // Размер одного пикселя DEM в координатах сцены.
+  const float pixelSizeX =
+      terrainSize.width / static_cast<float>(dem.width - 1);
+
+  const float pixelSizeY =
+      terrainSize.height / static_cast<float>(dem.height - 1);
+
+  // Максимальная длина одного участка дороги.
+  // Чем резче рельеф, тем меньше должен быть этот шаг.
+  const float maxSegmentLength =
+      std::max(0.0001f, std::min(pixelSizeX, pixelSizeY) * 1.5f);
 
   for (std::size_t i = 0; i + 1 < points.size(); ++i) {
     const ScenePoint &a = points[i];
     const ScenePoint &b = points[i + 1];
 
     const QVector2D direction = b.position - a.position;
-
     const float length = direction.length();
 
     if (length < 1e-7f)
@@ -730,34 +860,57 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
 
     const QVector2D offset = normal * halfWidth;
 
-    const QVector2D aLeft = a.position + offset;
-    const QVector2D aRight = a.position - offset;
+    // Разбиваем длинный сегмент на короткие участки.
+    const int steps =
+        std::max(1, static_cast<int>(std::ceil(length / maxSegmentLength)));
 
-    const QVector2D bLeft = b.position + offset;
-    const QVector2D bRight = b.position - offset;
+    for (int j = 0; j < steps; ++j) {
+      const float t0 = static_cast<float>(j) / steps;
+      const float t1 = static_cast<float>(j + 1) / steps;
 
-    const float yA = a.groundY + heightOffset;
-    const float yB = b.groundY + heightOffset;
+      const QVector2D centerA = a.position * (1.0f - t0) + b.position * t0;
 
-    // Первый треугольник.
-    addVertex(featureVertices, aLeft, yA, color.roofR, color.roofG,
-              color.roofB);
+      const QVector2D centerB = a.position * (1.0f - t1) + b.position * t1;
 
-    addVertex(featureVertices, aRight, yA, color.roofR, color.roofG,
-              color.roofB);
+      const QVector2D aLeft = centerA + offset;
+      const QVector2D aRight = centerA - offset;
 
-    addVertex(featureVertices, bLeft, yB, color.roofR, color.roofG,
-              color.roofB);
+      const QVector2D bLeft = centerB + offset;
+      const QVector2D bRight = centerB - offset;
 
-    // Второй треугольник.
-    addVertex(featureVertices, aRight, yA, color.roofR, color.roofG,
-              color.roofB);
+      float yALeft, yARight;
+      float yBLeft, yBRight;
 
-    addVertex(featureVertices, bRight, yB, color.roofR, color.roofG,
-              color.roofB);
+      if (!getGroundY(aLeft, yALeft) || !getGroundY(aRight, yARight) ||
+          !getGroundY(bLeft, yBLeft) || !getGroundY(bRight, yBRight)) {
+        continue;
+      }
 
-    addVertex(featureVertices, bLeft, yB, color.roofR, color.roofG,
-              color.roofB);
+      yALeft += heightOffset;
+      yARight += heightOffset;
+      yBLeft += heightOffset;
+      yBRight += heightOffset;
+
+      // Первый треугольник.
+      addVertex(featureVertices, aLeft, yALeft, color.roofR, color.roofG,
+                color.roofB);
+
+      addVertex(featureVertices, aRight, yARight, color.roofR, color.roofG,
+                color.roofB);
+
+      addVertex(featureVertices, bLeft, yBLeft, color.roofR, color.roofG,
+                color.roofB);
+
+      // Второй треугольник.
+      addVertex(featureVertices, aRight, yARight, color.roofR, color.roofG,
+                color.roofB);
+
+      addVertex(featureVertices, bRight, yBRight, color.roofR, color.roofG,
+                color.roofB);
+
+      addVertex(featureVertices, bLeft, yBLeft, color.roofR, color.roofG,
+                color.roofB);
+    }
   }
 }
 

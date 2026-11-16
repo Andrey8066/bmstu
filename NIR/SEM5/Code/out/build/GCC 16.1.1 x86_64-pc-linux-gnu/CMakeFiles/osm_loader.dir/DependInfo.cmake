@@ -18,6 +18,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp" "CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp" "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp" "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o.d"
+  "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.cpp" "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o.d"
   "" "osm_loader" "gcc" "CMakeFiles/osm_loader.dir/link.d"
   )
 

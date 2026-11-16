@@ -21,6 +21,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o.d"
   "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o"
   "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o.d"
+  "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o"
+  "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o.d"
   "osm_loader"
   "osm_loader.pdb"
   "osm_loader_autogen/mocs_compilation.cpp"

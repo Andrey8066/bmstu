@@ -36,16 +36,15 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
                                        const int &timeout, const QRect &area) {
   Q_UNUSED(area);
 
-  // Формируем Overpass QL
-  QString finalQuery = buildOverpassQuery(timeout, queryType);
+  activeQuery = buildOverpassQuery(timeout, queryType);
 
-  if (finalQuery.isEmpty()) {
+  if (activeQuery.isEmpty()) {
     qDebug() << "Неизвестный тип запроса:" << queryType;
-    return "";
+    return {};
   }
 
-  // Границы области:
-  // south, west, north, east
+  activeQueryType = queryType;
+
   const double minLat = defaultArea.lat - defaultArea.width;
   const double maxLat = defaultArea.lat + defaultArea.width;
   const double minLon = defaultArea.lon - defaultArea.height;
@@ -57,145 +56,157 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
                            .arg(maxLat, 0, 'f', 6)
                            .arg(maxLon, 0, 'f', 6);
 
-  // Подставляем реальные координаты вместо {{bbox}}
-  finalQuery.replace("{{bbox}}", bbox);
+  activeQuery.replace("{{bbox}}", bbox);
 
   qDebug() << "Тип запроса:" << queryType;
   qDebug() << "BBox:" << bbox;
-  qDebug() << "Весь запрос:" << finalQuery;
+  qDebug() << "Весь запрос:" << activeQuery;
 
-  QNetworkRequest request(url);
+  // Основной и резервные серверы Overpass API.
+  servers = {"https://overpass-api.de/api/interpreter",
+             "https://overpass.private.coffee/api/interpreter",
+             "https://maps.mail.ru/osm/tools/overpass/api/interpreter"};
+
+  requestAttempt = 0;
+
+  // Не допускаем одновременного выполнения
+  // нескольких запросов этим загрузчиком.
+  if (reply && !reply->isFinished()) {
+    disconnect(reply, nullptr, this, nullptr);
+    reply->abort();
+  }
+
+  reply = nullptr;
+
+  sendNextRequest();
+
+  // Загрузка асинхронная.
+  // Результат будет передан через dataLoaded.
+  return {};
+}
+
+void OSMDataLoader::sendNextRequest() {
+  if (requestAttempt >= maxAttempts) {
+    qDebug() << "Все попытки загрузки OSM исчерпаны";
+
+    emit errorOccurred("Не удалось загрузить OSM после всех попыток");
+
+    return;
+  }
+
+  const int serverIndex = requestAttempt % servers.size();
+  const QString serverUrl = servers[serverIndex];
+
+  qDebug() << "================================";
+  qDebug() << "Попытка загрузки:" << requestAttempt + 1;
+  qDebug() << "Сервер:" << serverUrl;
+
+  QNetworkRequest request{QUrl(serverUrl)};
+
+  request.setTransferTimeout(30000);
 
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "application/x-www-form-urlencoded");
-  request.setHeader(
-      QNetworkRequest::UserAgentHeader,
-      "BMSTU-NIR-OSM-Loader/1.0 (+https://github.com/Andrey8066)");
+
+  request.setHeader(QNetworkRequest::UserAgentHeader,
+                    "BMSTU-NIR-OSM-Loader/1.0");
+
   request.setRawHeader("Accept", "application/json");
 
   QByteArray postData = "data=";
-  postData += QUrl::toPercentEncoding(finalQuery);
+  postData += QUrl::toPercentEncoding(activeQuery);
 
-  reply = manager->post(request, postData);
+  QNetworkReply *currentReply = manager->post(request, postData);
 
-  connect(reply, &QNetworkReply::finished, this, [this, area, queryType]() {
-    const QVariant status =
-        reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+  reply = currentReply;
+
+  connect(currentReply, &QNetworkReply::finished, this, [this, currentReply]() {
+    const int status =
+        currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
+            .toInt();
+
+    const auto networkError = currentReply->error();
 
     qDebug() << "HTTP status:" << status;
 
-    if (reply->error() != QNetworkReply::NoError) {
+    if (networkError != QNetworkReply::NoError) {
 
-      qDebug() << "Ошибка загрузки OSM данных:" << reply->errorString();
+      const QString error = currentReply->errorString();
 
-      const QByteArray serverResponse = reply->readAll();
+      const QByteArray response = currentReply->readAll();
 
-      qDebug() << "Ответ сервера:" << serverResponse;
+      qDebug() << "Ошибка загрузки:" << error;
+      qDebug() << "Ответ сервера:" << response;
 
-      emit errorOccurred("Не удалось загрузить данные из OSM");
+      const bool retryable = status == 0 || status == 429 || status == 502 ||
+                             status == 503 || status == 504 ||
+                             networkError == QNetworkReply::TimeoutError;
 
-      reply->deleteLater();
+      if (reply == currentReply)
+        reply = nullptr;
+
+      currentReply->deleteLater();
+
+      if (!retryable) {
+        emit errorOccurred("Ошибка загрузки OSM: " + error);
+        return;
+      }
+
+      const int delay = 1000 * (1 << requestAttempt);
+
+      requestAttempt++;
+
+      if (requestAttempt >= maxAttempts) {
+        sendNextRequest();
+        return;
+      }
+
+      qDebug() << "Повторная попытка через" << delay << "мс";
+
+      QTimer::singleShot(delay, this, [this]() { sendNextRequest(); });
+
       return;
     }
 
-    requestResult = reply->readAll();
+    const QByteArray response = currentReply->readAll();
+
+    if (reply == currentReply)
+      reply = nullptr;
+
+    currentReply->deleteLater();
 
     QJsonParseError parseError;
 
-    const QJsonDocument doc =
-        QJsonDocument::fromJson(requestResult, &parseError);
+    const QJsonDocument doc = QJsonDocument::fromJson(response, &parseError);
 
-    if (parseError.error != QJsonParseError::NoError) {
+    if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
 
       qDebug() << "Ошибка парсинга JSON:" << parseError.errorString();
 
-      qDebug() << "Ответ сервера:" << requestResult;
+      emit errorOccurred("Сервер вернул некорректный JSON");
 
-      reply->deleteLater();
       return;
     }
 
-    qDebug() << "OSM JSON успешно получен.";
-
-    qDebug() << "Получено байт:" << requestResult.size();
-
     const QJsonObject root = doc.object();
+
+    if (!root.contains("elements") || !root["elements"].isArray()) {
+
+      emit errorOccurred("В ответе отсутствует массив elements");
+
+      return;
+    }
+
+    requestResult = response;
+
     const QJsonArray elements = root["elements"].toArray();
 
-    emit dataLoaded(elements, queryType);
-    int ways = 0;
-    int relations = 0;
-    int nodes = 0;
+    qDebug() << "OSM JSON успешно получен";
+    qDebug() << "Получено байт:" << response.size();
+    qDebug() << "Количество объектов:" << elements.size();
 
-    int buildings = 0;
-    int buildingParts = 0;
-
-    for (const QJsonValue &value : elements) {
-      QJsonObject object = value.toObject();
-      QJsonObject tags = object["tags"].toObject();
-
-      QString type = object["type"].toString();
-
-      if (type == "way")
-        ways++;
-
-      if (type == "relation")
-        relations++;
-
-      if (type == "node")
-        nodes++;
-
-      if (tags.contains("building"))
-        buildings++;
-
-      if (tags.contains("building:part"))
-        buildingParts++;
-    }
-
-    qDebug() << "========== OSM STATISTICS ==========";
-    qDebug() << "Total elements:" << elements.size();
-    qDebug() << "Ways:" << ways;
-    qDebug() << "Relations:" << relations;
-    qDebug() << "Nodes:" << nodes;
-    qDebug() << "Building tags:" << buildings;
-    qDebug() << "Building parts:" << buildingParts;
-
-    int wayBuildings = 0;
-    int relationBuildings = 0;
-
-    int wayParts = 0;
-    int relationParts = 0;
-
-    for (const QJsonValue &value : elements) {
-      QJsonObject object = value.toObject();
-      QJsonObject tags = object["tags"].toObject();
-
-      QString type = object["type"].toString();
-
-      bool hasBuilding = tags.contains("building");
-      bool hasPart = tags.contains("building:part");
-
-      if (type == "way" && hasBuilding)
-        wayBuildings++;
-
-      if (type == "relation" && hasBuilding)
-        relationBuildings++;
-
-      if (type == "way" && hasPart)
-        wayParts++;
-
-      if (type == "relation" && hasPart)
-        relationParts++;
-    }
-
-    qDebug() << "Way buildings:" << wayBuildings;
-    qDebug() << "Relation buildings:" << relationBuildings;
-
-    qDebug() << "Way building parts:" << wayParts;
-    qDebug() << "Relation building parts:" << relationParts;
+    emit dataLoaded(elements, activeQueryType);
   });
-
-  return requestResult;
 }
 
 OSMDataLoaderArea OSMDataLoader::getDefaultArea() const { return defaultArea; }

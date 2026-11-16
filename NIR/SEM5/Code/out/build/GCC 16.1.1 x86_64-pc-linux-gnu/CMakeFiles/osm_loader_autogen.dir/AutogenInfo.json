@@ -711,6 +711,12 @@
 			"Mu",
 			"UVLADIE3JM/moc_osmfeature.cpp",
 			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_projectserializer.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -736,6 +742,7 @@
 	"MOC_INCLUDES" : 
 	[
 		"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src",
+		"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/third_party",
 		"/usr/include/qt6/QtCore",
 		"/usr/include/qt6",
 		"/usr/lib/qt6/mkspecs/linux-g++",
@@ -810,6 +817,11 @@
 		],
 		[
 			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.cpp",
 			"Mu",
 			null
 		]

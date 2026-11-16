@@ -371,6 +371,30 @@ src/osmdataparser.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.s
 .PHONY : src/osmdataparser.cpp.s
 
+src/projectserializer.o: src/projectserializer.cpp.o
+.PHONY : src/projectserializer.o
+
+# target to build an object file
+src/projectserializer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o
+.PHONY : src/projectserializer.cpp.o
+
+src/projectserializer.i: src/projectserializer.cpp.i
+.PHONY : src/projectserializer.i
+
+# target to preprocess a source file
+src/projectserializer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/projectserializer.cpp.i
+.PHONY : src/projectserializer.cpp.i
+
+src/projectserializer.s: src/projectserializer.cpp.s
+.PHONY : src/projectserializer.s
+
+# target to generate assembly for a file
+src/projectserializer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/projectserializer.cpp.s
+.PHONY : src/projectserializer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -409,6 +433,9 @@ help:
 	@echo "... src/osmdataparser.o"
 	@echo "... src/osmdataparser.i"
 	@echo "... src/osmdataparser.s"
+	@echo "... src/projectserializer.o"
+	@echo "... src/projectserializer.i"
+	@echo "... src/projectserializer.s"
 .PHONY : help
 
 

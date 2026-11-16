@@ -111,6 +111,29 @@ bool samePoint(const GeoPoint &a, const GeoPoint &b) {
   return std::abs(a.lat - b.lat) < eps && std::abs(a.lon - b.lon) < eps;
 }
 
+bool pointInRing(const GeoPoint &point, const QVector<GeoPoint> &ring) {
+  bool inside = false;
+
+  if (ring.size() < 3)
+    return false;
+
+  for (int i = 0, j = ring.size() - 1; i < ring.size(); j = i++) {
+
+    const GeoPoint &a = ring[i];
+    const GeoPoint &b = ring[j];
+
+    const bool intersects =
+        ((a.lat > point.lat) != (b.lat > point.lat)) &&
+        (point.lon <
+         (b.lon - a.lon) * (point.lat - a.lat) / (b.lat - a.lat) + a.lon);
+
+    if (intersects)
+      inside = !inside;
+  }
+
+  return inside;
+}
+
 // Читает координаты одного way из участника relation.
 QVector<GeoPoint> readMemberGeometry(const QJsonObject &member) {
   QVector<GeoPoint> points;
@@ -130,8 +153,8 @@ QVector<GeoPoint> readMemberGeometry(const QJsonObject &member) {
   return points;
 }
 
-// Собирает внешние кольца relation из нескольких way.
-QVector<QVector<GeoPoint>> readOuterRings(const QJsonObject &object) {
+QVector<QVector<GeoPoint>> readRings(const QJsonObject &object,
+                                     const QString &role) {
   QVector<QVector<GeoPoint>> segments;
 
   const QJsonArray members = object.value("members").toArray();
@@ -142,7 +165,7 @@ QVector<QVector<GeoPoint>> readOuterRings(const QJsonObject &object) {
     if (member.value("type").toString() != "way")
       continue;
 
-    if (member.value("role").toString() != "outer")
+    if (member.value("role").toString() != role)
       continue;
 
     QVector<GeoPoint> points = readMemberGeometry(member);
@@ -175,13 +198,14 @@ QVector<QVector<GeoPoint>> readOuterRings(const QJsonObject &object) {
             ring.push_back(segment[j]);
 
         } else if (samePoint(ring.front(), segment.back())) {
-          for (int j = 0; j < segment.size() - 1; ++j)
+          // Вставляем в начало в обратном порядке.
+          for (int j = segment.size() - 2; j >= 0; --j)
             ring.prepend(segment[j]);
 
         } else if (samePoint(ring.front(), segment.front())) {
           std::reverse(segment.begin(), segment.end());
 
-          for (int j = 0; j < segment.size() - 1; ++j)
+          for (int j = segment.size() - 2; j >= 0; --j)
             ring.prepend(segment[j]);
 
         } else {
@@ -194,11 +218,9 @@ QVector<QVector<GeoPoint>> readOuterRings(const QJsonObject &object) {
       }
     }
 
-    // Незамкнутые контуры не передаём рендереру.
     if (ring.size() < 4 || !samePoint(ring.front(), ring.back()))
       continue;
 
-    // Убираем повтор последней точки.
     ring.removeLast();
 
     if (ring.size() >= 3)
@@ -310,9 +332,15 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       if (member.value("type").toString() != "way")
         continue;
 
-      if (member.value("role").toString() != "outer")
-        continue;
+      const QString role = member.value("role").toString();
 
+      const bool isOuter = role == "outer";
+      const bool isBuildingInner =
+          OSMClassifier::classify(tags) == OSMFeatureType::Building &&
+          role == "inner";
+
+      if (!isOuter && !isBuildingInner)
+        continue;
       relationWayIds.insert(
           static_cast<qint64>(member.value("ref").toDouble()));
     }
@@ -355,20 +383,51 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
         continue;
       }
 
-      const auto rings = readOuterRings(object);
+      // 1. Собираем внешние кольца relation.
+      const auto outerRings = readRings(object, "outer");
 
-      for (const auto &ring : rings) {
+      // 2. Внутренние кольца нужны только зданиям.
+      QVector<QVector<GeoPoint>> innerRings;
+
+      if (feature.type == OSMFeatureType::Building) {
+        innerRings = readRings(object, "inner");
+      }
+
+      // 3. Создаём отдельный OSMFeature для каждого внешнего кольца.
+      for (const auto &outer : outerRings) {
         OSMFeature relationFeature = feature;
 
         relationFeature.geometryType = OSMGeometryType::Polygon;
-
-        relationFeature.geometry = ring;
+        relationFeature.geometry = outer;
 
         if (relationFeature.type == OSMFeatureType::Building) {
           relationFeature.heightMeters =
               parseBuildingHeight(relationFeature.tags);
+          relationFeature.minHeightMeters = 0.0f;
+
+          const QString minLevel =
+              relationFeature.tags.value("building:min_level").toString();
+
+          if (!minLevel.isEmpty()) {
+            bool ok = false;
+            const float levels = minLevel.toFloat(&ok);
+
+            if (ok)
+              relationFeature.minHeightMeters = levels * 3.0f;
+          }
 
           relationFeature.colors = getBuildingColors(relationFeature.tags);
+
+          // 4. Прикрепляем к зданию только те inner,
+          // которые находятся внутри текущего outer.
+          for (const auto &inner : innerRings) {
+            if (inner.isEmpty())
+              continue;
+
+            if (pointInRing(inner.first(), outer)) {
+              relationFeature.innerRings.push_back(inner);
+            }
+          }
         }
 
         result.push_back(std::move(relationFeature));
@@ -383,11 +442,30 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
 
     if (feature.type == OSMFeatureType::Building) {
       feature.heightMeters = parseBuildingHeight(feature.tags);
+      feature.minHeightMeters = 0.0f;
+
+      const QString minLevel =
+          feature.tags.value("building:min_level").toString();
+
+      if (!minLevel.isEmpty()) {
+        bool ok = false;
+        const float levels = minLevel.toFloat(&ok);
+
+        if (ok)
+          feature.minHeightMeters = levels * 3.0f;
+      }
       feature.colors = getBuildingColors(feature.tags);
     }
 
     if (feature.type == OSMFeatureType::Road) {
       feature.widthMeters = parseRoadWidth(feature.tags);
+
+      const QString highway = feature.tags.value("highway").toString();
+
+      if (highway == "footway" || highway == "path" || highway == "cycleway")
+        feature.colors = Colors(0, 0.5f, 0, 0, 0.5f, 0);
+      if (highway == "steps")
+        feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
     }
 
     result.push_back(std::move(feature));

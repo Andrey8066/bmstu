@@ -5,6 +5,7 @@
 #include "glwidget.hpp"
 #include "osmdataloader.hpp"
 #include "osmdataparser.hpp"
+#include "projectserializer.hpp"
 
 #include <QDebug>
 #include <QDoubleSpinBox>
@@ -54,9 +55,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   radiusInput->setValue(1000.0);
   radiusInput->setSuffix(" м");
 
+  // Таймаут
+  timeoutInput = new QDoubleSpinBox(this);
+  timeoutInput->setRange(1.0, 600.0);
+  timeoutInput->setDecimals(0);
+  timeoutInput->setSingleStep(1.0);
+  timeoutInput->setValue(1000.0);
+  timeoutInput->setSuffix(" c");
+
   formLayout->addRow("Широта:", latitudeInput);
   formLayout->addRow("Долгота:", longitudeInput);
   formLayout->addRow("Радиус:", radiusInput);
+  formLayout->addRow("Время ожидания:", timeoutInput);
 
   // OpenGL
   glWidget = new GLWidget(this);
@@ -68,9 +78,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
   auto *demButton = new QPushButton("Загрузить DEM", this);
 
+  auto *saveProjectButton = new QPushButton("Сохранить проект", this);
+
+  auto *openProjectButton = new QPushButton("Открыть проект", this);
+
   formLayout->addWidget(loadButton);
   formLayout->addWidget(osmJsonButton);
   formLayout->addWidget(demButton);
+  formLayout->addWidget(saveProjectButton);
+  formLayout->addWidget(openProjectButton);
 
   mainLayout->addLayout(formLayout);
   mainLayout->addWidget(glWidget, 1);
@@ -106,6 +122,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     glWidget->setDEM(dem);
   });
+  connect(saveProjectButton, &QPushButton::clicked, this,
+          &MainWindow::onSaveProjectButtonClicked);
+
+  connect(openProjectButton, &QPushButton::clicked, this,
+          &MainWindow::onOpenProjectButtonClicked);
 
   // Overpass API
   loader = new OSMDataLoader("https://overpass-api.de/api/interpreter",
@@ -124,16 +145,18 @@ void MainWindow::onLoadOsmButtonClicked() {
   const double latitude = latitudeInput->value();
   const double longitude = longitudeInput->value();
   const double radius = radiusInput->value();
+  const double timeout = timeoutInput->value();
 
   qDebug() << "Latitude:" << latitude;
   qDebug() << "Longitude:" << longitude;
   qDebug() << "Radius:" << radius;
+  qDebug() << "Timeout:" << timeout;
 
   loader->setArea(latitude, longitude, radius);
 
   // Пока загружаем только здания.
   // Запрос можно расширить для других типов объектов.
-  loader->fetchOSMData("buildings", 60);
+  loader->fetchOSMData("all", timeout);
 }
 
 // Загрузка локального JSON
@@ -260,4 +283,59 @@ void MainWindow::loadOSMFeatures(const QJsonArray &elements) {
 
   // Передаём все объекты в OpenGL
   glWidget->setFeatures(features);
+}
+
+void MainWindow::onSaveProjectButtonClicked() {
+  const QString fileName = QFileDialog::getSaveFileName(
+      this, "Сохранить проект", QString(), "Проекты 3D City (*.osm3d)");
+
+  if (fileName.isEmpty())
+    return;
+
+  QString path = fileName;
+
+  if (!path.endsWith(".osm3d", Qt::CaseInsensitive))
+    path += ".osm3d";
+
+  QString error;
+
+  const bool success =
+      ProjectSerializer::save(path, glWidget->getDEM(), glWidget->getFeatures(),
+                              glWidget->getVerticalScale(), &error);
+
+  if (!success) {
+    QMessageBox::warning(this, "Ошибка сохранения", error);
+    return;
+  }
+
+  QMessageBox::information(this, "Сохранение проекта",
+                           "Проект успешно сохранён.");
+}
+
+void MainWindow::onOpenProjectButtonClicked() {
+  const QString fileName = QFileDialog::getOpenFileName(
+      this, "Открыть проект", QString(), "Проекты 3D City (*.osm3d)");
+
+  if (fileName.isEmpty())
+    return;
+
+  DEMData dem;
+  QVector<OSMFeature> features;
+  float verticalScale = 0.12f;
+
+  QString error;
+
+  if (!ProjectSerializer::load(fileName, dem, features, verticalScale,
+                               &error)) {
+    QMessageBox::warning(this, "Ошибка открытия проекта", error);
+    return;
+  }
+
+  // Сначала устанавливаем масштаб, затем данные сцены.
+  glWidget->setVerticalScale(verticalScale);
+  glWidget->setDEM(dem);
+  glWidget->setFeatures(features);
+
+  QMessageBox::information(this, "Открытие проекта",
+                           "Проект успешно загружен.");
 }

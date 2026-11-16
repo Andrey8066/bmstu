@@ -42,6 +42,12 @@ public:
   void addAmenityPointFeature(const OSMFeature &feature);
   void addAmenityAreaFeature(const OSMFeature &feature);
 
+  const DEMData &getDEM() const;
+  const QVector<OSMFeature> &getFeatures() const;
+
+  float getVerticalScale() const;
+  void setVerticalScale(float value);
+
 protected:
   void initializeGL() override;
   void resizeGL(int width, int height) override;
@@ -116,6 +122,8 @@ private:
 
   float panX = 0.0f;
   float panY = 0.0f;
+
+  float verticalScaleCoefficient = 0.12f;
 
   QPoint lastMousePosition;
 };

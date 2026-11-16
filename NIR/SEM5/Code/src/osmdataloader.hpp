@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QRect>
 #include <QString>
+#include <QTimer>
 
 #define earthRadius 6371000.0
 
@@ -21,8 +22,8 @@ class OSMDataLoader : public QObject {
 public:
   QString filePath = "osm.json";
   explicit OSMDataLoader(
-      const QString apiUrl =
-          "https://maps.mail.ru/osm/tools/overpass/api/interpreter",
+      const QString apiUrl = "https://overpass.private.coffee/api/interpreter",
+      //"https://maps.mail.ru/osm/tools/overpass/api/interpreter",
       double lat = 55.766863, double lon = 37.681677, double radius = 1000,
       QObject *parent = nullptr);
 
@@ -50,6 +51,16 @@ public slots:
   QString saveToJSONFile(const QJsonArray &data, const QString &filename);
 
 private:
+  QStringList servers;
+
+  QString activeQuery;
+  QString activeQueryType;
+
+  int requestAttempt = 0;
+  static constexpr int maxAttempts = 4;
+
+  void sendNextRequest();
+
   QNetworkAccessManager *manager;
   OSMDataLoaderArea defaultArea;
   QByteArray requestResult;

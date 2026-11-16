@@ -385,6 +385,9 @@ Vulkan_INCLUDE_DIR:PATH=/usr/include
 //Path to a library.
 Vulkan_LIBRARY:FILEPATH=/usr/lib/libvulkan.so
 
+//The directory containing a CMake configuration file for mapbox.
+mapbox_DIR:PATH=mapbox_DIR-NOTFOUND
+
 
 ########################
 # INTERNAL cache entries
