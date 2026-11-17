@@ -27,6 +27,8 @@ add_executable(osm_loader
     src/osmdataparser.hpp
     src/projectserializer.cpp
     src/projectserializer.hpp
+    src/opentopographyloader.hpp
+    src/opentopographyloader.cpp
 )
 
 # Подключение Qt

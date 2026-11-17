@@ -467,6 +467,9 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       if (highway == "steps")
         feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
     }
+    if (feature.type == OSMFeatureType::Water) {
+      feature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
+    }
 
     result.push_back(std::move(feature));
   }

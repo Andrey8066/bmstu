@@ -68,6 +68,7 @@ private:
   QUrl url;
   double radToLat(double radius);
   double radToLon(double radius);
+  int timeout;
 };
 
 #endif // OSM_DATA_LOADER_HPP

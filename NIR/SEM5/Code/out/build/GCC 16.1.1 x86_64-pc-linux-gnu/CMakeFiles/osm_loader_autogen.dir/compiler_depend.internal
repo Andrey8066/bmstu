@@ -16,6 +16,8 @@
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.hpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.hpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp

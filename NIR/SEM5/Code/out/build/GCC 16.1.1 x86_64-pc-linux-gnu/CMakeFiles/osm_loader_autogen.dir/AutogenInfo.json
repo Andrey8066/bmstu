@@ -689,6 +689,12 @@
 			null
 		],
 		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_opentopographyloader.cpp",
+			null
+		],
+		[
 			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.hpp",
 			"Mu",
 			"UVLADIE3JM/moc_osmclassifier.cpp",
@@ -802,6 +808,11 @@
 		[ "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp", "Mu", null ],
 		[
 			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.cpp",
 			"Mu",
 			null
 		],

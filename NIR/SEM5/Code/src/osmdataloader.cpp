@@ -36,6 +36,8 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
                                        const int &timeout, const QRect &area) {
   Q_UNUSED(area);
 
+  OSMDataLoader::timeout = timeout;
+
   activeQuery = buildOverpassQuery(timeout, queryType);
 
   if (activeQuery.isEmpty()) {
@@ -63,8 +65,8 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
   qDebug() << "Весь запрос:" << activeQuery;
 
   // Основной и резервные серверы Overpass API.
-  servers = {"https://overpass-api.de/api/interpreter",
-             "https://overpass.private.coffee/api/interpreter",
+  servers = {//"https://overpass-api.de/api/interpreter",
+             //"https://overpass.private.coffee/api/interpreter",
              "https://maps.mail.ru/osm/tools/overpass/api/interpreter"};
 
   requestAttempt = 0;
@@ -103,7 +105,7 @@ void OSMDataLoader::sendNextRequest() {
 
   QNetworkRequest request{QUrl(serverUrl)};
 
-  request.setTransferTimeout(30000);
+  request.setTransferTimeout(timeout * 1000 + 10);
 
   request.setHeader(QNetworkRequest::ContentTypeHeader,
                     "application/x-www-form-urlencoded");
@@ -247,6 +249,7 @@ QString OSMDataLoader::buildOverpassQuery(const int &timeout,
                    (
                    nwr["building"]({{bbox}});
                    nwr["highway"]({{bbox}});
+                   nwr["waterway"]({{bbox}});
                    );
                    out geom;
                    )")

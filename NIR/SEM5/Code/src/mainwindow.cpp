@@ -19,6 +19,7 @@
 #include <QJsonParseError>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QStandardPaths>
 #include <QWidget>
 
 #define defaultLatitude 55.766863
@@ -32,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
   auto *mainLayout = new QHBoxLayout(centralWidget);
 
   auto *formLayout = new QFormLayout();
+
+  demLoader = new OpenTopographyLoader(this);
 
   // Широта
   latitudeInput = new QDoubleSpinBox(this);
@@ -95,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
   // Подключение кнопок
   connect(loadButton, &QPushButton::clicked, this,
-          &MainWindow::onLoadOsmButtonClicked);
+          &MainWindow::onLoadButtonClicked);
 
   connect(osmJsonButton, &QPushButton::clicked, this,
           &MainWindow::onLoadOsmJsonButtonClicked);
@@ -138,10 +141,39 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
             loadOSMFeatures(elements);
           });
+  connect(demLoader, &OpenTopographyLoader::downloadFinished, this,
+          [this](const QString &fileName) {
+            qDebug() << "[DEM] Начинаем чтение GeoTIFF";
+
+            DEMData dem;
+
+            if (!DEMReader::loadDem(fileName, dem)) {
+              QMessageBox::warning(this, "Ошибка DEM",
+                                   "Файл скачан, но не удалось прочитать DEM.");
+              return;
+            }
+
+            qDebug() << "[DEM] Размер:" << dem.width << "x" << dem.height;
+
+            qDebug() << "[DEM] Высоты:" << dem.minElevation << "—"
+                     << dem.maxElevation;
+
+            glWidget->setDEM(dem);
+
+            QMessageBox::information(
+                this, "DEM", "Цифровая модель рельефа успешно загружена.");
+          });
+
+  connect(demLoader, &OpenTopographyLoader::downloadError, this,
+          [this](const QString &error) {
+            qDebug() << "[DEM] Ошибка:" << error;
+
+            QMessageBox::warning(this, "Ошибка загрузки DEM", error);
+          });
 }
 
 // Загрузка из Overpass API
-void MainWindow::onLoadOsmButtonClicked() {
+void MainWindow::onLoadButtonClicked() {
   const double latitude = latitudeInput->value();
   const double longitude = longitudeInput->value();
   const double radius = radiusInput->value();
@@ -152,11 +184,79 @@ void MainWindow::onLoadOsmButtonClicked() {
   qDebug() << "Radius:" << radius;
   qDebug() << "Timeout:" << timeout;
 
-  loader->setArea(latitude, longitude, radius);
+  // ------------------------------------------------
+  // 1. Загрузка OSM
+  // ------------------------------------------------
 
-  // Пока загружаем только здания.
-  // Запрос можно расширить для других типов объектов.
+  loader->setArea(latitude, longitude, radius);
   loader->fetchOSMData("all", timeout);
+
+  // ------------------------------------------------
+  // 2. Вычисление границ области для DEM
+  // ------------------------------------------------
+
+  constexpr double metersPerDegree = 111320.0;
+  constexpr double pi = 3.14159265358979323846;
+
+  const double latRad = latitude * pi / 180.0;
+
+  const double latOffset = radius / metersPerDegree;
+  const double cosLatitude = std::cos(latRad);
+
+  if (std::abs(cosLatitude) < 1e-6) {
+    QMessageBox::warning(
+        this, "Ошибка координат",
+        "Невозможно рассчитать область DEM для данной широты.");
+    return;
+  }
+
+  const double lonOffset = radius / (metersPerDegree * cosLatitude);
+
+  const double south = latitude - latOffset;
+  const double north = latitude + latOffset;
+  const double west = longitude - lonOffset;
+  const double east = longitude + lonOffset;
+
+  if (south < -90.0 || north > 90.0 || west < -180.0 || east > 180.0) {
+    QMessageBox::warning(
+        this, "Ошибка координат",
+        "Рассчитанная область выходит за допустимые границы координат.");
+    return;
+  }
+
+  qDebug() << "DEM bounds:";
+  qDebug() << "South:" << south;
+  qDebug() << "North:" << north;
+  qDebug() << "West:" << west;
+  qDebug() << "East:" << east;
+
+  // ------------------------------------------------
+  // 3. Подготовка пути сохранения DEM
+  // ------------------------------------------------
+
+  const QString dataDirectory =
+      QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
+      "/dem";
+
+  if (!QDir().mkpath(dataDirectory)) {
+    QMessageBox::warning(this, "Ошибка",
+                         "Не удалось создать каталог для сохранения DEM.");
+    return;
+  }
+
+  const QString outputFile = dataDirectory + "/opentopography_eu_dtm.tif";
+
+  // ------------------------------------------------
+  // 4. Запуск загрузки DEM
+  // ------------------------------------------------
+
+  qDebug() << "Проверка DEM loader:" << demLoader;
+
+  qDebug() << "Запускаем загрузку DEM...";
+
+  demLoader->downloadDEM(south, north, west, east, outputFile);
+
+  qDebug() << "Вызов downloadDEM выполнен";
 }
 
 // Загрузка локального JSON

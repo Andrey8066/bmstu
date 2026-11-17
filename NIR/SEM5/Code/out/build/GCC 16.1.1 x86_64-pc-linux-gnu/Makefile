@@ -299,6 +299,30 @@ src/mainwindow.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/mainwindow.cpp.s
 .PHONY : src/mainwindow.cpp.s
 
+src/opentopographyloader.o: src/opentopographyloader.cpp.o
+.PHONY : src/opentopographyloader.o
+
+# target to build an object file
+src/opentopographyloader.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o
+.PHONY : src/opentopographyloader.cpp.o
+
+src/opentopographyloader.i: src/opentopographyloader.cpp.i
+.PHONY : src/opentopographyloader.i
+
+# target to preprocess a source file
+src/opentopographyloader.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.i
+.PHONY : src/opentopographyloader.cpp.i
+
+src/opentopographyloader.s: src/opentopographyloader.cpp.s
+.PHONY : src/opentopographyloader.s
+
+# target to generate assembly for a file
+src/opentopographyloader.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.s
+.PHONY : src/opentopographyloader.cpp.s
+
 src/osmclassifier.o: src/osmclassifier.cpp.o
 .PHONY : src/osmclassifier.o
 
@@ -424,6 +448,9 @@ help:
 	@echo "... src/mainwindow.o"
 	@echo "... src/mainwindow.i"
 	@echo "... src/mainwindow.s"
+	@echo "... src/opentopographyloader.o"
+	@echo "... src/opentopographyloader.i"
+	@echo "... src/opentopographyloader.s"
 	@echo "... src/osmclassifier.o"
 	@echo "... src/osmclassifier.i"
 	@echo "... src/osmclassifier.s"

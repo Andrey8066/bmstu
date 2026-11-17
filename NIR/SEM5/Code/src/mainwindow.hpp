@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "demreader.hpp"
+#include "opentopographyloader.hpp"
 #include <QJsonArray>
 #include <QMainWindow>
 
@@ -16,7 +18,7 @@ public:
   explicit MainWindow(QWidget *parent = nullptr);
 
 private slots:
-  void onLoadOsmButtonClicked();
+  void onLoadButtonClicked();
   void onLoadOsmJsonButtonClicked();
   void onSaveProjectButtonClicked();
   void onOpenProjectButtonClicked();
@@ -33,4 +35,5 @@ private:
 
   GLWidget *glWidget = nullptr;
   OSMDataLoader *loader = nullptr;
+  OpenTopographyLoader *demLoader = nullptr;
 };

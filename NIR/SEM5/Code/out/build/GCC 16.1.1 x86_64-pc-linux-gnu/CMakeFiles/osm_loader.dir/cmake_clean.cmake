@@ -15,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/osm_loader.dir/src/main.cpp.o.d"
   "CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o"
   "CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o.d"
+  "CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o"
+  "CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o.d"
   "CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o"
   "CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o.d"
   "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o"

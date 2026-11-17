@@ -3,18 +3,10 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/stdc-predef.h \
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/moc_mainwindow.cpp \
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/mainwindow.hpp \
- /usr/include/qt6/QtCore/QJsonArray /usr/include/qt6/QtCore/qjsonarray.h \
- /usr/include/qt6/QtCore/qjsonvalue.h \
- /usr/include/qt6/QtCore/qcborvalue.h \
- /usr/include/qt6/QtCore/qbytearray.h /usr/include/qt6/QtCore/qrefcount.h \
- /usr/include/qt6/QtCore/qatomic.h /usr/include/qt6/QtCore/qbasicatomic.h \
- /usr/include/qt6/QtCore/qatomic_cxx11.h \
- /usr/include/qt6/QtCore/qgenericatomic.h \
- /usr/include/qt6/QtCore/qcompilerdetection.h \
- /usr/include/qt6/QtCore/qprocessordetection.h \
- /usr/include/qt6/QtCore/qsystemdetection.h \
- /usr/include/qt6/QtCore/qtconfiginclude.h /usr/include/c++/16/version \
- /usr/include/c++/16/bits/version.h \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/demreader.hpp \
+ /usr/include/qt6/QtCore/QString /usr/include/qt6/QtCore/qstring.h \
+ /usr/include/qt6/QtCore/qchar.h /usr/include/qt6/QtCore/qglobal.h \
+ /usr/include/c++/16/type_traits \
  /usr/include/c++/16/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/include/c++/16/x86_64-pc-linux-gnu/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -22,38 +14,37 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/sys/cdefs.h /usr/include/bits/long-double.h \
  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
  /usr/include/c++/16/x86_64-pc-linux-gnu/bits/cpu_defines.h \
- /usr/include/c++/16/pstl/pstl_config.h /usr/include/qt6/QtCore/qconfig.h \
- /usr/include/qt6/QtCore/qtcore-config.h /usr/include/c++/16/utility \
- /usr/include/c++/16/bits/stl_relops.h \
- /usr/include/c++/16/bits/stl_pair.h /usr/include/c++/16/type_traits \
- /usr/include/c++/16/bits/move.h /usr/include/c++/16/bits/utility.h \
- /usr/include/c++/16/initializer_list \
- /usr/include/qt6/QtCore/qtconfigmacros.h \
- /usr/include/qt6/QtCore/qtdeprecationdefinitions.h \
- /usr/include/qt6/QtCore/qtversionchecks.h /usr/include/assert.h \
- /usr/include/qt6/QtCore/qtypes.h /usr/include/qt6/QtCore/qassert.h \
- /usr/include/qt6/QtCore/qtcoreexports.h \
- /usr/include/qt6/QtCore/qtdeprecationmarkers.h \
- /usr/include/qt6/QtCore/qtclasshelpermacros.h \
- /usr/include/qt6/QtCore/qtnoop.h /usr/include/c++/16/cstddef \
+ /usr/include/c++/16/pstl/pstl_config.h \
+ /usr/include/c++/16/bits/version.h /usr/include/c++/16/cstddef \
  /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/stddef.h \
+ /usr/include/c++/16/utility /usr/include/c++/16/bits/stl_relops.h \
+ /usr/include/c++/16/bits/stl_pair.h /usr/include/c++/16/bits/move.h \
+ /usr/include/c++/16/bits/utility.h /usr/include/c++/16/initializer_list \
  /usr/include/c++/16/cstdint \
  /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/libc-header-start.h \
  /usr/include/bits/types.h /usr/include/bits/typesizes.h \
  /usr/include/bits/time64.h /usr/include/bits/wchar.h \
  /usr/include/bits/stdint-intn.h /usr/include/bits/stdint-uintn.h \
- /usr/include/bits/stdint-least.h /usr/include/qt6/QtCore/qyieldcpu.h \
- /usr/include/c++/16/atomic /usr/include/c++/16/bits/atomic_base.h \
- /usr/include/c++/16/new /usr/include/c++/16/bits/exception.h \
- /usr/include/c++/16/bits/new_except.h \
- /usr/include/c++/16/bits/exception_defines.h \
- /usr/include/c++/16/bits/atomic_lockfree_defines.h \
- /usr/include/qt6/QtCore/qnamespace.h /usr/include/qt6/QtCore/qglobal.h \
+ /usr/include/bits/stdint-least.h /usr/include/assert.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/stdbool.h \
  /usr/include/qt6/QtCore/qtcoreglobal.h \
+ /usr/include/qt6/QtCore/qtversionchecks.h \
+ /usr/include/qt6/QtCore/qtconfiginclude.h /usr/include/c++/16/version \
+ /usr/include/qt6/QtCore/qconfig.h \
+ /usr/include/qt6/QtCore/qtcore-config.h \
+ /usr/include/qt6/QtCore/qtconfigmacros.h \
+ /usr/include/qt6/QtCore/qtdeprecationdefinitions.h \
+ /usr/include/qt6/QtCore/qcompilerdetection.h \
+ /usr/include/qt6/QtCore/qprocessordetection.h \
+ /usr/include/qt6/QtCore/qsystemdetection.h \
+ /usr/include/qt6/QtCore/qtcoreexports.h \
+ /usr/include/qt6/QtCore/qtdeprecationmarkers.h \
+ /usr/include/qt6/QtCore/qtclasshelpermacros.h \
  /usr/include/qt6/QtCore/qtpreprocessorsupport.h \
- /usr/include/qt6/QtCore/qtversion.h /usr/include/qt6/QtCore/qtypeinfo.h \
+ /usr/include/qt6/QtCore/qassert.h /usr/include/qt6/QtCore/qtnoop.h \
+ /usr/include/qt6/QtCore/qtypes.h /usr/include/qt6/QtCore/qtversion.h \
+ /usr/include/qt6/QtCore/qtypeinfo.h \
  /usr/include/qt6/QtCore/qcontainerfwd.h /usr/include/c++/16/limits \
  /usr/include/qt6/QtCore/qsysinfo.h /usr/include/qt6/QtCore/qlogging.h \
  /usr/include/qt6/QtCore/qflags.h /usr/include/qt6/QtCore/qcompare_impl.h \
@@ -74,7 +65,10 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/c++/16/bits/algorithmfwd.h \
  /usr/include/c++/16/bits/stl_heap.h \
  /usr/include/c++/16/bits/uniform_int_dist.h \
- /usr/include/c++/16/bits/stl_tempbuf.h \
+ /usr/include/c++/16/bits/stl_tempbuf.h /usr/include/c++/16/new \
+ /usr/include/c++/16/bits/exception.h \
+ /usr/include/c++/16/bits/new_except.h \
+ /usr/include/c++/16/bits/exception_defines.h \
  /usr/include/c++/16/bits/stl_construct.h /usr/include/c++/16/cstdlib \
  /usr/include/stdlib.h /usr/include/bits/waitflags.h \
  /usr/include/bits/waitstatus.h /usr/include/bits/floatn.h \
@@ -96,6 +90,12 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/bits/stdlib-float.h /usr/include/c++/16/bits/std_abs.h \
  /usr/include/c++/16/pstl/glue_algorithm_defs.h \
  /usr/include/c++/16/pstl/execution_defs.h \
+ /usr/include/qt6/QtCore/qatomic.h /usr/include/qt6/QtCore/qbasicatomic.h \
+ /usr/include/qt6/QtCore/qatomic_cxx11.h \
+ /usr/include/qt6/QtCore/qgenericatomic.h \
+ /usr/include/qt6/QtCore/qyieldcpu.h /usr/include/c++/16/atomic \
+ /usr/include/c++/16/bits/atomic_base.h \
+ /usr/include/c++/16/bits/atomic_lockfree_defines.h \
  /usr/include/qt6/QtCore/qconstructormacros.h \
  /usr/include/qt6/QtCore/qdarwinhelpers.h \
  /usr/include/qt6/QtCore/qexceptionhandling.h \
@@ -168,7 +168,10 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/c++/16/bits/stl_vector.h \
  /usr/include/c++/16/bits/stl_bvector.h \
  /usr/include/c++/16/bits/vector.tcc /usr/include/c++/16/array \
- /usr/include/c++/16/compare /usr/include/qt6/QtCore/qtmetamacros.h \
+ /usr/include/c++/16/compare /usr/include/qt6/QtCore/qstringview.h \
+ /usr/include/qt6/QtCore/qbytearray.h /usr/include/qt6/QtCore/qrefcount.h \
+ /usr/include/qt6/QtCore/qnamespace.h \
+ /usr/include/qt6/QtCore/qtmetamacros.h \
  /usr/include/qt6/QtCore/qarraydata.h /usr/include/qt6/QtCore/qpair.h \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/qt6/QtCore/qarraydatapointer.h \
@@ -245,19 +248,7 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtCore/qbytearrayalgorithms.h \
  /usr/include/qt6/QtCore/qbytearrayview.h \
  /usr/include/qt6/QtCore/qstringfwd.h /usr/include/c++/16/stdlib.h \
- /usr/include/qt6/QtCore/qcborcommon.h \
- /usr/include/qt6/QtCore/qobjectdefs.h \
- /usr/include/qt6/QtCore/qobjectdefs_impl.h \
- /usr/include/qt6/QtCore/qfunctionaltools_impl.h \
- /usr/include/qt6/QtCore/qmetatype.h \
- /usr/include/qt6/QtCore/qdatastream.h /usr/include/qt6/QtCore/qchar.h \
- /usr/include/qt6/QtCore/qstringview.h \
  /usr/include/qt6/QtCore/qstringalgorithms.h \
- /usr/include/qt6/QtCore/qiodevicebase.h \
- /usr/include/qt6/QtCore/qscopedpointer.h \
- /usr/include/qt6/QtCore/qfloat16.h \
- /usr/include/qt6/QtCore/qhashfunctions.h \
- /usr/include/qt6/QtCore/qstring.h \
  /usr/include/qt6/QtCore/qlatin1stringview.h \
  /usr/include/qt6/QtCore/qanystringview.h \
  /usr/include/qt6/QtCore/qutf8stringview.h \
@@ -265,7 +256,26 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtCore/qstringbuilder.h \
  /usr/include/qt6/QtCore/qstringconverter.h \
  /usr/include/qt6/QtCore/qstringconverter_base.h \
- /usr/include/c++/16/numeric /usr/include/c++/16/bits/stl_numeric.h \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/opentopographyloader.hpp \
+ /usr/include/qt6/QtNetwork/QNetworkAccessManager \
+ /usr/include/qt6/QtNetwork/qnetworkaccessmanager.h \
+ /usr/include/qt6/QtNetwork/qtnetworkglobal.h \
+ /usr/include/qt6/QtNetwork/qtnetwork-config.h \
+ /usr/include/qt6/QtNetwork/qtnetworkexports.h \
+ /usr/include/qt6/QtNetwork/qnetworkrequest.h \
+ /usr/include/qt6/QtNetwork/qhttpheaders.h \
+ /usr/include/qt6/QtCore/qdatetime.h /usr/include/qt6/QtCore/qcalendar.h \
+ /usr/include/qt6/QtCore/qlocale.h /usr/include/qt6/QtCore/qvariant.h \
+ /usr/include/qt6/QtCore/qmetatype.h \
+ /usr/include/qt6/QtCore/qdatastream.h \
+ /usr/include/qt6/QtCore/qobjectdefs.h \
+ /usr/include/qt6/QtCore/qobjectdefs_impl.h \
+ /usr/include/qt6/QtCore/qfunctionaltools_impl.h \
+ /usr/include/qt6/QtCore/qiodevicebase.h \
+ /usr/include/qt6/QtCore/qscopedpointer.h \
+ /usr/include/qt6/QtCore/qfloat16.h \
+ /usr/include/qt6/QtCore/qhashfunctions.h /usr/include/c++/16/numeric \
+ /usr/include/c++/16/bits/stl_numeric.h \
  /usr/include/c++/16/pstl/glue_numeric_defs.h \
  /usr/include/qt6/QtCore/qmath.h /usr/include/qt6/QtCore/qalgorithms.h \
  /usr/include/qt6/QtCore/q20bit.h /usr/include/qt6/QtCore/qtformat_impl.h \
@@ -277,11 +287,8 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/c++/16/bits/stl_list.h /usr/include/c++/16/bits/list.tcc \
  /usr/include/c++/16/map /usr/include/c++/16/bits/stl_tree.h \
  /usr/include/c++/16/bits/stl_map.h \
- /usr/include/c++/16/bits/stl_multimap.h \
- /usr/include/qt6/QtCore/qshareddata.h \
- /usr/include/qt6/QtCore/qdatetime.h /usr/include/qt6/QtCore/qcalendar.h \
- /usr/include/qt6/QtCore/qlocale.h /usr/include/qt6/QtCore/qvariant.h \
- /usr/include/qt6/QtCore/qdebug.h /usr/include/qt6/QtCore/qtextstream.h \
+ /usr/include/c++/16/bits/stl_multimap.h /usr/include/qt6/QtCore/qdebug.h \
+ /usr/include/qt6/QtCore/qtextstream.h \
  /usr/include/qt6/QtCore/qcontiguouscache.h /usr/include/c++/16/climits \
  /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/limits.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/syslimits.h \
@@ -289,6 +296,7 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
  /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
  /usr/include/bits/uio_lim.h /usr/include/qt6/QtCore/qsharedpointer.h \
+ /usr/include/qt6/QtCore/qshareddata.h \
  /usr/include/qt6/QtCore/qsharedpointer_impl.h /usr/include/c++/16/chrono \
  /usr/include/c++/16/bits/chrono.h /usr/include/c++/16/ratio \
  /usr/include/c++/16/ctime /usr/include/c++/16/set \
@@ -307,9 +315,33 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtCore/q20utility.h /usr/include/qt6/QtCore/qobject.h \
  /usr/include/qt6/QtCore/qobject_impl.h \
  /usr/include/qt6/QtCore/qbindingstorage.h \
+ /usr/include/qt6/QtCore/qmetaobject.h \
+ /usr/include/qt6/QtCore/QSharedDataPointer \
+ /usr/include/qt6/QtCore/QString /usr/include/qt6/QtCore/QUrl \
+ /usr/include/qt6/QtCore/qurl.h /usr/include/qt6/QtCore/QVariant \
+ /usr/include/qt6/QtCore/q26numeric.h /usr/include/qt6/QtCore/QList \
+ /usr/include/qt6/QtCore/QObject \
+ /usr/include/qt6/QtNetwork/QSslConfiguration \
+ /usr/include/qt6/QtNetwork/qsslconfiguration.h \
+ /usr/include/qt6/QtNetwork/qsslsocket.h \
+ /usr/include/qt6/QtNetwork/qtcpsocket.h \
+ /usr/include/qt6/QtNetwork/qabstractsocket.h \
+ /usr/include/qt6/QtCore/qiodevice.h /usr/include/qt6/QtCore/qspan.h \
+ /usr/include/c++/16/cassert /usr/include/qt6/QtCore/q20iterator.h \
+ /usr/include/qt6/QtNetwork/qhostaddress.h \
+ /usr/include/qt6/QtNetwork/qsslerror.h \
+ /usr/include/qt6/QtNetwork/qsslcertificate.h \
+ /usr/include/qt6/QtCore/qcryptographichash.h \
+ /usr/include/qt6/QtNetwork/qssl.h /usr/include/qt6/QtCore/QFlags \
+ /usr/include/qt6/QtNetwork/QSslPreSharedKeyAuthenticator \
+ /usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
+ /usr/include/qt6/QtCore/QMetaType /usr/include/qt6/QtCore/QObject \
+ /usr/include/qt6/QtCore/QJsonArray /usr/include/qt6/QtCore/qjsonarray.h \
+ /usr/include/qt6/QtCore/qjsonvalue.h \
+ /usr/include/qt6/QtCore/qcborvalue.h \
+ /usr/include/qt6/QtCore/qcborcommon.h \
  /usr/include/qt6/QtCore/qregularexpression.h \
- /usr/include/qt6/QtCore/qurl.h /usr/include/qt6/QtCore/quuid.h \
- /usr/include/qt6/QtCore/qendian.h \
+ /usr/include/qt6/QtCore/quuid.h /usr/include/qt6/QtCore/qendian.h \
  /usr/include/qt6/QtCore/qjsondocument.h \
  /usr/include/qt6/QtCore/qjsonparseerror.h \
  /usr/include/qt6/QtWidgets/QMainWindow \
@@ -331,53 +363,28 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtGui/qrgba64.h /usr/include/qt6/QtGui/qimage.h \
  /usr/include/qt6/QtGui/qpixelformat.h \
  /usr/include/qt6/QtGui/qtransform.h /usr/include/qt6/QtGui/qpolygon.h \
- /usr/include/qt6/QtGui/qregion.h /usr/include/qt6/QtCore/qspan.h \
- /usr/include/c++/16/cassert /usr/include/qt6/QtCore/q20iterator.h \
- /usr/include/qt6/QtCore/qline.h /usr/include/qt6/QtGui/qpalette.h \
- /usr/include/qt6/QtGui/qbrush.h /usr/include/qt6/QtGui/qfont.h \
- /usr/include/qt6/QtGui/qfontmetrics.h /usr/include/qt6/QtGui/qfontinfo.h \
+ /usr/include/qt6/QtGui/qregion.h /usr/include/qt6/QtCore/qline.h \
+ /usr/include/qt6/QtGui/qpalette.h /usr/include/qt6/QtGui/qbrush.h \
+ /usr/include/qt6/QtGui/qfont.h /usr/include/qt6/QtGui/qfontmetrics.h \
+ /usr/include/qt6/QtGui/qfontinfo.h \
  /usr/include/qt6/QtGui/qfontvariableaxis.h \
  /usr/include/qt6/QtWidgets/qsizepolicy.h \
  /usr/include/qt6/QtGui/qcursor.h /usr/include/qt6/QtGui/qbitmap.h \
  /usr/include/qt6/QtWidgets/qtabwidget.h \
+ /usr/include/qt6/QtNetwork/QSslError \
  /usr/include/qt6/QtCore/qtmochelpers.h \
  /usr/include/qt6/QtCore/qtmocconstants.h \
  /usr/include/qt6/QtCore/q20algorithm.h \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/moc_opentopographyloader.cpp \
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/moc_osmdataloader.cpp \
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/osmdataloader.hpp \
  /usr/include/qt6/QtNetwork/QNetworkReply \
  /usr/include/qt6/QtNetwork/qnetworkreply.h \
- /usr/include/qt6/QtNetwork/qtnetworkglobal.h \
- /usr/include/qt6/QtNetwork/qtnetwork-config.h \
- /usr/include/qt6/QtNetwork/qtnetworkexports.h \
- /usr/include/qt6/QtCore/QIODevice /usr/include/qt6/QtCore/qiodevice.h \
- /usr/include/qt6/QtCore/QString /usr/include/qt6/QtCore/QVariant \
+ /usr/include/qt6/QtCore/QIODevice \
  /usr/include/qt6/QtNetwork/QNetworkRequest \
- /usr/include/qt6/QtNetwork/qnetworkrequest.h \
- /usr/include/qt6/QtNetwork/qhttpheaders.h \
- /usr/include/qt6/QtCore/qmetaobject.h \
- /usr/include/qt6/QtCore/QSharedDataPointer /usr/include/qt6/QtCore/QUrl \
- /usr/include/qt6/QtCore/q26numeric.h \
  /usr/include/qt6/QtNetwork/QNetworkAccessManager \
- /usr/include/qt6/QtNetwork/qnetworkaccessmanager.h \
- /usr/include/qt6/QtCore/QList /usr/include/qt6/QtCore/QObject \
- /usr/include/qt6/QtNetwork/QSslConfiguration \
- /usr/include/qt6/QtNetwork/qsslconfiguration.h \
- /usr/include/qt6/QtNetwork/qsslsocket.h \
- /usr/include/qt6/QtNetwork/qtcpsocket.h \
- /usr/include/qt6/QtNetwork/qabstractsocket.h \
- /usr/include/qt6/QtNetwork/qhostaddress.h \
- /usr/include/qt6/QtNetwork/qsslerror.h \
- /usr/include/qt6/QtNetwork/qsslcertificate.h \
- /usr/include/qt6/QtCore/qcryptographichash.h \
- /usr/include/qt6/QtNetwork/qssl.h /usr/include/qt6/QtCore/QFlags \
- /usr/include/qt6/QtNetwork/QSslPreSharedKeyAuthenticator \
- /usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
- /usr/include/qt6/QtCore/QMetaType /usr/include/qt6/QtCore/QObject \
- /usr/include/qt6/QtCore/QRect /usr/include/qt6/QtCore/QString \
- /usr/include/qt6/QtCore/QTimer /usr/include/qt6/QtCore/qtimer.h \
- /usr/include/qt6/QtCore/qbasictimer.h \
+ /usr/include/qt6/QtCore/QRect /usr/include/qt6/QtCore/QTimer \
+ /usr/include/qt6/QtCore/qtimer.h /usr/include/qt6/QtCore/qbasictimer.h \
  /usr/include/qt6/QtCore/qabstracteventdispatcher.h \
  /usr/include/qt6/QtCore/qeventloop.h \
- /usr/include/qt6/QtCore/qdeadlinetimer.h \
- /usr/include/qt6/QtNetwork/QSslError
+ /usr/include/qt6/QtCore/qdeadlinetimer.h

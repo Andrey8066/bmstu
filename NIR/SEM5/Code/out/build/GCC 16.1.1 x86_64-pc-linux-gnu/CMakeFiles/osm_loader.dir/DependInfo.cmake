@@ -15,6 +15,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/glwidget.cpp" "CMakeFiles/osm_loader.dir/src/glwidget.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/glwidget.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp" "CMakeFiles/osm_loader.dir/src/main.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/main.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.cpp" "CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/mainwindow.cpp.o.d"
+  "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.cpp" "CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmclassifier.cpp" "CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmclassifier.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp" "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp" "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o.d"
