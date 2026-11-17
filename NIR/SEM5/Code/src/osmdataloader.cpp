@@ -250,6 +250,11 @@ QString OSMDataLoader::buildOverpassQuery(const int &timeout,
                    nwr["building"]({{bbox}});
                    nwr["highway"]({{bbox}});
                    nwr["waterway"]({{bbox}});
+                  nwr["natural"="water"]({{bbox}});
+                  nwr["water"="lake"]({{bbox}});
+                  nwr["water"="pond"]({{bbox}});
+                  nwr["water"="reservoir"]({{bbox}});
+                  nwr["waterway"="riverbank"]({{bbox}});
                    );
                    out geom;
                    )")
