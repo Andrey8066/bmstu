@@ -1,0 +1,177 @@
+
+#include "stm32f1xx.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+#define CMD_SIZE 32
+
+static void usart2_send_char(char c)
+{
+    while (!(USART2->SR & USART_SR_TXE)) {}
+    USART2->DR = (uint16_t)c;
+}
+
+static void usart2_send_string(const char *s)
+{
+    while (*s != '\0')
+    {
+        usart2_send_char(*s);
+        s++;
+    }
+
+    /* Ждём окончания передачи последнего символа */
+    while (!(USART2->SR & USART_SR_TC)) {}
+
+    /* Конец ответа: нулевой байт */
+    usart2_send_char('\0');
+}
+
+static void adc_init(void)
+{
+    /* Включаем тактирование ADC1 */
+    RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+
+    /* PCLK2 = 8 MHz, ADC clock = PCLK2 / 6 */
+    RCC->CFGR &= ~RCC_CFGR_ADCPRE;
+    RCC->CFGR |= RCC_CFGR_ADCPRE_DIV6;
+
+    /* Включаем встроенный температурный датчик и VREFINT */
+    ADC1->CR2 |= ADC_CR2_TSVREFE;
+
+    /* Канал 16: длительность выборки 239.5 циклов */
+    ADC1->SMPR1 &= ~(7UL << 18);
+    ADC1->SMPR1 |=  (7UL << 18);
+
+    /* Одна регулярная конверсия, канал 16 */
+    ADC1->SQR1 = 0;
+    ADC1->SQR3 = 16;
+
+    /* Включаем ADC */
+    ADC1->CR2 |= ADC_CR2_ADON;
+
+    for (volatile uint32_t i = 0; i < 10000; i++) {}
+
+    /* Калибровка */
+    ADC1->CR2 |= ADC_CR2_RSTCAL;
+    while (ADC1->CR2 & ADC_CR2_RSTCAL) {}
+
+    ADC1->CR2 |= ADC_CR2_CAL;
+    while (ADC1->CR2 & ADC_CR2_CAL) {}
+
+    /* Программный запуск регулярной конверсии */
+    ADC1->CR2 |= ADC_CR2_EXTTRIG;
+}
+
+static uint16_t adc_read_temperature(void)
+{
+    ADC1->SR = 0;
+
+    /* Запуск преобразования */
+    ADC1->CR2 |= ADC_CR2_SWSTART;
+
+    while (!(ADC1->SR & ADC_SR_EOC)) {}
+
+    return (uint16_t)ADC1->DR;
+}
+
+static void usart2_init(void)
+{
+    /* HSI = 8 MHz, SYSCLK = 8 MHz, PCLK1 = 8 MHz */
+    RCC->CR |= RCC_CR_HSION;
+    while (!(RCC->CR & RCC_CR_HSIRDY)) {}
+    RCC->CFGR = 0;
+
+    /* Включаем GPIOA и USART2 */
+    RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
+    RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
+
+    /* PA2 = TX, alternate function push-pull */
+    GPIOA->CRL &= ~(0xFUL << 8);
+    GPIOA->CRL |=  (0xBUL << 8);
+
+    /* PA3 = RX, input floating */
+    GPIOA->CRL &= ~(0xFUL << 12);
+    GPIOA->CRL |=  (0x4UL << 12);
+
+    /* PCLK1 = 8 MHz, baud = 9600 */
+    USART2->BRR = 833;
+    USART2->CR1 = USART_CR1_TE | USART_CR1_RE | USART_CR1_UE;
+    USART2->CR2 = 0;
+    USART2->CR3 = 0;
+}
+
+int main(void)
+{
+    char command[CMD_SIZE];
+    char response[32];
+    uint32_t pos = 0;
+
+    usart2_init();
+    adc_init();
+
+    usart2_send_string("Thermometer ready");
+
+    while (1)
+    {
+        /* Ожидаем входящий символ */
+        while (!(USART2->SR & USART_SR_RXNE)) {}
+
+        char c = (char)(USART2->DR & 0xFF);
+
+        /* Enter: CR или LF; также допускаем 0x00 */
+        if (c == '\r' || c == '\n' || c == '\0')
+        {
+            if (pos == 0)
+                continue;
+
+            command[pos] = '\0';
+
+            if (strcmp(command, "TEMPERATURE?") == 0)
+            {
+                uint32_t raw = adc_read_temperature();
+
+                /* Приближённая формула для VDDA = 3.3 V.
+                   Значения калибровки датчика зависят от экземпляра. */
+                int32_t vsense_mv =
+                    (int32_t)((raw * 3300UL) / 4095UL);
+
+                int32_t t10 =
+                    (((1430 - vsense_mv) * 100) / 43) + 250;
+
+                if (t10 < 0)
+                {
+                    snprintf(response, sizeof(response),
+                             "-%ld.%ld C",
+                             (long)(-t10 / 10),
+                             (long)(-t10 % 10));
+                }
+                else
+                {
+                    snprintf(response, sizeof(response),
+                             "%ld.%ld C",
+                             (long)(t10 / 10),
+                             (long)(t10 % 10));
+                }
+
+                usart2_send_string(response);
+            }
+            else
+            {
+                usart2_send_string("Unknown command");
+            }
+
+            pos = 0;
+        }
+        else if (pos < CMD_SIZE - 1)
+        {
+            command[pos++] = c;
+        }
+        else
+        {
+            /* Слишком длинная команда */
+            pos = 0;
+            usart2_send_string("Command too long");
+        }
+    }
+}

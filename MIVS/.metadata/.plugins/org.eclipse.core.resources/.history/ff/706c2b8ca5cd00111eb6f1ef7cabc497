@@ -1,0 +1,198 @@
+
+#include "stm32f1xx.h"
+#include <stdint.h>
+#include <stdio.h>
+#include <string.h>
+
+/*
+ * STM32F103C8T6
+ * HSE = 8 MHz, PLL x8 = 64 MHz
+ * USART2: 9600, 8N1
+ * Command: "TEMPERATURE?" + 0x00
+ * Response: ASCII string + 0x00
+ *
+ * VDDA assumed to be 3.3 V.
+ */
+
+#define CMD_SIZE 32
+
+static volatile uint32_t adc_value;
+
+static void usart2_putc(char c)
+{
+    while (!(USART2->SR & USART_SR_TXE)) {}
+    USART2->DR = (uint16_t)c;
+}
+
+static void usart2_send_string(const char *s)
+{
+
+}
+
+
+static uint16_t adc1_read_temperature(void)
+{
+    /* Start conversion */
+    ADC1->CR2 |= ADC_CR2_ADON;
+
+    while (!(ADC1->SR & ADC_SR_EOC)) {}
+
+    return (uint16_t)ADC1->DR;
+}
+
+static int temperature_x10(void)
+{
+
+}
+
+/* ---------- Main ---------- */
+
+int main(void)
+{
+    char command[CMD_SIZE];
+    char response[32];
+    uint32_t pos = 0;
+
+    /* Enable HSE */
+        RCC->CR |= RCC_CR_HSEON;
+        while (!(RCC->CR & RCC_CR_HSERDY)) {}
+
+        /* Flash: prefetch + 2 wait states */
+        FLASH->ACR = FLASH_ACR_PRFTBE | FLASH_ACR_LATENCY_2;
+
+        /* APB1 = HCLK/2, APB2 = HCLK */
+        RCC->CFGR &= ~(RCC_CFGR_HPRE |
+                       RCC_CFGR_PPRE1 |
+                       RCC_CFGR_PPRE2 |
+                       RCC_CFGR_PLLSRC |
+                       RCC_CFGR_PLLXTPRE |
+                       RCC_CFGR_PLLMULL);
+
+        RCC->CFGR |= RCC_CFGR_PPRE1_DIV2 |
+                     RCC_CFGR_PLLSRC |
+                     RCC_CFGR_PLLMULL8;
+
+        /* Enable PLL */
+        RCC->CR |= RCC_CR_PLLON;
+        while (!(RCC->CR & RCC_CR_PLLRDY)) {}
+
+        /* Select PLL as SYSCLK */
+        RCC->CFGR &= ~RCC_CFGR_SW;
+        RCC->CFGR |= RCC_CFGR_SW_PLL;
+
+        while ((RCC->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {}
+
+        RCC->APB2ENR |= RCC_APB2ENR_IOPAEN |
+                            RCC_APB2ENR_AFIOEN;
+
+            RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
+
+            /*
+             * PA2: Alternate function push-pull, 50 MHz
+             * PA3: Input floating
+             */
+            GPIOA->CRL &= ~((0xFUL << 8) | (0xFUL << 12));
+            GPIOA->CRL |=  (0xBUL << 8) | (0x4UL << 12);
+
+            /*
+             * PCLK1 = 32 MHz
+             * USARTDIV = 32,000,000 / (16 * 9600)
+             * BRR = 3333 approximately
+             */
+            USART2->BRR = 3333;
+            USART2->CR1 = USART_CR1_TE | USART_CR1_RE;
+            USART2->CR2 = 0;  /* 1 stop bit */
+            USART2->CR3 = 0;
+            USART2->CR1 |= USART_CR1_UE;
+
+            RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+
+                /*
+                 * PCLK2 = 64 MHz; ADC clock = PCLK2 / 6
+                 * ADC clock = 10.667 MHz
+                 */
+                RCC->CFGR &= ~RCC_CFGR_ADCPRE;
+                RCC->CFGR |= RCC_CFGR_ADCPRE_DIV6;
+
+                /* Enable internal temperature sensor and VREFINT */
+                ADC1->CR2 |= ADC_CR2_TSVREFE;
+
+                /* Long sample time for channel 16: 239.5 cycles */
+                ADC1->SMPR1 &= ~(7UL << 18);
+                ADC1->SMPR1 |=  (7UL << 18);
+
+                /* Regular sequence length = 1, channel 16 */
+                ADC1->SQR1 = 0;
+                ADC1->SQR3 = 16;
+
+                /* Power on ADC */
+                ADC1->CR2 |= ADC_CR2_ADON;
+
+                for (volatile uint32_t i = 0; i < 10000; i++) {}
+
+                /* Reset calibration */
+                ADC1->CR2 |= ADC_CR2_RSTCAL;
+                while (ADC1->CR2 & ADC_CR2_RSTCAL) {}
+
+                /* Calibrate ADC */
+                ADC1->CR2 |= ADC_CR2_CAL;
+                while (ADC1->CR2 & ADC_CR2_CAL) {}
+
+    for (;;)
+    {
+        while (!(USART2->SR & USART_SR_RXNE)) {}
+        char c = (USART2->DR & 0xFF);
+
+        if (c == '\0')
+        {
+            command[pos] = '\0';
+
+            if (strcmp(command, "TEMPERATURE?") == 0)
+            {
+                ADC1->CR2 |= ADC_CR2_ADON;
+
+                while (!(ADC1->SR & ADC_SR_EOC)) {}
+
+                uint32_t raw =  (uint16_t)ADC1->DR;
+
+                /* Convert ADC count to millivolts; VDDA = 3300 mV */
+                int32_t vsense_mv = (int32_t)((raw * 3300UL) / 4095UL);
+
+                /*
+                 * T(°C) = (1430 - Vsense_mV) / 4.3 + 25
+                 * Return temperature in tenths of degree Celsius.
+                 */
+                int t = (((1430 - vsense_mv) * 100) / 43) + 250;
+
+                if (t < 0)
+                {
+                    snprintf(response, sizeof(response),
+                             "-%d.%d C", -t / 10, -t % 10);
+                }
+                else
+                {
+                    snprintf(response, sizeof(response),
+                             "%d.%d C", t / 10, t % 10);
+                }
+
+                while (*response){
+                	while (!(USART2->SR & USART_SR_TXE)) {}
+                	    USART2->DR = (uint16_t)*response;
+                }
+                while (!(USART2->SR & USART_SR_TXE)) {}
+                USART2->DR = (uint16_t)'\0';
+            }
+
+            pos = 0;
+        }
+        else if (pos < CMD_SIZE - 1)
+        {
+            command[pos++] = c;
+        }
+        else
+        {
+            /* Oversized command: discard and restart */
+            pos = 0;
+        }
+    }
+}

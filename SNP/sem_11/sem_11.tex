@@ -1,0 +1,233 @@
+% Шаблон документа для курса "Системы научных публикаций"
+% Семинар 11. LaTeX. Создание и редактирование уравнений
+\documentclass[a4paper,12pt]{article}
+
+%%% Работа с русским языком
+\usepackage{cmap}          % Поиск в PDF
+\usepackage{mathtext}         % Русские буквы в фомулах
+\usepackage[T2A]{fontenc}      % Кодировка
+\usepackage[utf8]{inputenc}      % Кодировка исходного текста
+\usepackage[english,russian]{babel}  % Локализация и переносы
+\usepackage{indentfirst}            % Для красной строки первого абзаца
+
+\usepackage{extsizes}               % Возможность сделать 14-й шрифт
+\usepackage{geometry}               % Простой способ задавать поля
+\geometry{top=25mm}
+\geometry{bottom=35mm}
+\geometry{left=35mm}
+\geometry{right=20mm}
+
+%\usepackage{fancyhdr}                   % Колонтитулы
+%    \pagestyle{fancy}
+%    \renewcommand{\headrulewidth}{0mm}  % Толщина линейки, отчеркивающей
+%    \lfoot{Нижний левый}                % верхний колонтитул
+%    \rfoot{Нижний правый}
+%    \rhead{Верхний правый}
+%    \chead{Верхний в центре}
+%    \lhead{Верхний левый}
+%    % \cfoot{Нижний в центре} % По умолчанию здесь номер страницы (\thepage)
+
+
+\usepackage{setspace} % Межстрочное расстояние
+%\onehalfspacing      % Межстрочное расстояние 1.5
+%\doublespacing       % Межстрочное расстояние 2
+%\singlespacing       % Межстрочное расстояние 1
+
+\usepackage{lastpage} % Узнать, сколько всего страниц в документе
+
+\usepackage{soul}     % Модификаторы начертания
+
+\usepackage{multicol} % Несколько колонок
+
+\usepackage{lipsum}   % Генерация случайного текста
+
+%\renewcommand{\familydefault}{\sfdefault} % Начертание шрифта без засечек
+
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\hypersetup{        % Гиперссылки
+  unicode=true,           % Русские буквы в раздела PDF
+  pdftitle={Заголовок},   % Заголовок
+  pdfauthor={Автор},      % Автор
+  pdfsubject={Тема},      % Тема
+  pdfcreator={Создатель}, % Создатель
+  pdfproducer={Производитель}, % Производитель
+  pdfkeywords={keyword1} {key2} {key3}, % Ключевые слова
+  colorlinks=true,         % false: ссылки в рамках; true: цветные ссылки
+  linkcolor=black,          % Внутренние ссылки
+  citecolor=green,        % Ссылки на библиографию
+  filecolor=magenta,      % Ссылки на файлы
+  urlcolor=blue           % Ссылки на URL
+}
+
+
+%%% Дополнительная работа с математикой
+\usepackage{amsfonts,amssymb,amsthm,mathtools} % AMS
+\usepackage{amsmath}
+\usepackage{icomma} % "Умная" запятая: $0,2$ --- число, $0, 2$ --- перечисление
+
+%% Номера формул
+%\mathtoolsset{showonlyrefs=true} % Показывать номера только у тех формул, на которые есть \eqref{} в тексте.
+
+%% Шрифты
+\usepackage{euscript} % Шрифт Евклид
+\usepackage{mathrsfs} % Красивый матшрифт
+
+%% Перенос знаков в формулах (по Львовскому)
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\DeclareMathOperator{\sgn}{\mathop{\mathrm{sgn}}}
+
+%%% Окружения типа theorem
+\theoremstyle{definition}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{proposition}[theorem]{Утверждение}
+\newtheorem{definition}{Определение}[theorem]
+\theoremstyle{remark}
+\newtheorem*{remark}{Замечание}
+
+%%% Заголовок
+\author{Соин Андрей Дмитриевич}
+\title{\LaTeX. Создание и редактирование уравнений}
+\date{\today}
+
+\begin{document} % Конец преамбулы, начало документа
+
+\maketitle
+
+\section{Формулы и ссылки на них}
+
+Внутритекстовая формула: $a^2 + b^2 = c^2$ — теорема Пифагора.
+
+Выключная формула:
+\[
+  E = mc^2
+\]
+
+Выключная формула с окружением \texttt{equation} и меткой:
+\begin{equation}\label{eq:newton}
+  F = ma
+\end{equation}
+
+Ссылка на формулу: уравнение \eqref{eq:newton} (см.~стр.~\pageref{eq:newton}) — второй закон Ньютона.
+
+\section{Перенос знака в формулах}
+
+Длинный текст длинный текст длинный текст длинный текст
+$1\hm{+}2\hm{+}3\hm{+}4\hm{+}5\hm{+}6=21$ длинный текст длинный текст длинный текст.
+
+\section{Формулы}
+
+\begin{equation}
+  \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+\end{equation}
+
+\begin{equation}
+  n! \approx \sqrt{2\pi n} \left(\frac{n}{e}\right)^n
+\end{equation}
+
+\begin{equation}
+  G(t) = B_0 + \sum_{n=1}^{M} \left[ C_n \cos\left(\frac{2\pi n t}{T}\right) + D_n \sin\left(\frac{2\pi n t}{T}\right) \right]
+\end{equation}
+
+\begin{equation}
+  M\ddot{y} + b\dot{y} + ky = F_1 \cos(2\pi ft)
+\end{equation}
+
+\begin{equation}
+  \mathrm{CO}_2 + \mathrm{H}_2\mathrm{O} \to \mathrm{H}_2\mathrm{CO}_3
+\end{equation}
+
+\begin{multline}
+  10+20+30+40+50+60+70+\dots \\
+  +500+510+520+530+540+550+560+570+\dots \\
+  +960+970+980+990+1000=50500
+\end{multline}
+
+\begin{align}
+  5 \times 5 &= 25 & \omega_1 + \omega_2 &\notin \Omega \\
+  z^2 - 2z + 5 &= 0 & \Gamma \setminus \Lambda &= \Theta \\
+  \sqrt{1+y\sqrt{y^3+\sqrt{y+1}}} &= z_0 & \overline{z_1 \cdot z_2} &= \bar{z}_1 \cdot \bar{z}_2
+\end{align}
+
+\begin{equation}
+  \begin{aligned}
+    5 \times 5 &= 25 & \omega_1 + \omega_2 &\notin \Omega \\
+    z^2 - 2z + 5 &= 0 & \Gamma \setminus \Lambda &= \Theta \\
+    \sqrt{1+y\sqrt{y^3+\sqrt{y+1}}} &= z_0 & \overline{z_1 \cdot z_2} &= \bar{z}_1 \cdot \bar{z}_2
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  \begin{aligned}
+    I_1 &= 0 \\
+    R_1 I_1 + R_2 I_2 + R_3 I_3 &= \mathcal{E}_1 \\
+    R_2 I_2 - R_3 I_3 &= \mathcal{E}_2
+  \end{aligned}
+\end{equation}
+
+\begin{equation}
+  A_n =
+  \begin{cases}
+    1, & \text{если } n=0; \\
+    2, & \text{если } n=1; \\
+    A_{n-1} - A_{n-2}, & \text{если } n>1.
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+  \exp x =
+  \begin{cases}
+    e^x, & x>0 \\
+    1, & x=0 \\
+    e^{-x}, & x<0
+  \end{cases}
+\end{equation}
+
+\begin{equation}
+  \Lambda_x =
+  \begin{pmatrix}
+    \cosh \chi & -\sinh \chi \\
+    -\sinh \chi & \cosh \chi
+  \end{pmatrix}
+\end{equation}
+
+\begin{equation}
+  B =
+  \begin{vmatrix}
+    b_{11} & \cdots & b_{1m} \\
+    \vdots & \ddots & \vdots \\
+    b_{m1} & \cdots & b_{mm}
+  \end{vmatrix}
+\end{equation}
+
+\section{Теоремы}
+
+\begin{theorem}[Теорема косинусов]\label{thm:cos}
+  Квадрат стороны треугольника равен сумме квадратов двух других сторон
+  без удвоенного произведения этих сторон на косинус угла между ними:
+  \[
+    c^2 = a^2 + b^2 - 2ab\cos\gamma .
+  \]
+\end{theorem}
+
+Смотри теорему~\ref{thm:cos} на стр.~\pageref{thm:cos}.
+
+\begin{proposition}\label{prop:twolines}
+  Через две точки можно провести две прямые.
+\end{proposition}
+
+\begin{definition}
+  Биссектрисой угла называется луч, исходящий из вершины угла и делящий его пополам.
+\end{definition}
+
+\begin{remark}
+  Утверждение~\ref{prop:twolines} не верно.
+\end{remark}
+
+\begin{proof}[Доказательство теоремы косинусов]
+  \lipsum[1-2]
+\end{proof}
+
+\end{document}

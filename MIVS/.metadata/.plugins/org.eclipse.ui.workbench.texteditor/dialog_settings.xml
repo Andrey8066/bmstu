@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="java.lang.Class">
+		<list key="findhistory">
+			<item value="USART_SR_RXNE"/>
+			<item value="while (!(USART2-&gt;SR &amp; USART_SR_RXNE)) {}&#x0A;char c = (char)(USART2-&gt;DR &amp; 0xFF);"/>
+			<item value="hse"/>
+			<item value="333"/>
+			<item value="ADC1-&gt;CR2"/>
+		</list>
+	</section>
+</section>

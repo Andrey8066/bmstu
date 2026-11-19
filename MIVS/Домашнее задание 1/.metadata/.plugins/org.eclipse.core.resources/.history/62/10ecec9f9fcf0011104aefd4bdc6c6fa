@@ -1,0 +1,102 @@
+#include "stm32f1xx.h"
+
+#define V25 1.43f
+#define AVG_SLOPE 0.0043f
+#define VREF 3.3f
+#define ADC_MAX 4095.0f
+
+static volatile float temperature = 0.0f;
+static uint8_t thermostat_state = 0;
+
+int main(void) {
+
+  RCC->APB2ENR |= RCC_APB2ENR_IOPAEN;
+
+  GPIOA->CRH &= ~(GPIO_CRH_MODE8 | GPIO_CRH_CNF8);
+
+  GPIOA->CRH |= GPIO_CRH_MODE8_1;
+
+  GPIOA->BRR = GPIO_BRR_BR8;
+
+  RCC->APB2ENR |= RCC_APB2ENR_ADC1EN;
+
+  ADC1->CR2 |= ADC_CR2_TSVREFE;
+
+  for (volatile uint32_t i = 0; i < 10000U; i++) {
+    __NOP();
+  }
+
+  ADC1->SMPR1 &= ~(7U << 18);
+  ADC1->SMPR1 |= (7U << 18);
+
+  ADC1->SQR1 = 0U;
+  ADC1->SQR3 = 16U;
+
+  ADC1->CR2 |= ADC_CR2_ADON;
+
+  for (volatile uint32_t i = 0; i < 1000U; i++) {
+    __NOP();
+  }
+
+  ADC1->CR2 |= ADC_CR2_RSTCAL;
+  while ((ADC1->CR2 & ADC_CR2_RSTCAL) != 0U) {
+  }
+
+  ADC1->CR2 |= ADC_CR2_CAL;
+  while ((ADC1->CR2 & ADC_CR2_CAL) != 0U) {
+  }
+
+  ADC1->CR2 |= ADC_CR2_EXTTRIG;
+
+  static uint32_t test = 0;
+
+  uint16_t adc_value;
+  float voltage;
+
+  while (1) {
+    ADC1->CR2 |= ADC_CR2_SWSTART;
+
+//    while ((ADC1->SR & ADC_SR_EOC) == 0U) {
+//    }
+//
+//    adc_value = (uint16_t)ADC1->DR;
+//
+//    voltage = ((float)adc_value * VREF) / ADC_MAX;
+//
+//    temperature = (V25 - voltage) / AVG_SLOPE + 25.0f;
+    	                if (test < 1000U)
+    	                {
+    	                    temperature = -10.0f;
+    	                }
+    	                else if (test < 2000U)
+    	                {
+    	                    temperature = 0.0f;
+    	                }
+    	                else
+    	                {
+    	                    temperature = 10.0f;
+    	                }
+
+    if (temperature < -5.0f) {
+      thermostat_state = 1U;
+    } else if (temperature > 5.0f) {
+      thermostat_state = 0U;
+    }
+
+    if (thermostat_state) {
+      GPIOA->BSRR = GPIO_BSRR_BS8;
+    } else {
+      GPIOA->BRR = GPIO_BRR_BR8;
+    }
+
+    test++;
+
+    if (test >= 3000U) {
+      test = 0U;
+    }
+
+    for (volatile uint32_t i = 0; i < 10U; i++) {
+      __NOP();
+    }
+  }
+}
