@@ -1,0 +1,127 @@
+\documentclass[a4paper,12pt]{article}
+
+\usepackage{cmap}
+\usepackage{mathtext}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+
+\usepackage{extsizes}
+\usepackage{geometry}
+\geometry{top=25mm}
+\geometry{bottom=35mm}
+\geometry{left=35mm}
+\geometry{right=20mm}
+
+\usepackage{setspace}
+\usepackage{lastpage}
+\usepackage{soul}
+\usepackage{multicol}
+\usepackage{lipsum}
+
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\hypersetup{
+  unicode=true,
+  pdftitle={Заголовок},
+  pdfauthor={Автор},
+  pdfsubject={Тема},
+  pdfcreator={Создатель},
+  pdfproducer={Производитель},
+  pdfkeywords={keyword1} {key2} {key3},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=green,
+  filecolor=magenta,
+  urlcolor=blue
+}
+
+\usepackage{amsfonts,amssymb,amsthm,mathtools}
+\usepackage{amsmath}
+\usepackage{icomma}
+
+\usepackage{euscript}
+\usepackage{mathrsfs}
+
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\usepackage{graphicx}
+\graphicspath{{imgs/}}
+\setlength\fboxsep{3pt}
+\setlength\fboxrule{1pt}
+\usepackage{wrapfig}
+
+\author{ФИО}
+\title{\LaTeX. Вставка и настройка рисунков}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Форматирование рисунков}
+
+\noindent\includegraphics{picture}
+
+\bigskip
+
+\noindent Увеличение в 3 раза:\\
+\includegraphics[scale=3]{picture}
+
+\bigskip
+
+\noindent Уменьшение в 2 раза:\\
+\includegraphics[scale=0.5]{picture}
+
+\bigskip
+
+\noindent Ширина 2 см, высота 5 см (с сохранением пропорций):\\
+\includegraphics[width=2cm,height=5cm,keepaspectratio]{picture}
+
+\bigskip
+
+\noindent Рисунок в рамке (отступ 10 пт, толщина 2 пт):\\
+{\setlength\fboxsep{10pt}\setlength\fboxrule{2pt}\fbox{\includegraphics[scale=0.5]{picture}}}
+
+\section{Нумерация рисунков}
+
+См. рисунок~\ref{fig:numbered} на странице~\pageref{fig:numbered}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[scale=0.5]{picture}
+  \caption{Пример нумерованного рисунка}
+  \label{fig:numbered}
+\end{figure}
+
+\section{Обтекаемый рисунок}
+
+\lipsum[1-2]
+
+\begin{wrapfigure}{r}{0.35\textwidth}
+  \centering
+  \caption{Обтекаемый рисунок}
+  \includegraphics[width=0.3\textwidth]{picture}
+\end{wrapfigure}
+
+\lipsum[3-4]
+
+\section{Два рисунка под одним названием}
+
+\begin{figure}[htbp]
+  \centering
+  \begin{minipage}{0.45\textwidth}
+  \center{\includegraphics[width=\textwidth]{picture} \\ а)}
+\end{minipage}\hfill
+\begin{minipage}{0.45\textwidth}
+\center{ \includegraphics[width=\textwidth]{picture} \\ б) }
+\end{minipage}
+\caption{Два рисунка под одним названием}
+\label{fig:two}
+\end{figure}
+
+\listoffigures
+
+\end{document}
