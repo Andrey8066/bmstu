@@ -90,18 +90,6 @@ float parseRoadWidth(const QJsonObject &tags) {
 Colors getBuildingColors(const QJsonObject &tags) {
   const QString type = tags.value("building").toString();
 
-  if (type == "industrial") {
-    return Colors(0.55f, 0.55f, 0.55f, 0.35f, 0.35f, 0.35f);
-  }
-
-  if (type == "commercial" || type == "retail") {
-    return Colors(0.72f, 0.62f, 0.48f, 0.35f, 0.32f, 0.28f);
-  }
-
-  if (type == "house") {
-    return Colors(0.75f, 0.65f, 0.52f, 0.45f, 0.25f, 0.20f);
-  }
-
   return Colors(0.58f, 0.63f, 0.70f, 0.28f, 0.36f, 0.28f);
 }
 
@@ -273,12 +261,20 @@ bool readGeometry(const QJsonObject &object, OSMFeature &feature) {
         std::abs(feature.geometry.front().lon - feature.geometry.back().lon) <
             1e-10;
 
-    const bool area = feature.tags.value("area").toString() == "yes" ||
-                      (feature.tags.contains("building") && closed) ||
-                      (feature.tags.contains("landuse") && closed) ||
-                      (feature.tags.contains("leisure") && closed) ||
-                      (feature.tags.contains("natural") && closed) ||
-                      (feature.tags.contains("water") && closed);
+    const QString waterway = feature.tags.value("waterway").toString();
+
+    const bool isWaterLine = waterway == "river" || waterway == "stream" ||
+                             waterway == "canal" || waterway == "ditch" ||
+                             waterway == "drain" || waterway == "brook";
+
+    bool area =
+        !isWaterLine && (feature.tags.value("area").toString() == "yes" ||
+                         (closed && (feature.tags.contains("building") ||
+                                     feature.tags.contains("building:part") ||
+                                     feature.tags.contains("landuse") ||
+                                     feature.tags.contains("leisure") ||
+                                     feature.tags.contains("natural") ||
+                                     feature.tags.contains("water"))));
 
     if (area) {
       feature.geometryType = OSMGeometryType::Polygon;
@@ -287,6 +283,10 @@ bool readGeometry(const QJsonObject &object, OSMFeature &feature) {
         feature.geometry.pop_back();
     } else {
       feature.geometryType = OSMGeometryType::LineString;
+      if (feature.tags.contains("waterway")) {
+        qDebug() << "RIVER WAY:" << feature.tags.value("waterway").toString()
+                 << "points:" << feature.geometry.size();
+      }
     }
 
     return true;
@@ -400,6 +400,10 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
         relationFeature.geometryType = OSMGeometryType::Polygon;
         relationFeature.geometry = outer;
 
+        if (relationFeature.type == OSMFeatureType::Water) {
+          relationFeature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
+        }
+
         if (relationFeature.type == OSMFeatureType::Building) {
           relationFeature.heightMeters =
               parseBuildingHeight(relationFeature.tags);
@@ -437,9 +441,15 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
     }
 
     // Обычные node и way.
-    if (!readGeometry(object, feature))
+    if (!readGeometry(object, feature)) {
+      if (feature.tags.contains("waterway")) {
+        qDebug() << "RIVER PARSED:" << feature.id
+                 << feature.tags.value("waterway").toString()
+                 << "type:" << static_cast<int>(feature.geometryType)
+                 << "points:" << feature.geometry.size();
+      }
       continue;
-
+    }
     if (feature.type == OSMFeatureType::Building) {
       feature.heightMeters = parseBuildingHeight(feature.tags);
       feature.minHeightMeters = 0.0f;
@@ -469,6 +479,11 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
     }
     if (feature.type == OSMFeatureType::Water) {
       feature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
+      if (feature.tags.contains("width")) {
+        QString width = feature.tags.value("width").toString();
+        width.remove("m");
+        feature.widthMeters = width.toDouble();
+      }
     }
 
     result.push_back(std::move(feature));

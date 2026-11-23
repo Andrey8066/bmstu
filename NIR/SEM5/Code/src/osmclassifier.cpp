@@ -3,7 +3,7 @@
 
 OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
   // Здания
-  if (tags.contains("building"))
+  if (tags.contains("building") || tags.contains("building:part"))
     return OSMFeatureType::Building;
 
   // Дороги

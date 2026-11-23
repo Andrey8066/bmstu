@@ -1028,11 +1028,25 @@ void GLWidget::rebuildFeatureMesh() {
       if (feature.geometryType == OSMGeometryType::Polygon) {
         appendPolygon(feature, 0.0025f);
       } else if (feature.geometryType == OSMGeometryType::LineString) {
-        const float width = feature.widthMeters > 0.0
-                                ? static_cast<float>(feature.widthMeters)
-                                : 5.0f;
+        const QString waterway = feature.tags.value("waterway").toString();
+
+        float width = 5.0f;
+
+        if (waterway == "river")
+          width = 20.0f;
+        else if (waterway == "stream")
+          width = 2.0f;
+        else if (waterway == "canal")
+          width = 8.0f;
+        else if (waterway == "ditch" || waterway == "drain")
+          width = 1.5f;
+
+        if (feature.widthMeters > 0.0)
+          width = static_cast<float>(feature.widthMeters);
 
         appendLine(feature, width, 0.0025f);
+        qDebug() << "RIVER RENDER:" << feature.id << "width:" << width
+                 << "points:" << feature.geometry.size();
       }
 
       ++water;

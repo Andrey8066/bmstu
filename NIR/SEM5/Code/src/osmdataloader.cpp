@@ -247,14 +247,13 @@ QString OSMDataLoader::buildOverpassQuery(const int &timeout,
   if (queryType == "all") {
     return QString(R"([out:json][timeout:%1];
                    (
-                   nwr["building"]({{bbox}});
-                   nwr["highway"]({{bbox}});
-                   nwr["waterway"]({{bbox}});
+                  nwr["building"]({{bbox}});
+                  nwr["building:part"]({{bbox}});
+                  nwr["highway"]({{bbox}});
+
+                  nwr["waterway"]({{bbox}});
                   nwr["natural"="water"]({{bbox}});
-                  nwr["water"="lake"]({{bbox}});
-                  nwr["water"="pond"]({{bbox}});
-                  nwr["water"="reservoir"]({{bbox}});
-                  nwr["waterway"="riverbank"]({{bbox}});
+                  nwr["water"]({{bbox}});
                    );
                    out geom;
                    )")

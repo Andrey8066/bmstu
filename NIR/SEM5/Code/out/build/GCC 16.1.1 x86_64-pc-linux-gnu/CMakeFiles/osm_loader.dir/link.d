@@ -151,7 +151,7 @@ osm_loader: \
   /usr/lib/libminizip.so.1 \
   /usr/lib/librttopo.so.1 \
   /usr/lib/libfreexl.so.1 \
-  /usr/lib/libgeos.so.3.14.1 \
+  /usr/lib/libgeos.so.3.15.0 \
   /usr/lib/libjbig.so.2.1 \
   /usr/lib/libwebp.so.7 \
   /usr/lib32/libkrb5.so.3 \
@@ -500,7 +500,7 @@ CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o:
 
 /usr/lib/libfreexl.so.1:
 
-/usr/lib/libgeos.so.3.14.1:
+/usr/lib/libgeos.so.3.15.0:
 
 /usr/lib/libjbig.so.2.1:
 
