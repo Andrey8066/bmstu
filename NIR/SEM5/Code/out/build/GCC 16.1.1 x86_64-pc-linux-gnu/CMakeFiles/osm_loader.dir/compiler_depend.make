@@ -1114,7 +1114,6 @@ osm_loader_autogen/timestamp: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/CMakeLi
   /usr/share/cmake/Modules/Platform/UnixPaths.cmake
 
 CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: osm_loader_autogen/mocs_compilation.cpp \
-  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.hpp \
@@ -3210,7 +3209,6 @@ CMakeFiles/osm_loader.dir/src/glwidget.cpp.o: /home/andrey/Documents/BMSTU/NIR/S
   /usr/lib/gcc/x86_64-pc-linux-gnu/16/include/syslimits.h
 
 CMakeFiles/osm_loader.dir/src/main.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/main.cpp \
-  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp \
   /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.hpp \
   /usr/include/alloca.h \

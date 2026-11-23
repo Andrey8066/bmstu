@@ -363,8 +363,6 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: \
  /usr/include/qt6/QtCore/qtimezone.h /usr/include/qt6/QtCore/QSettings \
  /usr/include/qt6/QtCore/qsettings.h \
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/mainwindow.hpp \
- /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/demreader.hpp \
- /usr/include/qt6/QtCore/QString \
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.hpp \
  /usr/include/qt6/QtNetwork/QNetworkAccessManager \
  /usr/include/qt6/QtNetwork/qnetworkaccessmanager.h \
@@ -392,7 +390,8 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: \
  /usr/include/qt6/QtNetwork/QSslPreSharedKeyAuthenticator \
  /usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
  /usr/include/qt6/QtCore/QMetaType /usr/include/qt6/QtCore/QObject \
- /usr/include/qt6/QtCore/QJsonArray /usr/include/qt6/QtCore/qjsonarray.h \
+ /usr/include/qt6/QtCore/QString /usr/include/qt6/QtCore/QJsonArray \
+ /usr/include/qt6/QtCore/qjsonarray.h \
  /usr/include/qt6/QtCore/qjsonvalue.h \
  /usr/include/qt6/QtCore/qcborvalue.h \
  /usr/include/qt6/QtCore/qcborcommon.h \

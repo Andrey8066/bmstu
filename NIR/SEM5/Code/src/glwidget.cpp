@@ -770,13 +770,14 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
     ScenePoint point;
 
     if (!geoToScene(geo, point)) {
-      // Не соединяем участки через точки вне DEM.
-      points.clear();
-      return;
+      continue;
     }
 
     points.push_back(point);
   }
+
+  if (points.size() < 2)
+    return;
 
   const TerrainSize terrainSize = calculateTerrainSize();
 

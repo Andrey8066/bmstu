@@ -65,8 +65,8 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
   qDebug() << "Весь запрос:" << activeQuery;
 
   // Основной и резервные серверы Overpass API.
-  servers = {//"https://overpass-api.de/api/interpreter",
-             //"https://overpass.private.coffee/api/interpreter",
+  servers = {"https://overpass-api.de/api/interpreter",
+             "https://overpass.private.coffee/api/interpreter",
              "https://maps.mail.ru/osm/tools/overpass/api/interpreter"};
 
   requestAttempt = 0;

@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "demreader.hpp"
 #include "opentopographyloader.hpp"
 #include <QJsonArray>
 #include <QMainWindow>

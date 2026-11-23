@@ -71,7 +71,7 @@ void OpenTopographyLoader::downloadDEM(double south, double north, double west,
 
   QUrlQuery query;
 
-  query.addQueryItem("demtype", "COP30");
+  query.addQueryItem("demtype", "AW3D30_E");
   query.addQueryItem("south", QString::number(south, 'f', 8));
   query.addQueryItem("north", QString::number(north, 'f', 8));
   query.addQueryItem("west", QString::number(west, 'f', 8));
