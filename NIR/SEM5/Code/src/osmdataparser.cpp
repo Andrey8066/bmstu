@@ -283,10 +283,6 @@ bool readGeometry(const QJsonObject &object, OSMFeature &feature) {
         feature.geometry.pop_back();
     } else {
       feature.geometryType = OSMGeometryType::LineString;
-      if (feature.tags.contains("waterway")) {
-        qDebug() << "RIVER WAY:" << feature.tags.value("waterway").toString()
-                 << "points:" << feature.geometry.size();
-      }
     }
 
     return true;
@@ -442,12 +438,7 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
 
     // Обычные node и way.
     if (!readGeometry(object, feature)) {
-      if (feature.tags.contains("waterway")) {
-        qDebug() << "RIVER PARSED:" << feature.id
-                 << feature.tags.value("waterway").toString()
-                 << "type:" << static_cast<int>(feature.geometryType)
-                 << "points:" << feature.geometry.size();
-      }
+
       continue;
     }
     if (feature.type == OSMFeatureType::Building) {
@@ -467,7 +458,8 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       feature.colors = getBuildingColors(feature.tags);
     }
 
-    if (feature.type == OSMFeatureType::Road) {
+    if (feature.type == OSMFeatureType::Road ||
+        feature.type == OSMFeatureType::Bridge) {
       feature.widthMeters = parseRoadWidth(feature.tags);
 
       const QString highway = feature.tags.value("highway").toString();

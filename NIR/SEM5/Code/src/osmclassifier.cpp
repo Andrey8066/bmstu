@@ -7,8 +7,14 @@ OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
     return OSMFeatureType::Building;
 
   // Дороги
-  if (tags.contains("highway"))
+  if (tags.contains("highway")) {
+    // Мосты
+    if (tags.value("bridge").toString() != "" &&
+        tags.value("bridge").toString() != "no") {
+      return OSMFeatureType::Bridge;
+    }
     return OSMFeatureType::Road;
+  }
 
   // Железные дороги
   if (tags.contains("railway"))

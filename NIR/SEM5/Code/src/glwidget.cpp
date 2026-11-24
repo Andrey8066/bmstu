@@ -10,8 +10,10 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <limits>
 #include <mapbox/earcut.hpp>
 #include <numeric>
+#include <unordered_map>
 #include <vector>
 
 namespace {
@@ -108,6 +110,25 @@ triangulatePolygon(const std::vector<QVector2D> &points) {
 
 bool sameGeoPoint(const GeoPoint &a, const GeoPoint &b) {
   return std::abs(a.lat - b.lat) < 1e-10 && std::abs(a.lon - b.lon) < 1e-10;
+}
+
+// Расстояние между двумя географическими точками в метрах.
+double geoDistanceMeters(const GeoPoint &a, const GeoPoint &b) {
+  constexpr double earthRadius = 6371000.0;
+
+  const double lat1 = qDegreesToRadians(a.lat);
+  const double lat2 = qDegreesToRadians(b.lat);
+
+  const double dLat = lat2 - lat1;
+  const double dLon = qDegreesToRadians(b.lon - a.lon);
+
+  const double sinLat = std::sin(dLat * 0.5);
+  const double sinLon = std::sin(dLon * 0.5);
+
+  const double h =
+      sinLat * sinLat + std::cos(lat1) * std::cos(lat2) * sinLon * sinLon;
+
+  return earthRadius * 2.0 * std::asin(std::sqrt(std::clamp(h, 0.0, 1.0)));
 }
 
 } // namespace
@@ -759,12 +780,16 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
 // -----------------------------------------------------------------------------
 
 void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
-                          float heightOffset) {
+                          float heightOffset,
+                          const BridgeProfile *bridgeProfile) {
   if (feature.geometry.size() < 2)
     return;
 
   std::vector<ScenePoint> points;
   points.reserve(feature.geometry.size());
+
+  std::vector<double> bridgeAlong;
+  bridgeAlong.reserve(feature.geometry.size());
 
   for (const GeoPoint &geo : feature.geometry) {
     ScenePoint point;
@@ -774,6 +799,21 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
     }
 
     points.push_back(point);
+
+    double along = 0.0;
+
+    if (bridgeProfile && bridgeProfile->valid) {
+      const double metersPerLon =
+          111320.0 * std::cos(qDegreesToRadians(bridgeProfile->refLat));
+
+      const double localX = (geo.lon - bridgeProfile->refLon) * metersPerLon;
+
+      const double localY = (geo.lat - bridgeProfile->refLat) * 111132.0;
+
+      along = localX * bridgeProfile->axisX + localY * bridgeProfile->axisY;
+    }
+
+    bridgeAlong.push_back(along);
   }
 
   if (points.size() < 2)
@@ -806,9 +846,49 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
 
   const float metersToScene = static_cast<float>(2.0 / maxPhysicalDimension);
 
+  // Параметры моста в метрах.
+  constexpr float bridgeHeightMeters = 5.0f;
+  constexpr float bridgeThicknessMeters = 0.35f;
+
+  // Вертикальный масштаб DEM.
+  const float elevationRange = dem.maxElevation - dem.minElevation;
+
+  const float verticalScale = elevationRange > 0.0f
+                                  ? verticalScaleCoefficient / elevationRange
+                                  : 0.001f;
+
   const float halfWidth = std::max(0.0001f, widthMeters * metersToScene * 0.5f);
 
   const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
+
+  const bool isBridge = feature.type == OSMFeatureType::Bridge;
+
+  auto getBridgeProfile = [&](double along) -> float {
+    if (!isBridge || !bridgeProfile || !bridgeProfile->valid)
+      return 0.0f;
+
+    const double start = bridgeProfile->minAlong;
+    const double end = bridgeProfile->maxAlong;
+
+    const double rampLength = 20.0;
+
+    // Подъём в начале моста.
+    if (along < start + rampLength) {
+      const double t = std::clamp((along - start) / rampLength, 0.0, 1.0);
+
+      return static_cast<float>(t * t * (3.0 - 2.0 * t));
+    }
+
+    // Спуск в конце моста.
+    if (along > end - rampLength) {
+      const double t = std::clamp((end - along) / rampLength, 0.0, 1.0);
+
+      return static_cast<float>(t * t * (3.0 - 2.0 * t));
+    }
+
+    // Ровная центральная часть.
+    return 1.0f;
+  };
 
   auto getGroundY = [&](const QVector2D &pos, float &y) -> bool {
     const double pixelX = (pos.x() / terrainSize.width + 0.5) * (dem.width - 1);
@@ -887,10 +967,68 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
         continue;
       }
 
-      yALeft += heightOffset;
-      yARight += heightOffset;
-      yBLeft += heightOffset;
-      yBRight += heightOffset;
+      const double alongA =
+          bridgeAlong[i] * (1.0 - t0) + bridgeAlong[i + 1] * t0;
+
+      const double alongB =
+          bridgeAlong[i] * (1.0 - t1) + bridgeAlong[i + 1] * t1;
+
+      const float profileA = getBridgeProfile(alongA);
+      const float profileB = getBridgeProfile(alongB);
+
+      const float bridgeOffsetA = bridgeHeightMeters * verticalScale * profileA;
+
+      const float bridgeOffsetB = bridgeHeightMeters * verticalScale * profileB;
+
+      const float thicknessA = bridgeThicknessMeters * verticalScale * profileA;
+
+      const float thicknessB = bridgeThicknessMeters * verticalScale * profileB;
+
+      yALeft += heightOffset + bridgeOffsetA;
+      yARight += heightOffset + bridgeOffsetA;
+
+      yBLeft += heightOffset + bridgeOffsetB;
+      yBRight += heightOffset + bridgeOffsetB;
+
+      if (isBridge) {
+        const float bottomALeft = yALeft - thicknessA;
+        const float bottomARight = yARight - thicknessA;
+
+        const float bottomBLeft = yBLeft - thicknessB;
+        const float bottomBRight = yBRight - thicknessB;
+
+        // Более тёмный цвет нижней части моста.
+        const float sideR = color.roofR * 0.65f;
+        const float sideG = color.roofG * 0.65f;
+        const float sideB = color.roofB * 0.65f;
+
+        // Левая боковая грань.
+        addVertex(featureVertices, aLeft, yALeft, sideR, sideG, sideB);
+        addVertex(featureVertices, bLeft, yBLeft, sideR, sideG, sideB);
+        addVertex(featureVertices, bLeft, bottomBLeft, sideR, sideG, sideB);
+
+        addVertex(featureVertices, aLeft, yALeft, sideR, sideG, sideB);
+        addVertex(featureVertices, bLeft, bottomBLeft, sideR, sideG, sideB);
+        addVertex(featureVertices, aLeft, bottomALeft, sideR, sideG, sideB);
+
+        // Правая боковая грань.
+        addVertex(featureVertices, aRight, yARight, sideR, sideG, sideB);
+        addVertex(featureVertices, bRight, bottomBRight, sideR, sideG, sideB);
+        addVertex(featureVertices, bRight, yBRight, sideR, sideG, sideB);
+
+        addVertex(featureVertices, aRight, yARight, sideR, sideG, sideB);
+        addVertex(featureVertices, bRight, bottomBRight, sideR, sideG, sideB);
+        addVertex(featureVertices, aRight, bottomARight, sideR, sideG, sideB);
+
+        // Нижняя поверхность моста.
+        addVertex(featureVertices, aLeft, bottomALeft, sideR, sideG, sideB);
+        addVertex(featureVertices, aRight, bottomARight, sideR, sideG, sideB);
+        addVertex(featureVertices, bLeft, bottomBLeft, sideR, sideG, sideB);
+
+        addVertex(featureVertices, aRight, bottomARight, sideR, sideG, sideB);
+        addVertex(featureVertices, bRight, bottomBRight, sideR, sideG, sideB);
+        addVertex(featureVertices, bLeft, bottomBLeft, sideR, sideG, sideB);
+      }
 
       // Первый треугольник.
       addVertex(featureVertices, aLeft, yALeft, color.roofR, color.roofG,
@@ -992,10 +1130,25 @@ void GLWidget::rebuildFeatureMesh() {
 
   int buildings = 0;
   int roads = 0;
+  int bridges = 0;
   int water = 0;
   int vegetation = 0;
   int railways = 0;
   int other = 0;
+
+  // Строим общий профиль для каждой группы мостовых линий.
+  std::unordered_map<const OSMFeature *, BridgeProfile> bridgeProfiles;
+
+  const auto bridgeGroups = groupBridges();
+
+  for (const auto &group : bridgeGroups) {
+    const BridgeProfile profile = buildBridgeProfile(group);
+
+    for (const OSMFeature *feature : group) {
+      if (feature)
+        bridgeProfiles.emplace(feature, profile);
+    }
+  }
 
   for (const OSMFeature &feature : features) {
     if (feature.geometry.isEmpty())
@@ -1012,6 +1165,7 @@ void GLWidget::rebuildFeatureMesh() {
       break;
 
     case OSMFeatureType::Road:
+    case OSMFeatureType::Bridge: {
       if (feature.geometryType == OSMGeometryType::Polygon) {
         appendPolygon(feature, 0.0015f);
       } else if (feature.geometryType == OSMGeometryType::LineString) {
@@ -1019,11 +1173,26 @@ void GLWidget::rebuildFeatureMesh() {
                                 ? static_cast<float>(feature.widthMeters)
                                 : 4.0f;
 
-        appendLine(feature, width, 0.0015f);
+        // Одна функция строит и дорогу, и мост.
+        // Разница определяется внутри appendLine по feature.type.
+        const BridgeProfile *profile = nullptr;
+
+        if (feature.type == OSMFeatureType::Bridge) {
+          const auto it = bridgeProfiles.find(&feature);
+
+          if (it != bridgeProfiles.end())
+            profile = &it->second;
+        }
+        appendLine(feature, width, 0.0015f, profile);
       }
 
-      ++roads;
+      if (feature.type == OSMFeatureType::Bridge)
+        ++bridges;
+      else
+        ++roads;
+
       break;
+    }
 
     case OSMFeatureType::Water:
       if (feature.geometryType == OSMGeometryType::Polygon) {
@@ -1045,9 +1214,7 @@ void GLWidget::rebuildFeatureMesh() {
         if (feature.widthMeters > 0.0)
           width = static_cast<float>(feature.widthMeters);
 
-        appendLine(feature, width, 0.0025f);
-        qDebug() << "RIVER RENDER:" << feature.id << "width:" << width
-                 << "points:" << feature.geometry.size();
+        appendLine(feature, width, 0.0025f, nullptr);
       }
 
       ++water;
@@ -1075,7 +1242,7 @@ void GLWidget::rebuildFeatureMesh() {
                                 ? static_cast<float>(feature.widthMeters)
                                 : 4.5f;
 
-        appendLine(feature, width, 0.002f);
+        appendLine(feature, width, 0.002f, nullptr);
       }
 
       ++railways;
@@ -1100,9 +1267,9 @@ void GLWidget::rebuildFeatureMesh() {
 
   qDebug() << "OSM mesh rebuilt:"
            << "buildings =" << buildings << "roads =" << roads
-           << "water =" << water << "vegetation =" << vegetation
-           << "railways =" << railways << "other =" << other
-           << "vertices =" << featureVertices.size();
+           << "bridges =" << bridges << "water =" << water
+           << "vegetation =" << vegetation << "railways =" << railways
+           << "other =" << other << "vertices =" << featureVertices.size();
 }
 
 void GLWidget::uploadFeatureBuffer() {
@@ -1233,7 +1400,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
-  zoom -= event->angleDelta().y() / 120.0f * 0.25f;
+  zoom -= event->angleDelta().y() / 120.0f * 0.05f;
 
   zoom = std::clamp(zoom, 0.01f, 15.0f);
 
@@ -1282,4 +1449,192 @@ GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
   result.height = static_cast<float>(2.0 * physicalHeight / maxDimension);
 
   return result;
+}
+
+QVector<QVector<const OSMFeature *>> GLWidget::groupBridges() const {
+  QVector<QVector<const OSMFeature *>> groups;
+  QVector<bool> assigned(features.size(), false);
+
+  constexpr double maxGroupDistanceMeters = 25.0;
+
+  for (int i = 0; i < features.size(); ++i) {
+    const OSMFeature &first = features[i];
+
+    if (assigned[i] || first.type != OSMFeatureType::Bridge ||
+        first.geometryType != OSMGeometryType::LineString ||
+        first.geometry.size() < 2) {
+      continue;
+    }
+
+    QVector<const OSMFeature *> group;
+    group.push_back(&first);
+    assigned[i] = true;
+
+    const QString bridgeName = first.tags.value("bridge:name").toString();
+
+    const QString layer = first.tags.value("layer").toString();
+
+    // Без имени моста не пытаемся объединять линии:
+    // оставляем отдельную линию самостоятельной группой.
+    if (bridgeName.isEmpty()) {
+      groups.push_back(group);
+      continue;
+    }
+
+    // Пространственный центр первой линии.
+    double refLat = 0.0;
+    double refLon = 0.0;
+
+    for (const GeoPoint &p : first.geometry) {
+      refLat += p.lat;
+      refLon += p.lon;
+    }
+
+    refLat /= first.geometry.size();
+    refLon /= first.geometry.size();
+
+    const double metersPerLon = 111320.0 * std::cos(qDegreesToRadians(refLat));
+
+    auto bounds = [&](const OSMFeature &feature) {
+      std::array<double, 4> b = {std::numeric_limits<double>::max(),
+                                 std::numeric_limits<double>::max(),
+                                 std::numeric_limits<double>::lowest(),
+                                 std::numeric_limits<double>::lowest()};
+
+      for (const GeoPoint &p : feature.geometry) {
+        const double x = (p.lon - refLon) * metersPerLon;
+        const double y = (p.lat - refLat) * 111132.0;
+
+        b[0] = std::min(b[0], x);
+        b[1] = std::min(b[1], y);
+        b[2] = std::max(b[2], x);
+        b[3] = std::max(b[3], y);
+      }
+
+      return b;
+    };
+
+    const auto firstBounds = bounds(first);
+
+    // Добавляем только линии с тем же именем и layer,
+    // расположенные рядом с первой линией.
+    for (int j = i + 1; j < features.size(); ++j) {
+      const OSMFeature &candidate = features[j];
+
+      if (assigned[j] || candidate.type != OSMFeatureType::Bridge ||
+          candidate.geometryType != OSMGeometryType::LineString ||
+          candidate.geometry.size() < 2) {
+        continue;
+      }
+
+      if (candidate.tags.value("bridge:name").toString() != bridgeName ||
+          candidate.tags.value("layer").toString() != layer) {
+        continue;
+      }
+
+      const auto candidateBounds = bounds(candidate);
+
+      const double dx = std::max({0.0, firstBounds[0] - candidateBounds[2],
+                                  candidateBounds[0] - firstBounds[2]});
+
+      const double dy = std::max({0.0, firstBounds[1] - candidateBounds[3],
+                                  candidateBounds[1] - firstBounds[3]});
+
+      if (std::hypot(dx, dy) > maxGroupDistanceMeters)
+        continue;
+
+      group.push_back(&candidate);
+      assigned[j] = true;
+    }
+
+    groups.push_back(group);
+  }
+
+  return groups;
+}
+
+GLWidget::BridgeProfile
+GLWidget::buildBridgeProfile(const QVector<const OSMFeature *> &group) const {
+
+  BridgeProfile profile;
+
+  if (group.isEmpty())
+    return profile;
+
+  // Находим самую длинную линию группы.
+  // По ней определяем общее направление моста.
+  const OSMFeature *axisFeature = nullptr;
+  double longestLength = 0.0;
+
+  for (const OSMFeature *feature : group) {
+    if (!feature || feature->geometry.size() < 2)
+      continue;
+
+    double length = 0.0;
+
+    for (int i = 1; i < feature->geometry.size(); ++i)
+      length +=
+          geoDistanceMeters(feature->geometry[i - 1], feature->geometry[i]);
+
+    if (length > longestLength) {
+      longestLength = length;
+      axisFeature = feature;
+    }
+  }
+
+  if (!axisFeature || longestLength <= 0.0)
+    return profile;
+
+  profile.refLat = axisFeature->geometry.first().lat;
+  profile.refLon = axisFeature->geometry.first().lon;
+
+  const double metersPerLon =
+      111320.0 * std::cos(qDegreesToRadians(profile.refLat));
+
+  auto localPoint = [&](const GeoPoint &p) {
+    return QVector2D(
+        static_cast<float>((p.lon - profile.refLon) * metersPerLon),
+        static_cast<float>((p.lat - profile.refLat) * 111132.0));
+  };
+
+  const QVector2D axisStart = localPoint(axisFeature->geometry.first());
+
+  const QVector2D axisEnd = localPoint(axisFeature->geometry.last());
+
+  QVector2D axis = axisEnd - axisStart;
+
+  if (axis.lengthSquared() < 1e-8f)
+    return profile;
+
+  axis.normalize();
+
+  profile.axisX = axis.x();
+  profile.axisY = axis.y();
+
+  profile.minAlong = std::numeric_limits<double>::max();
+  profile.maxAlong = std::numeric_limits<double>::lowest();
+
+  // Общие начало и конец профиля для всех линий группы.
+  for (const OSMFeature *feature : group) {
+    if (!feature)
+      continue;
+
+    for (const GeoPoint &p : feature->geometry) {
+      const QVector2D local = localPoint(p);
+
+      const double along = QVector2D::dotProduct(local, axis);
+
+      profile.minAlong = std::min(profile.minAlong, along);
+      profile.maxAlong = std::max(profile.maxAlong, along);
+    }
+  }
+
+  if (profile.maxAlong <= profile.minAlong)
+    return profile;
+
+  profile.heightMeters = 5.0f;
+  profile.rampLength = 20.0f;
+  profile.valid = true;
+
+  return profile;
 }

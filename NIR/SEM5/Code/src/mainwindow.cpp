@@ -373,14 +373,6 @@ void MainWindow::loadOSMFeatures(const QJsonArray &elements) {
     }
   }
 
-  qDebug() << "Загружено OSM объектов:" << features.size();
-
-  qDebug() << "Здания:" << buildings;
-  qDebug() << "Дороги:" << roads;
-  qDebug() << "Вода:" << water;
-  qDebug() << "Растительность:" << vegetation;
-  qDebug() << "Другие:" << other;
-
   // Передаём все объекты в OpenGL
   glWidget->setFeatures(features);
 }

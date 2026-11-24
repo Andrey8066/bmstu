@@ -58,6 +58,22 @@ protected:
   void wheelEvent(QWheelEvent *event) override;
 
 private:
+  struct BridgeProfile {
+    bool valid = false;
+
+    double refLat = 0.0;
+    double refLon = 0.0;
+
+    double axisX = 0.0;
+    double axisY = 0.0;
+
+    double minAlong = 0.0;
+    double maxAlong = 0.0;
+
+    float heightMeters = 5.0f;
+    float rampLength = 20.0f;
+  };
+
   struct Vertex {
     float x, y, z;
     float r, g, b;
@@ -82,12 +98,17 @@ private:
   void rebuildMesh();
   void rebuildFeatureMesh();
 
+  BridgeProfile
+  buildBridgeProfile(const QVector<const OSMFeature *> &group) const;
+
+  QVector<QVector<const OSMFeature *>> groupBridges() const;
+
   void appendBuilding(const OSMFeature &feature);
 
   void appendPolygon(const OSMFeature &feature, float heightOffset = 0.0f);
 
   void appendLine(const OSMFeature &feature, float widthMeters,
-                  float heightOffset = 0.0f);
+                  float heightOffset, const BridgeProfile *bridgeProfile);
 
   void appendPoint(const OSMFeature &feature, float sizeMeters,
                    float heightOffset = 0.0f);
