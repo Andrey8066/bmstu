@@ -17,7 +17,7 @@ bool DEMReader::loadDem(const QString &fileName, DEMData &out) {
       GDALOpen(fileName.toLocal8Bit().constData(), GA_ReadOnly));
 
   if (!dataset) {
-    qWarning() << "Не удалось открыть DEM:" << fileName;
+    qWarning() << "[DEM] Не удалось открыть DEM:" << fileName;
     return false;
   }
 
@@ -59,11 +59,6 @@ bool DEMReader::loadDem(const QString &fileName, DEMData &out) {
 
   const double actualOffset = band->GetOffset();
 
-  qDebug() << "DEM:" << width << "x" << height;
-  qDebug() << "Projection:" << result.projectionWkt;
-  qDebug() << "NoData:" << hasNoData << noData;
-  qDebug() << "Scale:" << actualScale << "Offset:" << actualOffset;
-
   result.elevation.resize(static_cast<std::size_t>(width) * height);
 
   const CPLErr readResult =
@@ -103,9 +98,6 @@ bool DEMReader::loadDem(const QString &fileName, DEMData &out) {
   result.maxElevation = maxZ;
 
   out = std::move(result);
-
-  qDebug() << "DEM loaded:" << out.width << "x" << out.height
-           << "elevation range:" << out.minElevation << out.maxElevation;
 
   return true;
 }

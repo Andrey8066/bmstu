@@ -41,7 +41,7 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
   activeQuery = buildOverpassQuery(timeout, queryType);
 
   if (activeQuery.isEmpty()) {
-    qDebug() << "Неизвестный тип запроса:" << queryType;
+    qDebug() << "[OSM] Неизвестный тип запроса:" << queryType;
     return {};
   }
 
@@ -60,9 +60,9 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
 
   activeQuery.replace("{{bbox}}", bbox);
 
-  qDebug() << "Тип запроса:" << queryType;
-  qDebug() << "BBox:" << bbox;
-  qDebug() << "Весь запрос:" << activeQuery;
+  qDebug() << "[OSM] Тип запроса:" << queryType;
+  qDebug() << "[OSM] BBox:" << bbox;
+  qDebug() << "[OSM] Весь запрос:" << activeQuery;
 
   // Основной и резервные серверы Overpass API.
   servers = {"https://overpass-api.de/api/interpreter",
@@ -89,7 +89,7 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
 
 void OSMDataLoader::sendNextRequest() {
   if (requestAttempt >= maxAttempts) {
-    qDebug() << "Все попытки загрузки OSM исчерпаны";
+    qDebug() << "[OSM] Все попытки загрузки OSM исчерпаны";
 
     emit errorOccurred("Не удалось загрузить OSM после всех попыток");
 
@@ -99,9 +99,8 @@ void OSMDataLoader::sendNextRequest() {
   const int serverIndex = requestAttempt % servers.size();
   const QString serverUrl = servers[serverIndex];
 
-  qDebug() << "================================";
-  qDebug() << "Попытка загрузки:" << requestAttempt + 1;
-  qDebug() << "Сервер:" << serverUrl;
+  qDebug() << "[OSM] Попытка загрузки:" << requestAttempt + 1;
+  qDebug() << "[OSM] Сервер:" << serverUrl;
 
   QNetworkRequest request{QUrl(serverUrl)};
 
@@ -129,7 +128,7 @@ void OSMDataLoader::sendNextRequest() {
 
     const auto networkError = currentReply->error();
 
-    qDebug() << "HTTP status:" << status;
+    qDebug() << "[OSM] HTTP status:" << status;
 
     if (networkError != QNetworkReply::NoError) {
 
@@ -137,8 +136,8 @@ void OSMDataLoader::sendNextRequest() {
 
       const QByteArray response = currentReply->readAll();
 
-      qDebug() << "Ошибка загрузки:" << error;
-      qDebug() << "Ответ сервера:" << response;
+      qDebug() << "[OSM] Ошибка загрузки:" << error;
+      qDebug() << "[OSM] Ответ сервера:" << response;
 
       const bool retryable = status == 0 || status == 429 || status == 502 ||
                              status == 503 || status == 504 ||
@@ -163,7 +162,7 @@ void OSMDataLoader::sendNextRequest() {
         return;
       }
 
-      qDebug() << "Повторная попытка через" << delay << "мс";
+      qDebug() << "[OSM] Повторная попытка через" << delay << "мс";
 
       QTimer::singleShot(delay, this, [this]() { sendNextRequest(); });
 
@@ -183,7 +182,7 @@ void OSMDataLoader::sendNextRequest() {
 
     if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
 
-      qDebug() << "Ошибка парсинга JSON:" << parseError.errorString();
+      qDebug() << "[OSM] Ошибка парсинга JSON:" << parseError.errorString();
 
       emit errorOccurred("Сервер вернул некорректный JSON");
 
@@ -203,9 +202,9 @@ void OSMDataLoader::sendNextRequest() {
 
     const QJsonArray elements = root["elements"].toArray();
 
-    qDebug() << "OSM JSON успешно получен";
-    qDebug() << "Получено байт:" << response.size();
-    qDebug() << "Количество объектов:" << elements.size();
+    qDebug() << "[OSM] OSM JSON успешно получен";
+    qDebug() << "[OSM] Получено байт:" << response.size();
+    qDebug() << "[OSM] Количество объектов:" << elements.size();
 
     emit dataLoaded(elements, activeQueryType);
   });
@@ -270,7 +269,7 @@ QString OSMDataLoader::saveToJSONFile(const QJsonArray &data,
   QFile file(filename);
 
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    qDebug() << "Ошибка открытия файла для записи:" << filename;
+    qDebug() << "[OSM] Ошибка открытия файла для записи:" << filename;
     return "";
   }
 
@@ -282,7 +281,7 @@ QString OSMDataLoader::saveToJSONFile(const QJsonArray &data,
 
 void OSMDataLoader::waitData() {
   if (!reply) {
-    qDebug() << "Нет активного запроса";
+    qDebug() << "[OSM] Нет активного запроса";
     return;
   }
 
@@ -294,7 +293,7 @@ void OSMDataLoader::waitData() {
     loop.exec();
   }
 
-  qDebug() << "waitData(): запрос завершён";
+  qDebug() << "[OSM] waitData(): запрос завершён";
 }
 
 double OSMDataLoader::radToLat(double radius) {

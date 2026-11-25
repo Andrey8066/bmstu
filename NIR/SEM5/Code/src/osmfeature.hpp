@@ -16,6 +16,8 @@ enum class OSMFeatureType {
   Unknown,
   Building,
   Road,
+  PedestrianRoad,
+  Bridge,
   Water,
   Vegetation,
   Landuse,

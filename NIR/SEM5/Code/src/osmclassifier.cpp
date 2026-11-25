@@ -7,8 +7,21 @@ OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
     return OSMFeatureType::Building;
 
   // Дороги
-  if (tags.contains("highway"))
+  if (tags.contains("highway")) {
+    // Мосты
+    if (tags.value("bridge").toString() != "" &&
+        tags.value("bridge").toString() != "no") {
+      return OSMFeatureType::Bridge;
+    }
+    if (tags.value("highway").toString() != "footway" &&
+        tags.value("highway").toString() != "pedestrian" &&
+        tags.value("highway").toString() != "path" &&
+        tags.value("highway").toString() != "steps" &&
+        tags.value("highway").toString() != "corridor") {
+      return OSMFeatureType::PedestrianRoad;
+    }
     return OSMFeatureType::Road;
+  }
 
   // Железные дороги
   if (tags.contains("railway"))
