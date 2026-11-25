@@ -179,11 +179,6 @@ void MainWindow::onLoadButtonClicked() {
   const double radius = radiusInput->value();
   const double timeout = timeoutInput->value();
 
-  qDebug() << "Latitude:" << latitude;
-  qDebug() << "Longitude:" << longitude;
-  qDebug() << "Radius:" << radius;
-  qDebug() << "Timeout:" << timeout;
-
   // ------------------------------------------------
   // 1. Загрузка OSM
   // ------------------------------------------------
@@ -223,13 +218,6 @@ void MainWindow::onLoadButtonClicked() {
         "Рассчитанная область выходит за допустимые границы координат.");
     return;
   }
-
-  qDebug() << "DEM bounds:";
-  qDebug() << "South:" << south;
-  qDebug() << "North:" << north;
-  qDebug() << "West:" << west;
-  qDebug() << "East:" << east;
-
   // ------------------------------------------------
   // 3. Подготовка пути сохранения DEM
   // ------------------------------------------------
@@ -250,13 +238,7 @@ void MainWindow::onLoadButtonClicked() {
   // 4. Запуск загрузки DEM
   // ------------------------------------------------
 
-  qDebug() << "Проверка DEM loader:" << demLoader;
-
-  qDebug() << "Запускаем загрузку DEM...";
-
   demLoader->downloadDEM(south, north, west, east, outputFile);
-
-  qDebug() << "Вызов downloadDEM выполнен";
 }
 
 // Загрузка локального JSON
@@ -338,39 +320,6 @@ void MainWindow::loadOSMFeatures(const QJsonArray &elements) {
                              "Не удалось найти поддерживаемые OSM-объекты.");
 
     return;
-  }
-
-  // Статистика
-  int buildings = 0;
-  int roads = 0;
-  int water = 0;
-  int vegetation = 0;
-  int other = 0;
-
-  for (const OSMFeature &feature : features) {
-
-    switch (feature.type) {
-
-    case OSMFeatureType::Building:
-      ++buildings;
-      break;
-
-    case OSMFeatureType::Road:
-      ++roads;
-      break;
-
-    case OSMFeatureType::Water:
-      ++water;
-      break;
-
-    case OSMFeatureType::Vegetation:
-      ++vegetation;
-      break;
-
-    default:
-      ++other;
-      break;
-    }
   }
 
   // Передаём все объекты в OpenGL

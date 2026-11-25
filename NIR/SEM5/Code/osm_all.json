@@ -88829,6 +88829,82 @@
     },
     {
         "bounds": {
+            "maxlat": 55.7624846,
+            "maxlon": 37.6862502,
+            "minlat": 55.761847,
+            "minlon": 37.6844701
+        },
+        "geometry": [
+            {
+                "lat": 55.7624846,
+                "lon": 37.6844701
+            },
+            {
+                "lat": 55.761847,
+                "lon": 37.6862502
+            }
+        ],
+        "id": 227387313,
+        "nodes": [
+            2360761253,
+            1507754847
+        ],
+        "tags": {
+            "bridge": "yes",
+            "bridge:name": "Лефортовский мост",
+            "electrified": "contact_line",
+            "frequency": "0",
+            "gauge": "1524",
+            "layer": "1",
+            "maxspeed": "60",
+            "oneway": "yes",
+            "railway": "tram",
+            "railway:preferred_direction": "forward",
+            "usage": "main",
+            "voltage": "600"
+        },
+        "type": "way"
+    },
+    {
+        "bounds": {
+            "maxlat": 55.7625092,
+            "maxlon": 37.6862778,
+            "minlat": 55.761871,
+            "minlon": 37.6844984
+        },
+        "geometry": [
+            {
+                "lat": 55.761871,
+                "lon": 37.6862778
+            },
+            {
+                "lat": 55.7625092,
+                "lon": 37.6844984
+            }
+        ],
+        "id": 227387316,
+        "nodes": [
+            1507754850,
+            2360761255
+        ],
+        "tags": {
+            "bridge": "yes",
+            "bridge:name": "Лефортовский мост",
+            "electrified": "contact_line",
+            "frequency": "0",
+            "gauge": "1524",
+            "layer": "1",
+            "maxspeed": "60",
+            "oneway": "yes",
+            "railway": "tram",
+            "railway:preferred_direction": "forward",
+            "usage": "main",
+            "voltage": "600"
+        },
+        "type": "way"
+    },
+    {
+        "bounds": {
             "maxlat": 55.7637937,
             "maxlon": 37.6776705,
             "minlat": 55.7633197,

@@ -1,34 +1,42 @@
-
 #include "osmclassifier.hpp"
 
 OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
+  OSMFeatureType type = OSMFeatureType::Unknown;
+
   // Здания
   if (tags.contains("building") || tags.contains("building:part"))
-    return OSMFeatureType::Building;
+    type |= OSMFeatureType::Building;
 
   // Дороги
   if (tags.contains("highway")) {
-    // Мосты
-    if (tags.value("bridge").toString() != "" &&
-        tags.value("bridge").toString() != "no") {
-      return OSMFeatureType::Bridge;
-    }
-    QString highway = tags.value("highway").toString();
-    if (highway == "footway" || highway == "pedestrian" || highway == "path" ||
-        highway == "steps" || highway == "corridor") {
-      return OSMFeatureType::PedestrianRoad;
-    }
-    return OSMFeatureType::Road;
+
+    type |= OSMFeatureType::Road;
+  }
+
+  // Пешеходные дороги
+  const QString highway = tags.value("highway").toString();
+  if (highway == "footway" || highway == "pedestrian" || highway == "path" ||
+      highway == "steps" || highway == "corridor") {
+    type |= OSMFeatureType::PedestrianRoad;
+  }
+
+  // Мосты
+  const QString bridge = tags.value("bridge").toString();
+
+  if (tags.contains("bridge") ||
+      tags.value("man_made").toString() == "bridge") {
+    type |= OSMFeatureType::Bridge;
   }
 
   // Железные дороги
   if (tags.contains("railway"))
-    return OSMFeatureType::Railway;
+    type |= OSMFeatureType::Railway;
 
   // Вода
-  if (tags.contains("waterway") ||
-      tags.value("natural").toString() == "water" || tags.contains("water")) {
-    return OSMFeatureType::Water;
+  if ((tags.contains("waterway") ||
+       tags.value("natural").toString() == "water" || tags.contains("water")) &&
+      tags.value("tunnel").toString() != "culvert") {
+    type |= OSMFeatureType::Water;
   }
 
   // Растительность
@@ -38,18 +46,18 @@ OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
 
   if (natural == "wood" || natural == "tree" || natural == "scrub" ||
       landuse == "forest" || leisure == "park") {
-    return OSMFeatureType::Vegetation;
+    type |= OSMFeatureType::Vegetation;
   }
 
   // Остальные территории
   if (tags.contains("landuse"))
-    return OSMFeatureType::Landuse;
+    type |= OSMFeatureType::Landuse;
 
   // Общественные объекты
   if (tags.contains("amenity") || tags.contains("shop") ||
       tags.contains("office")) {
-    return OSMFeatureType::Amenity;
+    type |= OSMFeatureType::Amenity;
   }
 
-  return OSMFeatureType::Unknown;
+  return type;
 }

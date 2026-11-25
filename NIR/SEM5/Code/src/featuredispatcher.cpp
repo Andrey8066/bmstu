@@ -14,38 +14,45 @@ void FeatureDispatcher::dispatch(const OSMFeature &feature) {
   if (feature.geometry.isEmpty())
     return;
 
-  switch (feature.type) {
-  case OSMFeatureType::Building:
+  // Здания
+  if (feature.hasType(OSMFeatureType::Building)) {
     dispatchBuilding(feature);
-    break;
+  }
 
-  case OSMFeatureType::Road:
+  // Дороги
+  if (feature.hasType(OSMFeatureType::Road) ||
+      feature.hasType(OSMFeatureType::PedestrianRoad)) {
     dispatchRoad(feature);
-    break;
+  }
 
-  case OSMFeatureType::Water:
+  // Мосты
+  if (feature.hasType(OSMFeatureType::Bridge)) {
+    dispatchRoad(feature);
+  }
+
+  // Вода
+  if (feature.hasType(OSMFeatureType::Water)) {
     dispatchWater(feature);
-    break;
+  }
 
-  case OSMFeatureType::Vegetation:
+  // Растительность
+  if (feature.hasType(OSMFeatureType::Vegetation)) {
     dispatchVegetation(feature);
-    break;
+  }
 
-  case OSMFeatureType::Landuse:
+  // Территории
+  if (feature.hasType(OSMFeatureType::Landuse)) {
     dispatchLanduse(feature);
-    break;
+  }
 
-  case OSMFeatureType::Railway:
+  // Железные дороги
+  if (feature.hasType(OSMFeatureType::Railway)) {
     dispatchRailway(feature);
-    break;
+  }
 
-  case OSMFeatureType::Amenity:
+  // Общественные объекты
+  if (feature.hasType(OSMFeatureType::Amenity)) {
     dispatchAmenity(feature);
-    break;
-
-  case OSMFeatureType::Unknown:
-  default:
-    break;
   }
 }
 

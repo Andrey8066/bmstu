@@ -108,7 +108,7 @@ private:
   void appendPolygon(const OSMFeature &feature, float heightOffset = 0.0f);
 
   void appendLine(const OSMFeature &feature, float widthMeters,
-                  float heightOffset, const BridgeProfile *bridgeProfile);
+                  float heightOffset);
 
   void appendPoint(const OSMFeature &feature, float sizeMeters,
                    float heightOffset = 0.0f);

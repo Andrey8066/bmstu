@@ -65,8 +65,8 @@ QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
   qDebug() << "[OSM] Весь запрос:" << activeQuery;
 
   // Основной и резервные серверы Overpass API.
-  servers = {"https://overpass-api.de/api/interpreter",
-             "https://overpass.private.coffee/api/interpreter",
+  servers = {// "https://overpass-api.de/api/interpreter",
+             //"https://overpass.private.coffee/api/interpreter",
              "https://maps.mail.ru/osm/tools/overpass/api/interpreter"};
 
   requestAttempt = 0;
@@ -249,6 +249,8 @@ QString OSMDataLoader::buildOverpassQuery(const int &timeout,
                   nwr["building"]({{bbox}});
                   nwr["building:part"]({{bbox}});
                   nwr["highway"]({{bbox}});
+                  nwr["bridge"]({{bbox}});
+                  
 
                   nwr["waterway"]({{bbox}});
                   nwr["natural"="water"]({{bbox}});

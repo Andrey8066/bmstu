@@ -12,18 +12,37 @@ struct GeoPoint {
 
 enum class OSMGeometryType { Point, LineString, Polygon };
 
-enum class OSMFeatureType {
-  Unknown,
-  Building,
-  Road,
-  PedestrianRoad,
-  Bridge,
-  Water,
-  Vegetation,
-  Landuse,
-  Railway,
-  Amenity
+enum class OSMFeatureType : quint32 {
+  Unknown = 0,
+  Building = 1 << 0,
+  Road = 1 << 1,
+  PedestrianRoad = 1 << 2,
+  Bridge = 1 << 3,
+  Water = 1 << 4,
+  Vegetation = 1 << 5,
+  Landuse = 1 << 6,
+  Railway = 1 << 7,
+  Amenity = 1 << 8
 };
+
+inline OSMFeatureType operator|(OSMFeatureType a, OSMFeatureType b) {
+  return static_cast<OSMFeatureType>(static_cast<quint32>(a) |
+                                     static_cast<quint32>(b));
+}
+
+inline OSMFeatureType operator&(OSMFeatureType a, OSMFeatureType b) {
+  return static_cast<OSMFeatureType>(static_cast<quint32>(a) &
+                                     static_cast<quint32>(b));
+}
+
+inline OSMFeatureType &operator|=(OSMFeatureType &a, OSMFeatureType b) {
+  a = a | b;
+  return a;
+}
+
+inline bool hasType(OSMFeatureType value, OSMFeatureType flag) {
+  return (value & flag) != OSMFeatureType::Unknown;
+}
 
 struct Colors {
   float wallR = 1.0f;
@@ -60,4 +79,8 @@ struct OSMFeature {
   float widthMeters = 0.0f;
 
   Colors colors;
+
+  bool hasType(OSMFeatureType flag) const {
+    return ::hasType(this->type, flag);
+  };
 };

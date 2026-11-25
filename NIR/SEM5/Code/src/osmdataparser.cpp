@@ -367,7 +367,7 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
 
     feature.type = OSMClassifier::classify(feature.tags);
 
-    if (feature.type == OSMFeatureType::Unknown)
+    if (feature.hasType(OSMFeatureType::Unknown))
       continue;
 
     // Relation обрабатываем отдельно.
@@ -385,7 +385,7 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       // 2. Внутренние кольца нужны только зданиям.
       QVector<QVector<GeoPoint>> innerRings;
 
-      if (feature.type == OSMFeatureType::Building) {
+      if (feature.hasType(OSMFeatureType::Building)) {
         innerRings = readRings(object, "inner");
       }
 
@@ -396,11 +396,11 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
         relationFeature.geometryType = OSMGeometryType::Polygon;
         relationFeature.geometry = outer;
 
-        if (relationFeature.type == OSMFeatureType::Water) {
+        if (relationFeature.hasType(OSMFeatureType::Water)) {
           relationFeature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
         }
 
-        if (relationFeature.type == OSMFeatureType::Building) {
+        if (relationFeature.hasType(OSMFeatureType::Building)) {
           relationFeature.heightMeters =
               parseBuildingHeight(relationFeature.tags);
           relationFeature.minHeightMeters = 0.0f;
@@ -441,7 +441,7 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
 
       continue;
     }
-    if (feature.type == OSMFeatureType::Building) {
+    if (feature.hasType(OSMFeatureType::Building)) {
       feature.heightMeters = parseBuildingHeight(feature.tags);
       feature.minHeightMeters = 0.0f;
 
@@ -458,12 +458,12 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       feature.colors = getBuildingColors(feature.tags);
     }
 
-    if (feature.type == OSMFeatureType::Road ||
-        feature.type == OSMFeatureType::Bridge) {
+    if (feature.hasType(OSMFeatureType::Road) ||
+        feature.hasType(OSMFeatureType::Bridge)) {
       feature.widthMeters = parseRoadWidth(feature.tags);
     }
 
-    if (feature.type == OSMFeatureType::PedestrianRoad) {
+    if (feature.hasType(OSMFeatureType::PedestrianRoad)) {
       feature.widthMeters = parseRoadWidth(feature.tags);
       QString highway = feature.tags.value("highway").toString();
       feature.colors = Colors(0, 0.5f, 0, 0, 0.5f, 0);
@@ -471,7 +471,7 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       if (highway == "steps")
         feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
     }
-    if (feature.type == OSMFeatureType::Water) {
+    if (feature.hasType(OSMFeatureType::Water)) {
       feature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
       if (feature.tags.contains("width")) {
         QString width = feature.tags.value("width").toString();
