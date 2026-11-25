@@ -1,3280 +1,114 @@
 
-#include "demreader.hpp"
-
-#include <gdal_priv.h>
-
-#include <algorithm>
-#include <cmath>
-#include <limits>
-
-#include <QDebug>
-
-bool DEMReader::loadDem(const QString &fileName, DEMData &out) {
-  GDALAllRegister();
-  out = DEMData{};
-
-  GDALDataset *dataset = static_cast<GDALDataset *>(
-      GDALOpen(fileName.toLocal8Bit().constData(), GA_ReadOnly));
-
-  if (!dataset) {
-    qWarning() << "Не удалось открыть DEM:" << fileName;
-    return false;
-  }
-
-  DEMData result;
-
-  const int width = dataset->GetRasterXSize();
-  const int height = dataset->GetRasterYSize();
-
-  if (width < 2 || height < 2 || dataset->GetRasterCount() < 1) {
-    GDALClose(dataset);
-    return false;
-  }
-
-  GDALRasterBand *band = dataset->GetRasterBand(1);
-
-  if (!band) {
-    GDALClose(dataset);
-    return false;
-  }
-
-  const char *projection = dataset->GetProjectionRef();
-  result.projectionWkt = projection ? QString::fromUtf8(projection) : QString();
-
-  if (dataset->GetGeoTransform(result.geoTransform) != CE_None) {
-    GDALClose(dataset);
-    return false;
-  }
-
-  result.width = width;
-  result.height = height;
-
-  int hasNoData = 0;
-  const double noData = band->GetNoDataValue(&hasNoData);
-
-  const double scale = band->GetScale();
-  const double offset = band->GetOffset();
-
-  const double actualScale = band->GetScale() == 0.0 ? 1.0 : scale;
-
-  const double actualOffset = band->GetOffset();
-
-  qDebug() << "DEM:" << width << "x" << height;
-  qDebug() << "Projection:" << result.projectionWkt;
-  qDebug() << "NoData:" << hasNoData << noData;
-  qDebug() << "Scale:" << actualScale << "Offset:" << actualOffset;
-
-  result.elevation.resize(static_cast<std::size_t>(width) * height);
-
-  const CPLErr readResult =
-      band->RasterIO(GF_Read, 0, 0, width, height, result.elevation.data(),
-                     width, height, GDT_Float32, 0, 0);
-
-  GDALClose(dataset);
-
-  if (readResult != CE_None) {
-    return false;
-  }
-
-  float minZ = std::numeric_limits<float>::max();
-  float maxZ = std::numeric_limits<float>::lowest();
-
-  bool hasValidHeight = false;
-
-  for (float &z : result.elevation) {
-    if (!std::isfinite(z) || (hasNoData && z == static_cast<float>(noData))) {
-      z = 0.0f;
-      continue;
-    }
-
-    z = static_cast<float>(static_cast<double>(z) * actualScale + actualOffset);
-
-    minZ = std::min(minZ, z);
-    maxZ = std::max(maxZ, z);
-
-    hasValidHeight = true;
-  }
-
-  if (!hasValidHeight) {
-    return false;
-  }
-
-  result.minElevation = minZ;
-  result.maxElevation = maxZ;
-
-  out = std::move(result);
-
-  qDebug() << "DEM loaded:" << out.width << "x" << out.height
-           << "elevation range:" << out.minElevation << out.maxElevation;
-
-  return true;
-}
-
 #pragma once
 
-#include <QString>
-#include <vector>
+enum class RoadCategory {
+  Pedestrian,
 
-struct DEMData {
-  int width = 0;
-  int height = 0;
+  Car1Lane,
+  Car2Lanes,
+  Car3Lanes,
+  Car4Lanes,
+  Car5PlusLanes,
+  CarUnknownLanes,
 
-  // Высоты: индекс = y * width + x
-  std::vector<float> elevation;
+  Motorway,
 
-  // Геотрансформация GDAL
-  double geoTransform[6] = {};
-
-  QString projectionWkt;
-
-  float minElevation = 0.0f;
-  float maxElevation = 0.0f;
+  Unknown
 };
 
-class DEMReader {
-public:
-  static bool loadDem(const QString &fileName, DEMData &out);
-};
-#include "featuredispatcher.hpp"
-#include "glwidget.hpp"
-
-#include <QDebug>
-
-FeatureDispatcher::FeatureDispatcher(GLWidget *widget) : m_widget(widget) {}
-
-void FeatureDispatcher::dispatch(const OSMFeature &feature) {
-  if (!m_widget) {
-    qWarning() << "FeatureDispatcher: GLWidget is null";
-    return;
-  }
-
-  if (feature.geometry.isEmpty())
-    return;
-
-  switch (feature.type) {
-  case OSMFeatureType::Building:
-    dispatchBuilding(feature);
-    break;
-
-  case OSMFeatureType::Road:
-    dispatchRoad(feature);
-    break;
-
-  case OSMFeatureType::Water:
-    dispatchWater(feature);
-    break;
-
-  case OSMFeatureType::Vegetation:
-    dispatchVegetation(feature);
-    break;
-
-  case OSMFeatureType::Landuse:
-    dispatchLanduse(feature);
-    break;
-
-  case OSMFeatureType::Railway:
-    dispatchRailway(feature);
-    break;
-
-  case OSMFeatureType::Amenity:
-    dispatchAmenity(feature);
-    break;
-
-  case OSMFeatureType::Unknown:
-  default:
-    break;
-  }
-}
-
-void FeatureDispatcher::dispatchAll(const QVector<OSMFeature> &features) {
-  for (const OSMFeature &feature : features)
-    dispatch(feature);
-}
-
-void FeatureDispatcher::dispatchBuilding(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
-    m_widget->addBuildingFeature(feature);
-}
-
-void FeatureDispatcher::dispatchRoad(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::LineString)
-    m_widget->addRoadFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::Polygon)
-    m_widget->addRoadAreaFeature(feature);
-}
-
-void FeatureDispatcher::dispatchWater(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
-    m_widget->addWaterAreaFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::LineString)
-    m_widget->addWaterLineFeature(feature);
-}
-
-void FeatureDispatcher::dispatchVegetation(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
-    m_widget->addVegetationAreaFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::Point)
-    m_widget->addVegetationPointFeature(feature);
-}
-
-void FeatureDispatcher::dispatchLanduse(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
-    m_widget->addLanduseAreaFeature(feature);
-}
-
-void FeatureDispatcher::dispatchRailway(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::LineString)
-    m_widget->addRailwayFeature(feature);
-}
-
-void FeatureDispatcher::dispatchAmenity(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Point)
-    m_widget->addAmenityPointFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::Polygon)
-    m_widget->addAmenityAreaFeature(feature);
-}#pragma once
-
-#include "osmfeature.hpp"
-
-class GLWidget;
-
-class FeatureDispatcher {
-public:
-  explicit FeatureDispatcher(GLWidget *widget);
-
-  void dispatch(const OSMFeature &feature);
-
-  void dispatchAll(const QVector<OSMFeature> &features);
-
-private:
-  GLWidget *m_widget = nullptr;
-
-  void dispatchBuilding(const OSMFeature &feature);
-  void dispatchRoad(const OSMFeature &feature);
-  void dispatchWater(const OSMFeature &feature);
-  void dispatchVegetation(const OSMFeature &feature);
-  void dispatchLanduse(const OSMFeature &feature);
-  void dispatchRailway(const OSMFeature &feature);
-  void dispatchAmenity(const OSMFeature &feature);
-};
-#pragma once
-
-#include <QPointF>
-#include <QtMath>
-#include <cmath>
-
-constexpr double earthRadius = 6371000.0;
-
-inline QPointF geoToLocal(double lat, double lon, double centerLat,
-                          double centerLon) {
-  const double x = earthRadius * qDegreesToRadians(lon - centerLon) *
-                   std::cos(qDegreesToRadians(centerLat));
-
-  const double y = earthRadius * qDegreesToRadians(lat - centerLat);
-
-  return QPointF(x, y);
-}
-
-#include "glwidget.hpp"
-
-#include <QDebug>
-#include <QMouseEvent>
-#include <QVector2D>
-#include <QWheelEvent>
-#include <QtMath>
-
-#include <algorithm>
-#include <array>
-#include <cmath>
-#include <mapbox/earcut.hpp>
-#include <numeric>
-#include <vector>
-
-namespace {
-
-float cross2D(const QVector2D &a, const QVector2D &b, const QVector2D &c) {
-  return (b.x() - a.x()) * (c.y() - a.y()) - (b.y() - a.y()) * (c.x() - a.x());
-}
-
-bool pointInTriangle(const QVector2D &p, const QVector2D &a, const QVector2D &b,
-                     const QVector2D &c) {
-  constexpr float eps = 1e-7f;
-
-  return cross2D(a, b, p) >= -eps && cross2D(b, c, p) >= -eps &&
-         cross2D(c, a, p) >= -eps;
-}
-
-std::vector<std::array<int, 3>>
-triangulatePolygon(const std::vector<QVector2D> &points) {
-  std::vector<std::array<int, 3>> triangles;
-
-  if (points.size() < 3)
-    return triangles;
-
-  const int n = static_cast<int>(points.size());
-
-  double area = 0.0;
-
-  for (int i = 0; i < n; ++i) {
-    const auto &a = points[i];
-    const auto &b = points[(i + 1) % n];
-
-    area += a.x() * b.y() - b.x() * a.y();
-  }
-
-  if (std::abs(area) < 1e-10)
-    return triangles;
-
-  std::vector<int> indices(n);
-  std::iota(indices.begin(), indices.end(), 0);
-
-  if (area < 0.0)
-    std::reverse(indices.begin(), indices.end());
-
-  constexpr float eps = 1e-7f;
-
-  while (indices.size() > 3) {
-    bool clipped = false;
-
-    for (std::size_t i = 0; i < indices.size(); ++i) {
-      const int prev = indices[(i + indices.size() - 1) % indices.size()];
-
-      const int curr = indices[i];
-      const int next = indices[(i + 1) % indices.size()];
-
-      const auto &a = points[prev];
-      const auto &b = points[curr];
-      const auto &c = points[next];
-
-      if (cross2D(a, b, c) <= eps)
-        continue;
-
-      bool containsPoint = false;
-
-      for (int index : indices) {
-        if (index == prev || index == curr || index == next)
-          continue;
-
-        if (pointInTriangle(points[index], a, b, c)) {
-          containsPoint = true;
-          break;
-        }
-      }
-
-      if (containsPoint)
-        continue;
-
-      triangles.push_back({prev, curr, next});
-      indices.erase(indices.begin() + static_cast<long>(i));
-
-      clipped = true;
-      break;
-    }
-
-    if (!clipped)
-      return {};
-  }
-
-  if (indices.size() == 3) {
-    triangles.push_back({indices[0], indices[1], indices[2]});
-  }
-
-  return triangles;
-}
-
-bool sameGeoPoint(const GeoPoint &a, const GeoPoint &b) {
-  return std::abs(a.lat - b.lat) < 1e-10 && std::abs(a.lon - b.lon) < 1e-10;
-}
-
-} // namespace
-
-// -----------------------------------------------------------------------------
-// Constructor / destructor
-// -----------------------------------------------------------------------------
-
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
-  setFocusPolicy(Qt::StrongFocus);
-}
-
-GLWidget::~GLWidget() {
-  if (context() && context()->isValid()) {
-    makeCurrent();
-
-    vertexBuffer.destroy();
-    featureBuffer.destroy();
-
-    doneCurrent();
-  }
-}
-
-// -----------------------------------------------------------------------------
-// OpenGL initialization
-// -----------------------------------------------------------------------------
-
-void GLWidget::initializeGL() {
-  initializeOpenGLFunctions();
-
-  glClearColor(0.08f, 0.10f, 0.13f, 1.0f);
-
-  glEnable(GL_DEPTH_TEST);
-  glDisable(GL_CULL_FACE);
-
-  const char *vertexShader = R"(
-        attribute vec3 position;
-        attribute vec3 color;
-
-        uniform mat4 mvp;
-
-        varying vec3 vertexColor;
-
-        void main()
-        {
-            gl_Position = mvp * vec4(position, 1.0);
-            vertexColor = color;
-        }
-    )";
-
-  const char *fragmentShader = R"(
-        varying vec3 vertexColor;
-
-        void main()
-        {
-            gl_FragColor = vec4(vertexColor, 1.0);
-        }
-    )";
-
-  if (!shaderProgram.addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                             vertexShader)) {
-    qWarning() << "Vertex shader error:" << shaderProgram.log();
-    return;
-  }
-
-  if (!shaderProgram.addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                             fragmentShader)) {
-    qWarning() << "Fragment shader error:" << shaderProgram.log();
-    return;
-  }
-
-  if (!shaderProgram.link()) {
-    qWarning() << "Shader link error:" << shaderProgram.log();
-    return;
-  }
-
-  shaderReady = true;
-
-  vertexBuffer.create();
-  vertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-
-  featureBuffer.create();
-  featureBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-
-  rebuildMesh();
-  rebuildFeatureMesh();
-}
-
-// -----------------------------------------------------------------------------
-// Public setters
-// -----------------------------------------------------------------------------
-
-void GLWidget::setDEM(const DEMData &data) {
-  dem = data;
-
-  qDebug() << "DEM loaded:" << dem.width << "x" << dem.height
-           << "elevation range:" << dem.minElevation << dem.maxElevation;
-
-  rebuildMesh();
-  rebuildFeatureMesh();
-
-  update();
-}
-
-void GLWidget::setFeatures(const QVector<OSMFeature> &newFeatures) {
-  features = newFeatures;
-
-  qDebug() << "OSM features:" << features.size();
-
-  rebuildFeatureMesh();
-
-  update();
-}
-
-void GLWidget::addFeature(const OSMFeature &feature) {
-  features.push_back(feature);
-
-  rebuildFeatureMesh();
-  update();
-}
-
-const DEMData &GLWidget::getDEM() const { return dem; }
-
-const QVector<OSMFeature> &GLWidget::getFeatures() const { return features; }
-
-float GLWidget::getVerticalScale() const { return verticalScaleCoefficient; }
-
-void GLWidget::setVerticalScale(float value) {
-  if (!std::isfinite(value) || value <= 0.0f)
-    return;
-
-  verticalScaleCoefficient = value;
-
-  rebuildMesh();
-  rebuildFeatureMesh();
-
-  update();
-}
-// -----------------------------------------------------------------------------
-// FeatureDispatcher compatibility methods
-// -----------------------------------------------------------------------------
-
-void GLWidget::addBuildingFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addRoadFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addRoadAreaFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addWaterAreaFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addWaterLineFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addVegetationAreaFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addVegetationPointFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addLanduseAreaFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addRailwayFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addAmenityPointFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-void GLWidget::addAmenityAreaFeature(const OSMFeature &feature) {
-  addFeature(feature);
-}
-
-// -----------------------------------------------------------------------------
-// Terrain mesh
-// -----------------------------------------------------------------------------
-
-void GLWidget::rebuildMesh() {
-  vertices.clear();
-  meshReady = false;
-
-  const int width = dem.width;
-  const int height = dem.height;
-
-  if (width < 2 || height < 2) {
-    uploadTerrainBuffer();
-    update();
-    return;
-  }
-
-  const std::size_t required = static_cast<std::size_t>(width) * height;
-
-  if (dem.elevation.size() < required) {
-    qWarning() << "Invalid DEM elevation array";
-    uploadTerrainBuffer();
-    update();
-    return;
-  }
-
-  const float elevationRange = dem.maxElevation - dem.minElevation;
-
-  const TerrainSize terrainSize = calculateTerrainSize();
-
-  if (terrainSize.width <= 0.0f || terrainSize.height <= 0.0f) {
-    uploadTerrainBuffer();
-    update();
-    return;
-  }
-
-  constexpr int maxDimension = 10000;
-
-  const int stepX =
-      std::max(1, (width - 1 + maxDimension - 2) / (maxDimension - 1));
-
-  const int stepY =
-      std::max(1, (height - 1 + maxDimension - 2) / (maxDimension - 1));
-
-  auto vertexAt = [&](int x, int y, Vertex &result) -> bool {
-    const float elevation =
-        dem.elevation[static_cast<std::size_t>(y) * width + x];
-
-    if (!std::isfinite(elevation))
-      return false;
-
-    const float nx =
-        (static_cast<float>(x) / (width - 1) - 0.5f) * terrainSize.width;
-
-    const double *gt = dem.geoTransform;
-
-    const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
-
-    const float nz = -rowDirection *
-                     (static_cast<float>(y) / (height - 1) - 0.5f) *
-                     terrainSize.height;
-
-    const float normalized =
-        elevationRange > 0.0f
-            ? std::clamp((elevation - dem.minElevation) / elevationRange, 0.0f,
-                         1.0f)
-            : 0.5f;
-
-    const float vertical = elevationRange > 0.0f
-                               ? (elevation - dem.minElevation) *
-                                     (verticalScaleCoefficient / elevationRange)
-                               : 0.0f;
-
-    float r, g, b;
-
-    if (normalized < 0.5f) {
-      const float t = normalized * 2.0f;
-
-      r = 0.12f + 0.30f * t;
-      g = 0.35f + 0.30f * t;
-      b = 0.12f + 0.05f * t;
-    } else {
-      const float t = (normalized - 0.5f) * 2.0f;
-
-      r = 0.42f + 0.50f * t;
-      g = 0.65f + 0.30f * t;
-      b = 0.17f + 0.75f * t;
-    }
-
-    result = {nx, vertical, nz, r, g, b};
-
-    return true;
-  };
-
-  for (int y = 0; y < height - 1; y += stepY) {
-    const int y2 = std::min(y + stepY, height - 1);
-
-    for (int x = 0; x < width - 1; x += stepX) {
-      const int x2 = std::min(x + stepX, width - 1);
-
-      Vertex a, b, c, d;
-
-      if (!vertexAt(x, y, a) || !vertexAt(x2, y, b) || !vertexAt(x, y2, c) ||
-          !vertexAt(x2, y2, d)) {
-        continue;
-      }
-
-      vertices.insert(vertices.end(), {a, c, b, b, c, d});
-    }
-  }
-
-  meshReady = !vertices.empty();
-
-  uploadTerrainBuffer();
-
-  qDebug() << "Terrain vertices:" << vertices.size();
-}
-
-void GLWidget::uploadTerrainBuffer() {
-  if (!context() || !context()->isValid())
-    return;
-
-  makeCurrent();
-
-  if (!vertexBuffer.isCreated())
-    vertexBuffer.create();
-
-  if (vertexBuffer.isCreated()) {
-    vertexBuffer.bind();
-
-    if (vertices.empty())
-      vertexBuffer.allocate(0);
-    else
-      vertexBuffer.allocate(vertices.data(),
-                            static_cast<int>(vertices.size() * sizeof(Vertex)));
-
-    vertexBuffer.release();
-  }
-
-  doneCurrent();
-}
-
-// -----------------------------------------------------------------------------
-// Geographic coordinates -> DEM pixels -> scene coordinates
-// -----------------------------------------------------------------------------
-
-bool GLWidget::sampleElevation(double pixelX, double pixelY,
-                               float &elevation) const {
-  const int width = dem.width;
-  const int height = dem.height;
-
-  if (width < 2 || height < 2)
-    return false;
-
-  if (pixelX < 0.0 || pixelY < 0.0 || pixelX > width - 1 ||
-      pixelY > height - 1) {
-    return false;
-  }
-
-  const int x0 = static_cast<int>(std::floor(pixelX));
-  const int y0 = static_cast<int>(std::floor(pixelY));
-
-  const int x1 = std::min(x0 + 1, width - 1);
-  const int y1 = std::min(y0 + 1, height - 1);
-
-  const float fx = static_cast<float>(pixelX - x0);
-  const float fy = static_cast<float>(pixelY - y0);
-
-  const auto at = [&](int x, int y) -> float {
-    return dem.elevation[static_cast<std::size_t>(y) * width + x];
-  };
-
-  const float z00 = at(x0, y0); // a
-  const float z10 = at(x1, y0); // b
-  const float z01 = at(x0, y1); // c
-  const float z11 = at(x1, y1); // d
-
-  if (!std::isfinite(z00) || !std::isfinite(z10) || !std::isfinite(z01) ||
-      !std::isfinite(z11)) {
-    return false;
-  }
-
-  // Интерполяция по той же диагонали b-c,
-  // по которой строятся треугольники рельефа.
-  if (fx + fy <= 1.0f) {
-    elevation = z00 * (1.0f - fx - fy) + z10 * fx + z01 * fy;
-  } else {
-    elevation = z10 * (1.0f - fy) + z01 * (1.0f - fx) + z11 * (fx + fy - 1.0f);
-  }
-
-  return true;
-}
-
-bool GLWidget::geoToScene(const GeoPoint &point, ScenePoint &result) const {
-  const int width = dem.width;
-  const int height = dem.height;
-
-  if (width < 2 || height < 2)
-    return false;
-
-  const double *gt = dem.geoTransform;
-
-  const double determinant = gt[1] * gt[5] - gt[2] * gt[4];
-
-  if (std::abs(determinant) < 1e-15)
-    return false;
-
-  const double dx = point.lon - gt[0];
-  const double dy = point.lat - gt[3];
-
-  const double pixelX = (gt[5] * dx - gt[2] * dy) / determinant - 0.5;
-
-  const double pixelY = (-gt[4] * dx + gt[1] * dy) / determinant - 0.5;
-
-  float elevation = 0.0f;
-
-  if (!sampleElevation(pixelX, pixelY, elevation))
-    return false;
-
-  const TerrainSize terrainSize = calculateTerrainSize();
-
-  const float sceneX =
-      (static_cast<float>(pixelX) / (width - 1) - 0.5f) * terrainSize.width;
-
-  const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
-
-  const float sceneZ = -rowDirection *
-                       (static_cast<float>(pixelY) / (height - 1) - 0.5f) *
-                       terrainSize.height;
-
-  const float elevationRange = dem.maxElevation - dem.minElevation;
-
-  const float verticalScale = elevationRange > 0.0f
-                                  ? verticalScaleCoefficient / elevationRange
-                                  : 0.001f;
-
-  result.position = QVector2D(sceneX, sceneZ);
-
-  result.groundY = (elevation - dem.minElevation) * verticalScale;
-
-  return true;
-}
-
-// -----------------------------------------------------------------------------
-// Common vertex helper
-// -----------------------------------------------------------------------------
-
-void GLWidget::addVertex(std::vector<Vertex> &target, const QVector2D &position,
-                         float y, float r, float g, float b) {
-  target.push_back({position.x(), y, position.y(), r, g, b});
-}
-
-// -----------------------------------------------------------------------------
-// Building geometry: walls + roof
-// -----------------------------------------------------------------------------
-
-void GLWidget::appendBuilding(const OSMFeature &feature) {
-  if (feature.geometry.size() < 3)
-    return;
-
-  // Преобразует географическое кольцо в координаты сцены.
-  auto convertRing = [&](const QVector<GeoPoint> &geoRing,
-                         std::vector<ScenePoint> &sceneRing) -> bool {
-    sceneRing.clear();
-
-    for (const GeoPoint &geo : geoRing) {
-      ScenePoint point;
-
-      if (!geoToScene(geo, point))
-        return false;
-
-      sceneRing.push_back(point);
-    }
-
-    // Убираем повтор последней точки замкнутого кольца.
-    if (sceneRing.size() >= 2 &&
-        sameGeoPoint(geoRing.first(), geoRing.last())) {
-      sceneRing.pop_back();
-    }
-
-    return sceneRing.size() >= 3;
-  };
-
-  std::vector<ScenePoint> outerScene;
-
-  if (!convertRing(feature.geometry, outerScene))
-    return;
-
-  // Все кольца: сначала outer, затем inner.
-  std::vector<std::vector<ScenePoint>> sceneRings;
-  sceneRings.push_back(outerScene);
-
-  for (const auto &innerGeo : feature.innerRings) {
-    std::vector<ScenePoint> innerScene;
-
-    if (!convertRing(innerGeo, innerScene))
-      continue;
-
-    sceneRings.push_back(std::move(innerScene));
-  }
-
-  // Формат для Mapbox Earcut.
-  std::vector<std::vector<std::array<double, 2>>> polygon;
-
-  // Плоский массив координат для последующего получения вершин крыши.
-  std::vector<QVector2D> roofPoints;
-
-  for (const auto &ring : sceneRings) {
-    std::vector<std::array<double, 2>> earcutRing;
-
-    for (const ScenePoint &point : ring) {
-      earcutRing.push_back({static_cast<double>(point.position.x()),
-                            static_cast<double>(point.position.y())});
-
-      roofPoints.push_back(point.position);
-    }
-
-    polygon.push_back(std::move(earcutRing));
-  }
-
-  if (roofPoints.size() < 3)
-    return;
-
-  const std::vector<unsigned int> indices =
-      mapbox::earcut<unsigned int>(polygon);
-
-  if (indices.empty())
-    return;
-
-  // Высота основания по внешнему контуру.
-  float groundSum = 0.0f;
-
-  for (const ScenePoint &point : outerScene)
-    groundSum += point.groundY;
-
-  const float baseY = groundSum / static_cast<float>(outerScene.size());
-
-  const float elevationRange = dem.maxElevation - dem.minElevation;
-
-  const float verticalScale = elevationRange > 0.0f
-                                  ? verticalScaleCoefficient / elevationRange
-                                  : 0.001f;
-
-  const bool isRoof = feature.tags.value("building").toString() == "roof";
-
-  const float buildingHeight =
-      feature.heightMeters > 0.0f ? feature.heightMeters : 6.0f;
-
-  const float baseBuildingY = baseY + feature.minHeightMeters * verticalScale;
-
-  // Для building=roof верхняя поверхность находится
-  // непосредственно на уровне building:min_level.
-  const float roofY =
-      isRoof ? baseBuildingY : baseBuildingY + buildingHeight * verticalScale;
-
-  const Colors &color = feature.colors;
-
-  // Стены внешнего и внутренних контуров.
-  if (!isRoof) {
-    for (const auto &ring : sceneRings) {
-      const int count = static_cast<int>(ring.size());
-
-      for (int i = 0; i < count; ++i) {
-        const ScenePoint &a = ring[i];
-        const ScenePoint &b = ring[(i + 1) % count];
-
-        // Индивидуальная высота основания каждой вершины.
-        const float bottomA =
-            a.groundY + feature.minHeightMeters * verticalScale;
-
-        const float bottomB =
-            b.groundY + feature.minHeightMeters * verticalScale;
-
-        const QVector2D &pa = a.position;
-        const QVector2D &pb = b.position;
-
-        // Первый треугольник.
-        addVertex(featureVertices, pa, bottomA, color.wallR, color.wallG,
-                  color.wallB);
-
-        addVertex(featureVertices, pb, bottomB, color.wallR, color.wallG,
-                  color.wallB);
-
-        addVertex(featureVertices, pb, roofY, color.wallR, color.wallG,
-                  color.wallB);
-
-        // Второй треугольник.
-        addVertex(featureVertices, pa, bottomA, color.wallR, color.wallG,
-                  color.wallB);
-
-        addVertex(featureVertices, pb, roofY, color.wallR, color.wallG,
-                  color.wallB);
-
-        addVertex(featureVertices, pa, roofY, color.wallR, color.wallG,
-                  color.wallB);
-      }
-    }
-  }
-
-  // Крыша с отверстиями.
-  for (unsigned int index : indices) {
-    if (index >= roofPoints.size())
-      continue;
-
-    addVertex(featureVertices, roofPoints[index], roofY, color.roofR,
-              color.roofG, color.roofB);
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Flat polygon geometry: water, vegetation, landuse, amenity, road areas
-// -----------------------------------------------------------------------------
-
-void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
-  if (feature.geometry.size() < 3)
-    return;
-
-  std::vector<QVector2D> polygon;
-  polygon.reserve(feature.geometry.size());
-
-  float groundSum = 0.0f;
-  int validCount = 0;
-
-  for (const GeoPoint &geo : feature.geometry) {
-    ScenePoint point;
-
-    if (!geoToScene(geo, point))
-      return;
-
-    polygon.push_back(point.position);
-    groundSum += point.groundY;
-    ++validCount;
-  }
-
-  if (polygon.size() >= 2 &&
-      sameGeoPoint(feature.geometry.first(), feature.geometry.last())) {
-    polygon.pop_back();
-  }
-
-  if (polygon.size() < 3 || validCount == 0)
-    return;
-
-  const auto triangles = triangulatePolygon(polygon);
-
-  if (triangles.empty())
-    return;
-
-  const float y = groundSum / static_cast<float>(validCount) + heightOffset;
-
-  const Colors &color = feature.colors;
-
-  for (const auto &triangle : triangles) {
-    for (int index : triangle) {
-      addVertex(featureVertices, polygon[index], y, color.roofR, color.roofG,
-                color.roofB);
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Line geometry: roads, rivers, railway
-// Each line segment becomes a flat-width quad.
-// -----------------------------------------------------------------------------
-
-void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
-                          float heightOffset) {
-  if (feature.geometry.size() < 2)
-    return;
-
-  std::vector<ScenePoint> points;
-  points.reserve(feature.geometry.size());
-
-  for (const GeoPoint &geo : feature.geometry) {
-    ScenePoint point;
-
-    if (!geoToScene(geo, point)) {
-      // Не соединяем участки через точки вне DEM.
-      points.clear();
-      return;
-    }
-
-    points.push_back(point);
-  }
-
-  const TerrainSize terrainSize = calculateTerrainSize();
-
-  const double *gt = dem.geoTransform;
-
-  const double centerLat =
-      gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
-
-  const double metersPerDegreeLat = 111132.0;
-
-  const double metersPerDegreeLon =
-      111320.0 * std::cos(qDegreesToRadians(centerLat));
-
-  const double physicalWidth =
-      std::hypot((dem.width - 1) * gt[1] * metersPerDegreeLon,
-                 (dem.width - 1) * gt[4] * metersPerDegreeLat);
-
-  const double physicalHeight =
-      std::hypot((dem.height - 1) * gt[2] * metersPerDegreeLon,
-                 (dem.height - 1) * gt[5] * metersPerDegreeLat);
-
-  const double maxPhysicalDimension = std::max(physicalWidth, physicalHeight);
-
-  if (maxPhysicalDimension <= 0.0)
-    return;
-
-  const float metersToScene = static_cast<float>(2.0 / maxPhysicalDimension);
-
-  const float halfWidth = std::max(0.0001f, widthMeters * metersToScene * 0.5f);
-
-  const float rowDirection = gt[5] < 0.0 ? -1.0f : 1.0f;
-
-  auto getGroundY = [&](const QVector2D &pos, float &y) -> bool {
-    const double pixelX = (pos.x() / terrainSize.width + 0.5) * (dem.width - 1);
-
-    const double pixelY =
-        (0.5 - pos.y() / (rowDirection * terrainSize.height)) *
-        (dem.height - 1);
-
-    float elevation = 0.0f;
-
-    if (!sampleElevation(pixelX, pixelY, elevation))
-      return false;
-
-    const float elevationRange = dem.maxElevation - dem.minElevation;
-
-    const float verticalScale = elevationRange > 0.0f
-                                    ? verticalScaleCoefficient / elevationRange
-                                    : 0.001f;
-
-    y = (elevation - dem.minElevation) * verticalScale;
-
-    return true;
-  };
-
-  const Colors &color = feature.colors;
-
-  // Размер одного пикселя DEM в координатах сцены.
-  const float pixelSizeX =
-      terrainSize.width / static_cast<float>(dem.width - 1);
-
-  const float pixelSizeY =
-      terrainSize.height / static_cast<float>(dem.height - 1);
-
-  // Максимальная длина одного участка дороги.
-  // Чем резче рельеф, тем меньше должен быть этот шаг.
-  const float maxSegmentLength =
-      std::max(0.0001f, std::min(pixelSizeX, pixelSizeY) * 1.5f);
-
-  for (std::size_t i = 0; i + 1 < points.size(); ++i) {
-    const ScenePoint &a = points[i];
-    const ScenePoint &b = points[i + 1];
-
-    const QVector2D direction = b.position - a.position;
-    const float length = direction.length();
-
-    if (length < 1e-7f)
-      continue;
-
-    const QVector2D normal(-direction.y() / length, direction.x() / length);
-
-    const QVector2D offset = normal * halfWidth;
-
-    // Разбиваем длинный сегмент на короткие участки.
-    const int steps =
-        std::max(1, static_cast<int>(std::ceil(length / maxSegmentLength)));
-
-    for (int j = 0; j < steps; ++j) {
-      const float t0 = static_cast<float>(j) / steps;
-      const float t1 = static_cast<float>(j + 1) / steps;
-
-      const QVector2D centerA = a.position * (1.0f - t0) + b.position * t0;
-
-      const QVector2D centerB = a.position * (1.0f - t1) + b.position * t1;
-
-      const QVector2D aLeft = centerA + offset;
-      const QVector2D aRight = centerA - offset;
-
-      const QVector2D bLeft = centerB + offset;
-      const QVector2D bRight = centerB - offset;
-
-      float yALeft, yARight;
-      float yBLeft, yBRight;
-
-      if (!getGroundY(aLeft, yALeft) || !getGroundY(aRight, yARight) ||
-          !getGroundY(bLeft, yBLeft) || !getGroundY(bRight, yBRight)) {
-        continue;
-      }
-
-      yALeft += heightOffset;
-      yARight += heightOffset;
-      yBLeft += heightOffset;
-      yBRight += heightOffset;
-
-      // Первый треугольник.
-      addVertex(featureVertices, aLeft, yALeft, color.roofR, color.roofG,
-                color.roofB);
-
-      addVertex(featureVertices, aRight, yARight, color.roofR, color.roofG,
-                color.roofB);
-
-      addVertex(featureVertices, bLeft, yBLeft, color.roofR, color.roofG,
-                color.roofB);
-
-      // Второй треугольник.
-      addVertex(featureVertices, aRight, yARight, color.roofR, color.roofG,
-                color.roofB);
-
-      addVertex(featureVertices, bRight, yBRight, color.roofR, color.roofG,
-                color.roofB);
-
-      addVertex(featureVertices, bLeft, yBLeft, color.roofR, color.roofG,
-                color.roofB);
-    }
-  }
-}
-
-// -----------------------------------------------------------------------------
-// Point geometry: amenity and other OSM nodes
-// -----------------------------------------------------------------------------
-
-void GLWidget::appendPoint(const OSMFeature &feature, float sizeMeters,
-                           float heightOffset) {
-  if (feature.geometry.isEmpty())
-    return;
-
-  ScenePoint point;
-
-  if (!geoToScene(feature.geometry.first(), point))
-    return;
-
-  const TerrainSize terrainSize = calculateTerrainSize();
-
-  const double *gt = dem.geoTransform;
-
-  const double centerLat =
-      gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
-
-  const double metersPerDegreeLat = 111132.0;
-
-  const double metersPerDegreeLon =
-      111320.0 * std::cos(qDegreesToRadians(centerLat));
-
-  const double physicalWidth =
-      std::hypot((dem.width - 1) * gt[1] * metersPerDegreeLon,
-                 (dem.width - 1) * gt[4] * metersPerDegreeLat);
-
-  const double physicalHeight =
-      std::hypot((dem.height - 1) * gt[2] * metersPerDegreeLon,
-                 (dem.height - 1) * gt[5] * metersPerDegreeLat);
-
-  const double maxDimension = std::max(physicalWidth, physicalHeight);
-
-  if (maxDimension <= 0.0)
-    return;
-
-  const float halfSize =
-      std::max(0.0002f, static_cast<float>(sizeMeters / maxDimension));
-
-  const QVector2D p = point.position;
-
-  const QVector2D a(p.x() - halfSize, p.y() - halfSize);
-  const QVector2D b(p.x() + halfSize, p.y() - halfSize);
-  const QVector2D c(p.x() + halfSize, p.y() + halfSize);
-  const QVector2D d(p.x() - halfSize, p.y() + halfSize);
-
-  const float y = point.groundY + heightOffset;
-
-  const Colors &color = feature.colors;
-
-  addVertex(featureVertices, a, y, color.roofR, color.roofG, color.roofB);
-  addVertex(featureVertices, b, y, color.roofR, color.roofG, color.roofB);
-  addVertex(featureVertices, c, y, color.roofR, color.roofG, color.roofB);
-
-  addVertex(featureVertices, a, y, color.roofR, color.roofG, color.roofB);
-  addVertex(featureVertices, c, y, color.roofR, color.roofG, color.roofB);
-  addVertex(featureVertices, d, y, color.roofR, color.roofG, color.roofB);
-}
-
-// -----------------------------------------------------------------------------
-// OSM feature dispatcher
-// -----------------------------------------------------------------------------
-
-void GLWidget::rebuildFeatureMesh() {
-  featureVertices.clear();
-
-  if (dem.width < 2 || dem.height < 2) {
-    uploadFeatureBuffer();
-    update();
-    return;
-  }
-
-  int buildings = 0;
-  int roads = 0;
-  int water = 0;
-  int vegetation = 0;
-  int railways = 0;
-  int other = 0;
-
-  for (const OSMFeature &feature : features) {
-    if (feature.geometry.isEmpty())
-      continue;
-
-    switch (feature.type) {
-    case OSMFeatureType::Building:
-      if (feature.geometryType == OSMGeometryType::Polygon)
-        appendBuilding(feature);
-      else if (feature.geometryType == OSMGeometryType::Point)
-        appendPoint(feature, 5.0f);
-
-      ++buildings;
-      break;
-
-    case OSMFeatureType::Road:
-      if (feature.geometryType == OSMGeometryType::Polygon) {
-        appendPolygon(feature, 0.0015f);
-      } else if (feature.geometryType == OSMGeometryType::LineString) {
-        const float width = feature.widthMeters > 0.0
-                                ? static_cast<float>(feature.widthMeters)
-                                : 4.0f;
-
-        appendLine(feature, width, 0.0015f);
-      }
-
-      ++roads;
-      break;
-
-    case OSMFeatureType::Water:
-      if (feature.geometryType == OSMGeometryType::Polygon) {
-        appendPolygon(feature, 0.0025f);
-      } else if (feature.geometryType == OSMGeometryType::LineString) {
-        const float width = feature.widthMeters > 0.0
-                                ? static_cast<float>(feature.widthMeters)
-                                : 5.0f;
-
-        appendLine(feature, width, 0.0025f);
-      }
-
-      ++water;
-      break;
-
-    case OSMFeatureType::Vegetation:
-      if (feature.geometryType == OSMGeometryType::Polygon)
-        appendPolygon(feature, 0.001f);
-      else if (feature.geometryType == OSMGeometryType::Point)
-        appendPoint(feature, 4.0f, 0.001f);
-
-      ++vegetation;
-      break;
-
-    case OSMFeatureType::Landuse:
-      if (feature.geometryType == OSMGeometryType::Polygon)
-        appendPolygon(feature, 0.0008f);
-
-      ++other;
-      break;
-
-    case OSMFeatureType::Railway:
-      if (feature.geometryType == OSMGeometryType::LineString) {
-        const float width = feature.widthMeters > 0.0
-                                ? static_cast<float>(feature.widthMeters)
-                                : 4.5f;
-
-        appendLine(feature, width, 0.002f);
-      }
-
-      ++railways;
-      break;
-
-    case OSMFeatureType::Amenity:
-      if (feature.geometryType == OSMGeometryType::Polygon)
-        appendPolygon(feature, 0.0015f);
-      else if (feature.geometryType == OSMGeometryType::Point)
-        appendPoint(feature, 5.0f, 0.002f);
-
-      ++other;
-      break;
-
-    case OSMFeatureType::Unknown:
-    default:
-      break;
-    }
-  }
-
-  uploadFeatureBuffer();
-
-  qDebug() << "OSM mesh rebuilt:"
-           << "buildings =" << buildings << "roads =" << roads
-           << "water =" << water << "vegetation =" << vegetation
-           << "railways =" << railways << "other =" << other
-           << "vertices =" << featureVertices.size();
-}
-
-void GLWidget::uploadFeatureBuffer() {
-  if (!context() || !context()->isValid())
-    return;
-
-  makeCurrent();
-
-  if (!featureBuffer.isCreated())
-    featureBuffer.create();
-
-  if (featureBuffer.isCreated()) {
-    featureBuffer.bind();
-
-    if (featureVertices.empty())
-      featureBuffer.allocate(0);
-    else
-      featureBuffer.allocate(
-          featureVertices.data(),
-          static_cast<int>(featureVertices.size() * sizeof(Vertex)));
-
-    featureBuffer.release();
-  }
-
-  doneCurrent();
-}
-
-// -----------------------------------------------------------------------------
-// Rendering
-// -----------------------------------------------------------------------------
-
-void GLWidget::resizeGL(int width, int height) {
-  glViewport(0, 0, width, height);
-}
-
-void GLWidget::paintGL() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-  if (!shaderReady)
-    return;
-
-  QMatrix4x4 projection;
-
-  projection.perspective(45.0f,
-                         static_cast<float>(std::max(1, width())) /
-                             static_cast<float>(std::max(1, height())),
-                         0.01f, 100.0f);
-
-  QMatrix4x4 view;
-
-  view.translate(panX, panY, -zoom);
-
-  view.rotate(rotationX, 1.0f, 0.0f, 0.0f);
-  view.rotate(rotationZ, 0.0f, 1.0f, 0.0f);
-
-  const QMatrix4x4 mvp = projection * view;
-
-  auto drawBuffer = [&](QOpenGLBuffer &buffer, std::size_t vertexCount) {
-    if (vertexCount == 0 || !buffer.isCreated())
-      return;
-
-    shaderProgram.bind();
-    shaderProgram.setUniformValue("mvp", mvp);
-
-    buffer.bind();
-
-    const int positionLocation = shaderProgram.attributeLocation("position");
-
-    const int colorLocation = shaderProgram.attributeLocation("color");
-
-    shaderProgram.enableAttributeArray(positionLocation);
-    shaderProgram.enableAttributeArray(colorLocation);
-
-    shaderProgram.setAttributeBuffer(positionLocation, GL_FLOAT,
-                                     offsetof(Vertex, x), 3, sizeof(Vertex));
-
-    shaderProgram.setAttributeBuffer(colorLocation, GL_FLOAT,
-                                     offsetof(Vertex, r), 3, sizeof(Vertex));
-
-    glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(vertexCount));
-
-    shaderProgram.disableAttributeArray(positionLocation);
-    shaderProgram.disableAttributeArray(colorLocation);
-
-    buffer.release();
-    shaderProgram.release();
-  };
-
-  // Сначала рельеф.
-  if (meshReady)
-    drawBuffer(vertexBuffer, vertices.size());
-
-  // Затем здания и остальные OSM-объекты.
-  drawBuffer(featureBuffer, featureVertices.size());
-}
-
-// -----------------------------------------------------------------------------
-// Camera controls
-// -----------------------------------------------------------------------------
-
-void GLWidget::mousePressEvent(QMouseEvent *event) {
-  lastMousePosition = event->position().toPoint();
-}
-
-void GLWidget::mouseMoveEvent(QMouseEvent *event) {
-  const QPoint current = event->position().toPoint();
-
-  const QPoint delta = current - lastMousePosition;
-
-  if (event->buttons() & Qt::LeftButton) {
-    rotationZ += delta.x() * 0.5f;
-    rotationX += delta.y() * 0.5f;
-
-    update();
-  }
-
-  if (event->buttons() & Qt::RightButton) {
-    const float worldPerPixel =
-        (2.0f * zoom * 0.41421356f) / static_cast<float>(std::max(1, height()));
-
-    panX += delta.x() * worldPerPixel;
-    panY -= delta.y() * worldPerPixel;
-
-    update();
-  }
-
-  lastMousePosition = current;
-}
-
-void GLWidget::wheelEvent(QWheelEvent *event) {
-  zoom -= event->angleDelta().y() / 120.0f * 0.25f;
-
-  zoom = std::clamp(zoom, 0.01f, 15.0f);
-
-  update();
-}
-
-// -----------------------------------------------------------------------------
-// DEM physical dimensions
-// -----------------------------------------------------------------------------
-
-GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
-  TerrainSize result;
-
-  if (dem.width < 2 || dem.height < 2)
-    return result;
-
-  const double *gt = dem.geoTransform;
-
-  const double centerLat =
-      gt[3] + 0.5 * (dem.width - 1) * gt[4] + 0.5 * (dem.height - 1) * gt[5];
-
-  const double metersPerDegreeLat = 111132.0;
-
-  const double metersPerDegreeLon =
-      111320.0 * std::cos(qDegreesToRadians(centerLat));
-
-  const double dxLon = (dem.width - 1) * gt[1];
-  const double dxLat = (dem.width - 1) * gt[4];
-
-  const double dyLon = (dem.height - 1) * gt[2];
-  const double dyLat = (dem.height - 1) * gt[5];
-
-  const double physicalWidth =
-      std::hypot(dxLon * metersPerDegreeLon, dxLat * metersPerDegreeLat);
-
-  const double physicalHeight =
-      std::hypot(dyLon * metersPerDegreeLon, dyLat * metersPerDegreeLat);
-
-  const double maxDimension = std::max(physicalWidth, physicalHeight);
-
-  if (maxDimension <= 0.0)
-    return result;
-
-  result.width = static_cast<float>(2.0 * physicalWidth / maxDimension);
-
-  result.height = static_cast<float>(2.0 * physicalHeight / maxDimension);
-
-  return result;
-}
-
-#pragma once
-
-#include "demreader.hpp"
-#include "osmfeature.hpp"
-
-#include <QMatrix4x4>
-#include <QOpenGLBuffer>
-#include <QOpenGLFunctions>
-#include <QOpenGLShaderProgram>
-#include <QOpenGLWidget>
-#include <QPoint>
-#include <QVector>
-
-#include <vector>
-
-class QMouseEvent;
-class QWheelEvent;
-
-class GLWidget : public QOpenGLWidget, protected QOpenGLFunctions {
-public:
-  explicit GLWidget(QWidget *parent = nullptr);
-  ~GLWidget() override;
-
-  void setDEM(const DEMData &data);
-  void setFeatures(const QVector<OSMFeature> &newFeatures);
-
-  // Совместимость с FeatureDispatcher.
-  void addBuildingFeature(const OSMFeature &feature);
-  void addRoadFeature(const OSMFeature &feature);
-  void addRoadAreaFeature(const OSMFeature &feature);
-
-  void addWaterAreaFeature(const OSMFeature &feature);
-  void addWaterLineFeature(const OSMFeature &feature);
-
-  void addVegetationAreaFeature(const OSMFeature &feature);
-  void addVegetationPointFeature(const OSMFeature &feature);
-
-  void addLanduseAreaFeature(const OSMFeature &feature);
-  void addRailwayFeature(const OSMFeature &feature);
-
-  void addAmenityPointFeature(const OSMFeature &feature);
-  void addAmenityAreaFeature(const OSMFeature &feature);
-
-  const DEMData &getDEM() const;
-  const QVector<OSMFeature> &getFeatures() const;
-
-  float getVerticalScale() const;
-  void setVerticalScale(float value);
-
-protected:
-  void initializeGL() override;
-  void resizeGL(int width, int height) override;
-  void paintGL() override;
-
-  void mousePressEvent(QMouseEvent *event) override;
-  void mouseMoveEvent(QMouseEvent *event) override;
-  void wheelEvent(QWheelEvent *event) override;
-
-private:
-  struct Vertex {
-    float x, y, z;
-    float r, g, b;
-  };
-
-  struct TerrainSize {
-    float width = 0.0f;
-    float height = 0.0f;
-  };
-
-  struct ScenePoint {
-    QVector2D position;
-    float groundY = 0.0f;
-  };
-
-  TerrainSize calculateTerrainSize() const;
-
-  bool geoToScene(const GeoPoint &point, ScenePoint &result) const;
-
-  bool sampleElevation(double pixelX, double pixelY, float &elevation) const;
-
-  void rebuildMesh();
-  void rebuildFeatureMesh();
-
-  void appendBuilding(const OSMFeature &feature);
-
-  void appendPolygon(const OSMFeature &feature, float heightOffset = 0.0f);
-
-  void appendLine(const OSMFeature &feature, float widthMeters,
-                  float heightOffset = 0.0f);
-
-  void appendPoint(const OSMFeature &feature, float sizeMeters,
-                   float heightOffset = 0.0f);
-
-  void uploadTerrainBuffer();
-  void uploadFeatureBuffer();
-
-  void addFeature(const OSMFeature &feature);
-
-  void addVertex(std::vector<Vertex> &target, const QVector2D &position,
-                 float y, float r, float g, float b);
-
-  QOpenGLShaderProgram shaderProgram;
-
-  QOpenGLBuffer vertexBuffer{QOpenGLBuffer::VertexBuffer};
-
-  QOpenGLBuffer featureBuffer{QOpenGLBuffer::VertexBuffer};
-
-  std::vector<Vertex> vertices;
-  std::vector<Vertex> featureVertices;
-
-  DEMData dem;
-  QVector<OSMFeature> features;
-
-  bool meshReady = false;
-  bool shaderReady = false;
-
-  float rotationX = 35.0f;
-  float rotationZ = -25.0f;
-
-  float zoom = 3.0f;
-
-  float panX = 0.0f;
-  float panY = 0.0f;
-
-  float verticalScaleCoefficient = 0.12f;
-
-  QPoint lastMousePosition;
-};
-#include <QApplication>
-#include <QDebug>
-#include <QDir>
-#include <QSettings>
-#include <mainwindow.hpp>
-
-int main(int argc, char *argv[]) {
-  QApplication app(argc, argv);
-
-  MainWindow window;
-  window.show();
-
-  return app.exec();
-}
-
-#include "mainwindow.hpp"
-
-#include "demreader.hpp"
-#include "glwidget.hpp"
-#include "osmdataloader.hpp"
-#include "osmdataparser.hpp"
-#include "projectserializer.hpp"
-
-#include <QDebug>
-#include <QDoubleSpinBox>
-#include <QFile>
-#include <QFileDialog>
-#include <QFormLayout>
-#include <QHBoxLayout>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonParseError>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QStandardPaths>
-#include <QWidget>
-
-#define defaultLatitude 55.766863
-#define defaultLongitude 37.681677
-
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
-  setWindowTitle("3D City");
-  resize(800, 500);
-
-  auto *centralWidget = new QWidget(this);
-  auto *mainLayout = new QHBoxLayout(centralWidget);
-
-  auto *formLayout = new QFormLayout();
-
-  demLoader = new OpenTopographyLoader(this);
-
-  // Широта
-  latitudeInput = new QDoubleSpinBox(this);
-  latitudeInput->setRange(-90.0, 90.0);
-  latitudeInput->setDecimals(10);
-  latitudeInput->setSingleStep(0.000001);
-  latitudeInput->setValue(defaultLatitude);
-
-  // Долгота
-  longitudeInput = new QDoubleSpinBox(this);
-  longitudeInput->setRange(-180.0, 180.0);
-  longitudeInput->setDecimals(10);
-  longitudeInput->setSingleStep(0.000001);
-  longitudeInput->setValue(defaultLongitude);
-
-  // Радиус
-  radiusInput = new QDoubleSpinBox(this);
-  radiusInput->setRange(1.0, 100000.0);
-  radiusInput->setDecimals(0);
-  radiusInput->setSingleStep(100.0);
-  radiusInput->setValue(1000.0);
-  radiusInput->setSuffix(" м");
-
-  // Таймаут
-  timeoutInput = new QDoubleSpinBox(this);
-  timeoutInput->setRange(1.0, 600.0);
-  timeoutInput->setDecimals(0);
-  timeoutInput->setSingleStep(1.0);
-  timeoutInput->setValue(1000.0);
-  timeoutInput->setSuffix(" c");
-
-  formLayout->addRow("Широта:", latitudeInput);
-  formLayout->addRow("Долгота:", longitudeInput);
-  formLayout->addRow("Радиус:", radiusInput);
-  formLayout->addRow("Время ожидания:", timeoutInput);
-
-  // OpenGL
-  glWidget = new GLWidget(this);
-
-  // Кнопки
-  loadButton = new QPushButton("Загрузить область", this);
-
-  auto *osmJsonButton = new QPushButton("Загрузить OSM JSON", this);
-
-  auto *demButton = new QPushButton("Загрузить DEM", this);
-
-  auto *saveProjectButton = new QPushButton("Сохранить проект", this);
-
-  auto *openProjectButton = new QPushButton("Открыть проект", this);
-
-  formLayout->addWidget(loadButton);
-  formLayout->addWidget(osmJsonButton);
-  formLayout->addWidget(demButton);
-  formLayout->addWidget(saveProjectButton);
-  formLayout->addWidget(openProjectButton);
-
-  mainLayout->addLayout(formLayout);
-  mainLayout->addWidget(glWidget, 1);
-
-  setCentralWidget(centralWidget);
-
-  // Подключение кнопок
-  connect(loadButton, &QPushButton::clicked, this,
-          &MainWindow::onLoadButtonClicked);
-
-  connect(osmJsonButton, &QPushButton::clicked, this,
-          &MainWindow::onLoadOsmJsonButtonClicked);
-
-  // DEM
-  connect(demButton, &QPushButton::clicked, this, [this]() {
-    const QString fileName = QFileDialog::getOpenFileName(
-        this, "Выбрать цифровую модель рельефа", QString(),
-        "DEM (*.tif *.tiff);;Все файлы (*)");
-
-    if (fileName.isEmpty())
-      return;
-
-    DEMData dem;
-
-    if (!DEMReader::loadDem(fileName, dem)) {
-      QMessageBox::warning(this, "Ошибка", "Не удалось загрузить DEM-файл.");
-      return;
-    }
-
-    qDebug() << "DEM:" << dem.width << "x" << dem.height;
-
-    qDebug() << "Высоты:" << dem.minElevation << "—" << dem.maxElevation;
-
-    glWidget->setDEM(dem);
-  });
-  connect(saveProjectButton, &QPushButton::clicked, this,
-          &MainWindow::onSaveProjectButtonClicked);
-
-  connect(openProjectButton, &QPushButton::clicked, this,
-          &MainWindow::onOpenProjectButtonClicked);
-
-  // Overpass API
-  loader = new OSMDataLoader("https://overpass-api.de/api/interpreter",
-                             defaultLatitude, defaultLongitude, 1000.0, this);
-
-  connect(loader, &OSMDataLoader::dataLoaded, this,
-          [this](const QJsonArray &elements, const QString &queryType) {
-            Q_UNUSED(queryType);
-
-            loadOSMFeatures(elements);
-          });
-  connect(demLoader, &OpenTopographyLoader::downloadFinished, this,
-          [this](const QString &fileName) {
-            qDebug() << "[DEM] Начинаем чтение GeoTIFF";
-
-            DEMData dem;
-
-            if (!DEMReader::loadDem(fileName, dem)) {
-              QMessageBox::warning(this, "Ошибка DEM",
-                                   "Файл скачан, но не удалось прочитать DEM.");
-              return;
-            }
-
-            qDebug() << "[DEM] Размер:" << dem.width << "x" << dem.height;
-
-            qDebug() << "[DEM] Высоты:" << dem.minElevation << "—"
-                     << dem.maxElevation;
-
-            glWidget->setDEM(dem);
-
-            QMessageBox::information(
-                this, "DEM", "Цифровая модель рельефа успешно загружена.");
-          });
-
-  connect(demLoader, &OpenTopographyLoader::downloadError, this,
-          [this](const QString &error) {
-            qDebug() << "[DEM] Ошибка:" << error;
-
-            QMessageBox::warning(this, "Ошибка загрузки DEM", error);
-          });
-}
-
-// Загрузка из Overpass API
-void MainWindow::onLoadButtonClicked() {
-  const double latitude = latitudeInput->value();
-  const double longitude = longitudeInput->value();
-  const double radius = radiusInput->value();
-  const double timeout = timeoutInput->value();
-
-  qDebug() << "Latitude:" << latitude;
-  qDebug() << "Longitude:" << longitude;
-  qDebug() << "Radius:" << radius;
-  qDebug() << "Timeout:" << timeout;
-
-  // ------------------------------------------------
-  // 1. Загрузка OSM
-  // ------------------------------------------------
-
-  loader->setArea(latitude, longitude, radius);
-  loader->fetchOSMData("all", timeout);
-
-  // ------------------------------------------------
-  // 2. Вычисление границ области для DEM
-  // ------------------------------------------------
-
-  constexpr double metersPerDegree = 111320.0;
-  constexpr double pi = 3.14159265358979323846;
-
-  const double latRad = latitude * pi / 180.0;
-
-  const double latOffset = radius / metersPerDegree;
-  const double cosLatitude = std::cos(latRad);
-
-  if (std::abs(cosLatitude) < 1e-6) {
-    QMessageBox::warning(
-        this, "Ошибка координат",
-        "Невозможно рассчитать область DEM для данной широты.");
-    return;
-  }
-
-  const double lonOffset = radius / (metersPerDegree * cosLatitude);
-
-  const double south = latitude - latOffset;
-  const double north = latitude + latOffset;
-  const double west = longitude - lonOffset;
-  const double east = longitude + lonOffset;
-
-  if (south < -90.0 || north > 90.0 || west < -180.0 || east > 180.0) {
-    QMessageBox::warning(
-        this, "Ошибка координат",
-        "Рассчитанная область выходит за допустимые границы координат.");
-    return;
-  }
-
-  qDebug() << "DEM bounds:";
-  qDebug() << "South:" << south;
-  qDebug() << "North:" << north;
-  qDebug() << "West:" << west;
-  qDebug() << "East:" << east;
-
-  // ------------------------------------------------
-  // 3. Подготовка пути сохранения DEM
-  // ------------------------------------------------
-
-  const QString dataDirectory =
-      QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) +
-      "/dem";
-
-  if (!QDir().mkpath(dataDirectory)) {
-    QMessageBox::warning(this, "Ошибка",
-                         "Не удалось создать каталог для сохранения DEM.");
-    return;
-  }
-
-  const QString outputFile = dataDirectory + "/opentopography_eu_dtm.tif";
-
-  // ------------------------------------------------
-  // 4. Запуск загрузки DEM
-  // ------------------------------------------------
-
-  qDebug() << "Проверка DEM loader:" << demLoader;
-
-  qDebug() << "Запускаем загрузку DEM...";
-
-  demLoader->downloadDEM(south, north, west, east, outputFile);
-
-  qDebug() << "Вызов downloadDEM выполнен";
-}
-
-// Загрузка локального JSON
-void MainWindow::onLoadOsmJsonButtonClicked() {
-  const QString fileName =
-      QFileDialog::getOpenFileName(this, "Выбрать файл OSM JSON", QString(),
-                                   "JSON files (*.json);;Все файлы (*)");
-
-  if (fileName.isEmpty())
-    return;
-
-  QFile file(fileName);
-
-  if (!file.open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, "Ошибка", "Не удалось открыть файл OSM JSON.");
-    return;
-  }
-
-  const QByteArray jsonData = file.readAll();
-  file.close();
-
-  QJsonParseError parseError;
-
-  const QJsonDocument document = QJsonDocument::fromJson(jsonData, &parseError);
-
-  if (parseError.error != QJsonParseError::NoError) {
-
-    QMessageBox::warning(this, "Ошибка JSON", parseError.errorString());
-
-    return;
-  }
-
-  QJsonArray elements;
-
-  // Формат с корневым массивом
-  if (document.isArray()) {
-
-    elements = document.array();
-  }
-  // Стандартный формат Overpass
-  else if (document.isObject()) {
-
-    const QJsonObject root = document.object();
-
-    if (!root.value("elements").isArray()) {
-
-      QMessageBox::warning(this, "Ошибка",
-                           "В JSON отсутствует массив elements.");
-
-      return;
-    }
-
-    elements = root.value("elements").toArray();
-  } else {
-
-    QMessageBox::warning(this, "Ошибка", "Некорректная структура OSM JSON.");
-
-    return;
-  }
-
-  if (elements.isEmpty()) {
-
-    QMessageBox::information(this, "Информация",
-                             "В файле отсутствуют OSM-объекты.");
-
-    return;
-  }
-
-  loadOSMFeatures(elements);
-}
-
-// Общая загрузка объектов OSM
-void MainWindow::loadOSMFeatures(const QJsonArray &elements) {
-  const QVector<OSMFeature> features = OSMDataParser::parse(elements);
-
-  if (features.isEmpty()) {
-
-    QMessageBox::information(this, "Информация",
-                             "Не удалось найти поддерживаемые OSM-объекты.");
-
-    return;
-  }
-
-  // Статистика
-  int buildings = 0;
-  int roads = 0;
-  int water = 0;
-  int vegetation = 0;
-  int other = 0;
-
-  for (const OSMFeature &feature : features) {
-
-    switch (feature.type) {
-
-    case OSMFeatureType::Building:
-      ++buildings;
-      break;
-
-    case OSMFeatureType::Road:
-      ++roads;
-      break;
-
-    case OSMFeatureType::Water:
-      ++water;
-      break;
-
-    case OSMFeatureType::Vegetation:
-      ++vegetation;
-      break;
-
-    default:
-      ++other;
-      break;
-    }
-  }
-
-  qDebug() << "Загружено OSM объектов:" << features.size();
-
-  qDebug() << "Здания:" << buildings;
-  qDebug() << "Дороги:" << roads;
-  qDebug() << "Вода:" << water;
-  qDebug() << "Растительность:" << vegetation;
-  qDebug() << "Другие:" << other;
-
-  // Передаём все объекты в OpenGL
-  glWidget->setFeatures(features);
-}
-
-void MainWindow::onSaveProjectButtonClicked() {
-  const QString fileName = QFileDialog::getSaveFileName(
-      this, "Сохранить проект", QString(), "Проекты 3D City (*.osm3d)");
-
-  if (fileName.isEmpty())
-    return;
-
-  QString path = fileName;
-
-  if (!path.endsWith(".osm3d", Qt::CaseInsensitive))
-    path += ".osm3d";
-
-  QString error;
-
-  const bool success =
-      ProjectSerializer::save(path, glWidget->getDEM(), glWidget->getFeatures(),
-                              glWidget->getVerticalScale(), &error);
-
-  if (!success) {
-    QMessageBox::warning(this, "Ошибка сохранения", error);
-    return;
-  }
-
-  QMessageBox::information(this, "Сохранение проекта",
-                           "Проект успешно сохранён.");
-}
-
-void MainWindow::onOpenProjectButtonClicked() {
-  const QString fileName = QFileDialog::getOpenFileName(
-      this, "Открыть проект", QString(), "Проекты 3D City (*.osm3d)");
-
-  if (fileName.isEmpty())
-    return;
-
-  DEMData dem;
-  QVector<OSMFeature> features;
-  float verticalScale = 0.12f;
-
-  QString error;
-
-  if (!ProjectSerializer::load(fileName, dem, features, verticalScale,
-                               &error)) {
-    QMessageBox::warning(this, "Ошибка открытия проекта", error);
-    return;
-  }
-
-  // Сначала устанавливаем масштаб, затем данные сцены.
-  glWidget->setVerticalScale(verticalScale);
-  glWidget->setDEM(dem);
-  glWidget->setFeatures(features);
-
-  QMessageBox::information(this, "Открытие проекта",
-                           "Проект успешно загружен.");
-}
-#pragma once
-
-#include "demreader.hpp"
-#include "opentopographyloader.hpp"
-#include <QJsonArray>
-#include <QMainWindow>
-
-class QDoubleSpinBox;
-class QPushButton;
-class GLWidget;
-class OSMDataLoader;
-
-class MainWindow : public QMainWindow {
-  Q_OBJECT
-
-public:
-  explicit MainWindow(QWidget *parent = nullptr);
-
-private slots:
-  void onLoadButtonClicked();
-  void onLoadOsmJsonButtonClicked();
-  void onSaveProjectButtonClicked();
-  void onOpenProjectButtonClicked();
-
-private:
-  void loadOSMFeatures(const QJsonArray &elements);
-
-  QDoubleSpinBox *latitudeInput = nullptr;
-  QDoubleSpinBox *longitudeInput = nullptr;
-  QDoubleSpinBox *radiusInput = nullptr;
-  QDoubleSpinBox *timeoutInput = nullptr;
-
-  QPushButton *loadButton = nullptr;
-
-  GLWidget *glWidget = nullptr;
-  OSMDataLoader *loader = nullptr;
-  OpenTopographyLoader *demLoader = nullptr;
-};
-
-#include "opentopographyloader.hpp"
-
-#include <QDebug>
-#include <QDir>
-#include <QFileInfo>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QSaveFile>
-#include <QUrl>
-#include <QUrlQuery>
-#include <qdebug.h>
-
-OpenTopographyLoader::OpenTopographyLoader(QObject *parent)
-    : QObject(parent), manager(new QNetworkAccessManager(this)) {}
-
-bool OpenTopographyLoader::isGeoTiff(const QByteArray &data) {
-  if (data.size() < 4)
-    return false;
-
-  const auto *p = reinterpret_cast<const unsigned char *>(data.constData());
-
-  const bool littleEndian = p[0] == 'I' && p[1] == 'I';
-
-  const bool bigEndian = p[0] == 'M' && p[1] == 'M';
-
-  if (!littleEndian && !bigEndian)
-    return false;
-
-  if (littleEndian) {
-    return (p[2] == 42 && p[3] == 0) || (p[2] == 43 && p[3] == 0);
-  }
-
-  return (p[2] == 0 && p[3] == 42) || (p[2] == 0 && p[3] == 43);
-}
-
-void OpenTopographyLoader::downloadDEM(double south, double north, double west,
-                                       double east, const QString &outputFile) {
-  qDebug() << "[DEM] downloadDEM() вызван";
-  qDebug() << "[DEM] Bounds:" << south << north << west << east;
-  qDebug() << "[DEM] Output file:" << outputFile;
-
-  // Проверка координат
-  if (south < -90.0 || north > 90.0 || west < -180.0 || east > 180.0 ||
-      south >= north || west >= east) {
-    emit downloadError("Некорректные координаты DEM.");
-    return;
-  }
-
-  // Получение API-ключа
-  const QString apiKey = qEnvironmentVariable("OPEN_TOPOGRAPHY_API_KEY");
-
-  // Никогда не выводим сам ключ в лог!
-  qDebug() << "[DEM] API key:" << (apiKey.isEmpty() ? "НЕ НАЙДЕН" : "НАЙДЕН");
-
-  if (apiKey.isEmpty()) {
-    emit downloadError("Не задан OPEN_TOPOGRAPHY_API_KEY.");
-    return;
-  }
-
-  // Создание каталога
-  const QFileInfo fileInfo(outputFile);
-
-  if (!QDir().mkpath(fileInfo.absolutePath())) {
-    emit downloadError("Не удалось создать каталог для DEM.");
-    return;
-  }
-
-  // Формирование запроса
-  QUrl url("https://portal.opentopography.org/API/globaldem");
-
-  QUrlQuery query;
-
-  query.addQueryItem("demtype", "COP30");
-  query.addQueryItem("south", QString::number(south, 'f', 8));
-  query.addQueryItem("north", QString::number(north, 'f', 8));
-  query.addQueryItem("west", QString::number(west, 'f', 8));
-  query.addQueryItem("east", QString::number(east, 'f', 8));
-  query.addQueryItem("outputFormat", "GTiff");
-  query.addQueryItem("API_Key", apiKey);
-
-  url.setQuery(query);
-
-  QNetworkRequest request(url);
-
-  request.setHeader(QNetworkRequest::UserAgentHeader,
-                    "BMSTU-NIR-DEM-Loader/1.0");
-
-  request.setRawHeader("Accept", "image/tiff, application/octet-stream");
-
-  request.setTransferTimeout(180000);
-
-  // Отправка запроса
-  QNetworkReply *reply = manager->get(request);
-
-  qDebug() << "[DEM] HTTP-запрос отправлен";
-  qDebug() << "[DEM] Host:" << request.url().host();
-  qDebug() << "[DEM] Path:" << request.url().path();
-
-  // Прогресс загрузки
-  connect(reply, &QNetworkReply::downloadProgress, this,
-          [this](qint64 received, qint64 total) {
-            qDebug() << "[DEM] Download:" << received << "/" << total;
-            emit downloadProgress(received, total);
-          });
-
-  // Ошибки сети
-  connect(reply, &QNetworkReply::errorOccurred, this,
-          [reply](QNetworkReply::NetworkError error) {
-            Q_UNUSED(error);
-
-            qDebug() << "[DEM] Network error:" << reply->errorString();
-          });
-
-  // Завершение загрузки
-  connect(reply, &QNetworkReply::finished, this, [this, reply, outputFile]() {
-    // Сначала получаем всю информацию из reply
-    const int status =
-        reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
-
-    const QNetworkReply::NetworkError error = reply->error();
-
-    const QString errorString = reply->errorString();
-
-    const QByteArray data = reply->readAll();
-
-    qDebug() << "[DEM] Ответ получен";
-    qDebug() << "[DEM] HTTP status:" << status;
-    qDebug() << "[DEM] Network error code:" << error;
-    qDebug() << "[DEM] Network error:" << errorString;
-    qDebug() << "[DEM] Response size:" << data.size();
-
-    // После чтения всех данных удаляем reply
-    reply->deleteLater();
-
-    // Проверка HTTP и сетевой ошибки
-    if (error != QNetworkReply::NoError || status != 200) {
-      emit downloadError(QString("Ошибка загрузки DEM. HTTP %1: %2")
-                             .arg(status)
-                             .arg(errorString));
-      return;
-    }
-
-    // Проверка формата GeoTIFF
-    if (!isGeoTiff(data)) {
-      qDebug() << "[DEM] Первые байты ответа:" << data.left(100);
-
-      emit downloadError("Сервер не вернул корректный GeoTIFF. "
-                         "Возможно, получено текстовое сообщение об ошибке.");
-      return;
-    }
-
-    // Сохранение GeoTIFF
-    QSaveFile file(outputFile);
-
-    if (!file.open(QIODevice::WriteOnly)) {
-      emit downloadError("Не удалось открыть файл: " + file.errorString());
-      return;
-    }
-
-    if (file.write(data) != data.size()) {
-      file.cancelWriting();
-
-      emit downloadError("Ошибка записи GeoTIFF.");
-      return;
-    }
-
-    if (!file.commit()) {
-      emit downloadError("Не удалось завершить сохранение GeoTIFF.");
-      return;
-    }
-
-    qDebug() << "[DEM] GeoTIFF сохранён:" << outputFile;
-    qDebug() << "[DEM] Размер файла:" << data.size();
-
-    emit downloadFinished(outputFile);
-  });
-}
-
-#pragma once
-
-#include <QNetworkAccessManager>
-#include <QObject>
-#include <QString>
-
-class OpenTopographyLoader : public QObject {
-  Q_OBJECT
-
-public:
-  explicit OpenTopographyLoader(QObject *parent = nullptr);
-
-  void downloadDEM(double south, double north, double west, double east,
-                   const QString &outputFile);
-
-signals:
-  void downloadFinished(const QString &fileName);
-  void downloadError(const QString &message);
-  void downloadProgress(qint64 received, qint64 total);
-
-private:
-  QNetworkAccessManager *manager;
-
-  static bool isGeoTiff(const QByteArray &data);
-};
-
-#include "osmclassifier.hpp"
-
-OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
-  // Здания
-  if (tags.contains("building") || tags.contains("building:part"))
-    return OSMFeatureType::Building;
-
-  // Дороги
-  if (tags.contains("highway"))
-    return OSMFeatureType::Road;
-
-  // Железные дороги
-  if (tags.contains("railway"))
-    return OSMFeatureType::Railway;
-
-  // Вода
-  if (tags.contains("waterway") ||
-      tags.value("natural").toString() == "water" || tags.contains("water")) {
-    return OSMFeatureType::Water;
-  }
-
-  // Растительность
-  const QString natural = tags.value("natural").toString();
-  const QString landuse = tags.value("landuse").toString();
-  const QString leisure = tags.value("leisure").toString();
-
-  if (natural == "wood" || natural == "tree" || natural == "scrub" ||
-      landuse == "forest" || leisure == "park") {
-    return OSMFeatureType::Vegetation;
-  }
-
-  // Остальные территории
-  if (tags.contains("landuse"))
-    return OSMFeatureType::Landuse;
-
-  // Общественные объекты
-  if (tags.contains("amenity") || tags.contains("shop") ||
-      tags.contains("office")) {
-    return OSMFeatureType::Amenity;
-  }
-
-  return OSMFeatureType::Unknown;
-}
-
-#pragma once
-
-#include "osmfeature.hpp"
-
-#include <QJsonObject>
-
-class OSMClassifier {
-public:
-  static OSMFeatureType classify(const QJsonObject &tags);
-};
-#include "osmdataloader.hpp"
-
-#include <QDebug>
-#include <QEventLoop>
-#include <QFile>
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QList>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-#include <QUrl>
-#include <QUrlQuery>
-#include <cmath>
-
-OSMDataLoader::OSMDataLoader(const QString apiUrl, double lat, double lon,
-                             double radius, QObject *parent)
-    : QObject(parent), manager(new QNetworkAccessManager(this)), url(apiUrl) {
-
-  // TODO: прописать преобразование радиуса в отклонение координат
-  //  Координаты центра карты по умолчанию (Москва)
-
-  defaultArea.lat = lat; // 55.766863, 37.681677
-  defaultArea.lon = lon;
-  defaultArea.width = radToLat(radius);  // +/- 0.2 градуса по широте
-  defaultArea.height = radToLon(radius); // +/- 0.3 градуса по долготе
-
-  connect(this, &OSMDataLoader::dataLoaded, this,
-          [&](const QJsonArray &data, const QString &queryType) {
-            saveToJSONFile(data, QString("osm_%1.json").arg(queryType));
-          });
-}
-
-QByteArray OSMDataLoader::fetchOSMData(const QString &queryType,
-                                       const int &timeout, const QRect &area) {
-  Q_UNUSED(area);
-
-  OSMDataLoader::timeout = timeout;
-
-  activeQuery = buildOverpassQuery(timeout, queryType);
-
-  if (activeQuery.isEmpty()) {
-    qDebug() << "Неизвестный тип запроса:" << queryType;
-    return {};
-  }
-
-  activeQueryType = queryType;
-
-  const double minLat = defaultArea.lat - defaultArea.width;
-  const double maxLat = defaultArea.lat + defaultArea.width;
-  const double minLon = defaultArea.lon - defaultArea.height;
-  const double maxLon = defaultArea.lon + defaultArea.height;
-
-  const QString bbox = QString("%1,%2,%3,%4")
-                           .arg(minLat, 0, 'f', 6)
-                           .arg(minLon, 0, 'f', 6)
-                           .arg(maxLat, 0, 'f', 6)
-                           .arg(maxLon, 0, 'f', 6);
-
-  activeQuery.replace("{{bbox}}", bbox);
-
-  qDebug() << "Тип запроса:" << queryType;
-  qDebug() << "BBox:" << bbox;
-  qDebug() << "Весь запрос:" << activeQuery;
-
-  // Основной и резервные серверы Overpass API.
-  servers = {//"https://overpass-api.de/api/interpreter",
-             //"https://overpass.private.coffee/api/interpreter",
-             "https://maps.mail.ru/osm/tools/overpass/api/interpreter"};
-
-  requestAttempt = 0;
-
-  // Не допускаем одновременного выполнения
-  // нескольких запросов этим загрузчиком.
-  if (reply && !reply->isFinished()) {
-    disconnect(reply, nullptr, this, nullptr);
-    reply->abort();
-  }
-
-  reply = nullptr;
-
-  sendNextRequest();
-
-  // Загрузка асинхронная.
-  // Результат будет передан через dataLoaded.
-  return {};
-}
-
-void OSMDataLoader::sendNextRequest() {
-  if (requestAttempt >= maxAttempts) {
-    qDebug() << "Все попытки загрузки OSM исчерпаны";
-
-    emit errorOccurred("Не удалось загрузить OSM после всех попыток");
-
-    return;
-  }
-
-  const int serverIndex = requestAttempt % servers.size();
-  const QString serverUrl = servers[serverIndex];
-
-  qDebug() << "================================";
-  qDebug() << "Попытка загрузки:" << requestAttempt + 1;
-  qDebug() << "Сервер:" << serverUrl;
-
-  QNetworkRequest request{QUrl(serverUrl)};
-
-  request.setTransferTimeout(timeout * 1000 + 10);
-
-  request.setHeader(QNetworkRequest::ContentTypeHeader,
-                    "application/x-www-form-urlencoded");
-
-  request.setHeader(QNetworkRequest::UserAgentHeader,
-                    "BMSTU-NIR-OSM-Loader/1.0");
-
-  request.setRawHeader("Accept", "application/json");
-
-  QByteArray postData = "data=";
-  postData += QUrl::toPercentEncoding(activeQuery);
-
-  QNetworkReply *currentReply = manager->post(request, postData);
-
-  reply = currentReply;
-
-  connect(currentReply, &QNetworkReply::finished, this, [this, currentReply]() {
-    const int status =
-        currentReply->attribute(QNetworkRequest::HttpStatusCodeAttribute)
-            .toInt();
-
-    const auto networkError = currentReply->error();
-
-    qDebug() << "HTTP status:" << status;
-
-    if (networkError != QNetworkReply::NoError) {
-
-      const QString error = currentReply->errorString();
-
-      const QByteArray response = currentReply->readAll();
-
-      qDebug() << "Ошибка загрузки:" << error;
-      qDebug() << "Ответ сервера:" << response;
-
-      const bool retryable = status == 0 || status == 429 || status == 502 ||
-                             status == 503 || status == 504 ||
-                             networkError == QNetworkReply::TimeoutError;
-
-      if (reply == currentReply)
-        reply = nullptr;
-
-      currentReply->deleteLater();
-
-      if (!retryable) {
-        emit errorOccurred("Ошибка загрузки OSM: " + error);
-        return;
-      }
-
-      const int delay = 1000 * (1 << requestAttempt);
-
-      requestAttempt++;
-
-      if (requestAttempt >= maxAttempts) {
-        sendNextRequest();
-        return;
-      }
-
-      qDebug() << "Повторная попытка через" << delay << "мс";
-
-      QTimer::singleShot(delay, this, [this]() { sendNextRequest(); });
-
-      return;
-    }
-
-    const QByteArray response = currentReply->readAll();
-
-    if (reply == currentReply)
-      reply = nullptr;
-
-    currentReply->deleteLater();
-
-    QJsonParseError parseError;
-
-    const QJsonDocument doc = QJsonDocument::fromJson(response, &parseError);
-
-    if (parseError.error != QJsonParseError::NoError || !doc.isObject()) {
-
-      qDebug() << "Ошибка парсинга JSON:" << parseError.errorString();
-
-      emit errorOccurred("Сервер вернул некорректный JSON");
-
-      return;
-    }
-
-    const QJsonObject root = doc.object();
-
-    if (!root.contains("elements") || !root["elements"].isArray()) {
-
-      emit errorOccurred("В ответе отсутствует массив elements");
-
-      return;
-    }
-
-    requestResult = response;
-
-    const QJsonArray elements = root["elements"].toArray();
-
-    qDebug() << "OSM JSON успешно получен";
-    qDebug() << "Получено байт:" << response.size();
-    qDebug() << "Количество объектов:" << elements.size();
-
-    emit dataLoaded(elements, activeQueryType);
-  });
-}
-
-OSMDataLoaderArea OSMDataLoader::getDefaultArea() const { return defaultArea; }
-
-void OSMDataLoader::setArea(const OSMDataLoaderArea &area) {
-  defaultArea = area;
-}
-
-void OSMDataLoader::setArea(double lat, double lon, double radius) {
-
-  defaultArea.lat = lat; // 55.766863, 37.681677
-  defaultArea.lon = lon;
-  defaultArea.width = radToLat(radius);  // +/- 0.2 градуса по широте
-  defaultArea.height = radToLon(radius); // +/- 0.3 градуса по долготе
-}
-
-// Формирование Overpass QL запроса - правильная syntax
-
-QString OSMDataLoader::buildOverpassQuery(const int &timeout,
-                                          const QString &queryType) {
-  if (queryType == "buildings") {
-    return QString(R"(
-            [out:json][timeout:%1];
-
-            (
-                nwr["building"]({{bbox}});
-                nwr["building:part"]({{bbox}});
-                relation["type"="building"]({{bbox}});
-            );
-
-            out geom;
-        )")
-        .arg(timeout);
-  }
-
-  if (queryType == "all") {
-    return QString(R"([out:json][timeout:%1];
-                   (
-                  nwr["building"]({{bbox}});
-                  nwr["building:part"]({{bbox}});
-                  nwr["highway"]({{bbox}});
-
-                  nwr["waterway"]({{bbox}});
-                  nwr["natural"="water"]({{bbox}});
-                  nwr["water"="lake"]({{bbox}});
-                  nwr["water"="pond"]({{bbox}});
-                  nwr["water"="reservoir"]({{bbox}});
-                  nwr["waterway"="riverbank"]({{bbox}});
-                  nwr["waterway"="river"]({{bbox}});
-                   );
-                   out geom;
-                   )")
-        .arg(timeout);
-  }
-
-  qWarning() << "Неизвестный тип запроса:" << queryType;
-  return QString();
-}
-
-// Сохранение JSON в файл
-QString OSMDataLoader::saveToJSONFile(const QJsonArray &data,
-                                      const QString &filename) {
-  QFile file(filename);
-
-  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-    qDebug() << "Ошибка открытия файла для записи:" << filename;
-    return "";
-  }
-
-  file.write(QJsonDocument(data).toJson());
-  file.close();
-
-  return filename;
-}
-
-void OSMDataLoader::waitData() {
-  if (!reply) {
-    qDebug() << "Нет активного запроса";
-    return;
-  }
-
-  if (!reply->isFinished()) {
-    QEventLoop loop;
-
-    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-
-    loop.exec();
-  }
-
-  qDebug() << "waitData(): запрос завершён";
-}
-
-double OSMDataLoader::radToLat(double radius) {
-  return radius / (earthRadius * M_PI) * 180;
-}
-double OSMDataLoader::radToLon(double radius) {
-  const double latRadians = defaultArea.lat * M_PI / 180.0;
-
-  return radius / (earthRadius * std::cos(latRadians)) * 180.0 / M_PI;
-}#ifndef OSM_DATA_LOADER_HPP
-#define OSM_DATA_LOADER_HPP
-
-#include <QNetworkReply>
-#include <QObject>
-#include <QRect>
-#include <QString>
-#include <QTimer>
-
-#define earthRadius 6371000.0
-
-struct OSMDataLoaderArea {
-  double lat;
-  double lon;
-  double width;  // широта +/-
-  double height; // долгота +/-
-};
-
-class OSMDataLoader : public QObject {
-  Q_OBJECT
-
-public:
-  QString filePath = "osm.json";
-  explicit OSMDataLoader(
-      const QString apiUrl = "https://overpass.private.coffee/api/interpreter",
-      //"https://maps.mail.ru/osm/tools/overpass/api/interpreter",
-      double lat = 55.766863, double lon = 37.681677, double radius = 1000,
-      QObject *parent = nullptr);
-
-  enum QueryType { Buildings, Roads, Crosswalks, AllElements };
-
-signals:
-  void dataLoaded(const QJsonArray &rawJSON, const QString &queryType);
-  void errorOccurred(const QString &errorMessage);
-
-public slots:
-  // Загрузка данных из OpenStreetMap через Overpass API
-  QByteArray fetchOSMData(const QString &queryType = "all",
-                          const int &timeout = 30, const QRect &area = QRect());
-
-  OSMDataLoaderArea getDefaultArea() const;
-  void setArea(const OSMDataLoaderArea &area);
-  void setArea(double lat, double lon, double radius);
-
-  void waitData();
-
-  // Формирование Overpass QL запроса
-  QString buildOverpassQuery(const int &timout, const QString &queryType);
-
-  // Сохранение сырых данных в файл
-  QString saveToJSONFile(const QJsonArray &data, const QString &filename);
-
-private:
-  QStringList servers;
-
-  QString activeQuery;
-  QString activeQueryType;
-
-  int requestAttempt = 0;
-  static constexpr int maxAttempts = 4;
-
-  void sendNextRequest();
-
-  QNetworkAccessManager *manager;
-  OSMDataLoaderArea defaultArea;
-  QByteArray requestResult;
-  QNetworkReply *reply = nullptr;
-  QUrl url;
-  double radToLat(double radius);
-  double radToLon(double radius);
-  int timeout;
-};
-
-#endif // OSM_DATA_LOADER_HPP
-#include "osmdataparser.hpp"
-#include "osmclassifier.hpp"
+#include "roadclassifier.hpp"
 
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QString>
 
-#include <algorithm>
-#include <cmath>
-#include <utility>
+int RoadClassifier::getLanes(const QJsonObject &tags) const {
+  QJsonValue value = tags.value("lanes");
 
-namespace {
-
-double parseLength(const QJsonValue &value, bool *ok) {
-  *ok = false;
-
-  double result = 0.0;
-
-  if (value.isDouble()) {
-    result = value.toDouble();
-    *ok = true;
-    return result;
-  }
-
-  QString text = value.toString().trimmed().toLower();
-
-  bool feet = text.endsWith("ft");
-
-  if (feet)
-    text.chop(2);
-  else if (text.endsWith("m"))
-    text.chop(1);
-
-  result = text.trimmed().toDouble(ok);
-
-  if (feet && *ok)
-    result *= 0.3048;
-
-  return result;
-}
-
-float parseBuildingHeight(const QJsonObject &tags) {
   bool ok = false;
 
-  double height = parseLength(tags.value("height"), &ok);
+  int lanes = value.toString().toInt(&ok);
 
-  if (ok && height > 0.0)
-    return static_cast<float>(std::clamp(height, 2.0, 300.0));
-
-  const double levels = tags.value("building:levels").toString().toDouble(&ok);
-
-  if (ok && levels > 0.0) {
-    return static_cast<float>(std::clamp(levels * 3.0, 2.0, 300.0));
+  if (!ok && value.isDouble()) {
+    lanes = value.toInt();
+    ok = true;
   }
 
-  return 9.0f;
+  if (!ok || lanes <= 0)
+    return 0;
+
+  return lanes;
 }
 
-float parseRoadWidth(const QJsonObject &tags) {
-  bool ok = false;
+RoadCategory RoadClassifier::classifyFeature(const OSMFeature &feature,
+                                             int &lanes) const {
+  const QJsonObject &tags = feature.getTags();
 
-  double width = parseLength(tags.value("width"), &ok);
+  QString highway = tags.value("highway").toString();
 
-  if (ok && width > 0.0)
-    return static_cast<float>(width);
+  lanes = getLanes(tags);
 
-  const double lanes = tags.value("lanes").toString().toDouble(&ok);
+  if (highway.isEmpty())
+    return RoadCategory::Unknown;
 
-  if (ok && lanes > 0.0)
-    return static_cast<float>(lanes * 3.5);
-
-  const QString highway = tags.value("highway").toString();
-
-  if (highway == "motorway" || highway == "trunk")
-    return 12.0f;
-
-  if (highway == "primary" || highway == "secondary")
-    return 9.0f;
-
-  if (highway == "residential")
-    return 6.0f;
-
-  if (highway == "footway" || highway == "path" || highway == "cycleway")
-    return 2.0f;
-
-  return 5.0f;
-}
-
-Colors getBuildingColors(const QJsonObject &tags) {
-  const QString type = tags.value("building").toString();
-
-  return Colors(0.58f, 0.63f, 0.70f, 0.28f, 0.36f, 0.28f);
-}
-
-bool samePoint(const GeoPoint &a, const GeoPoint &b) {
-  constexpr double eps = 1e-9;
-
-  return std::abs(a.lat - b.lat) < eps && std::abs(a.lon - b.lon) < eps;
-}
-
-bool pointInRing(const GeoPoint &point, const QVector<GeoPoint> &ring) {
-  bool inside = false;
-
-  if (ring.size() < 3)
-    return false;
-
-  for (int i = 0, j = ring.size() - 1; i < ring.size(); j = i++) {
-
-    const GeoPoint &a = ring[i];
-    const GeoPoint &b = ring[j];
-
-    const bool intersects =
-        ((a.lat > point.lat) != (b.lat > point.lat)) &&
-        (point.lon <
-         (b.lon - a.lon) * (point.lat - a.lat) / (b.lat - a.lat) + a.lon);
-
-    if (intersects)
-      inside = !inside;
+  // Motorways
+  if (highway == "motorway" || highway == "motorway_link") {
+    return RoadCategory::Motorway;
   }
 
-  return inside;
+  // Pedestrian roads
+  if (highway == "footway" || highway == "pedestrian" || highway == "path" ||
+      highway == "steps" || highway == "bridleway") {
+    return RoadCategory::Pedestrian;
+  }
+
+  // Other recognized road types
+  static const QStringList carRoads = {
+      "trunk",        "trunk_link",     "primary",       "primary_link",
+      "secondary",    "secondary_link", "tertiary",      "tertiary_link",
+      "unclassified", "residential",    "living_street", "service",
+      "road"};
+
+  if (!carRoads.contains(highway))
+    return RoadCategory::Unknown;
+
+  if (lanes == 0)
+    return RoadCategory::CarUnknownLanes;
+
+  if (lanes == 1)
+    return RoadCategory::Car1Lane;
+
+  if (lanes == 2)
+    return RoadCategory::Car2Lanes;
+
+  if (lanes == 3)
+    return RoadCategory::Car3Lanes;
+
+  if (lanes == 4)
+    return RoadCategory::Car4Lanes;
+
+  return RoadCategory::Car5PlusLanes;
 }
 
-// Читает координаты одного way из участника relation.
-QVector<GeoPoint> readMemberGeometry(const QJsonObject &member) {
-  QVector<GeoPoint> points;
+QVector<RoadClassifier::ClassifiedRoad>
+RoadClassifier::classify(const QVector<OSMFeature> &features) const {
+  QVector<ClassifiedRoad> result;
 
-  const QJsonArray geometry = member.value("geometry").toArray();
+  result.reserve(features.size());
 
-  for (const QJsonValue &value : geometry) {
-    const QJsonObject point = value.toObject();
+  for (const OSMFeature &feature : features) {
+    int lanes = 0;
 
-    if (!point.contains("lat") || !point.contains("lon"))
+    RoadCategory category = classifyFeature(feature, lanes);
+
+    if (category == RoadCategory::Unknown)
       continue;
 
-    points.push_back(
-        {point.value("lat").toDouble(), point.value("lon").toDouble()});
-  }
-
-  return points;
-}
-
-QVector<QVector<GeoPoint>> readRings(const QJsonObject &object,
-                                     const QString &role) {
-  QVector<QVector<GeoPoint>> segments;
-
-  const QJsonArray members = object.value("members").toArray();
-
-  for (const QJsonValue &value : members) {
-    const QJsonObject member = value.toObject();
-
-    if (member.value("type").toString() != "way")
-      continue;
-
-    if (member.value("role").toString() != role)
-      continue;
-
-    QVector<GeoPoint> points = readMemberGeometry(member);
-
-    if (points.size() >= 2)
-      segments.push_back(std::move(points));
-  }
-
-  QVector<QVector<GeoPoint>> rings;
-
-  while (!segments.isEmpty()) {
-    QVector<GeoPoint> ring = segments.takeFirst();
-
-    bool changed = true;
-
-    while (changed && !segments.isEmpty()) {
-      changed = false;
-
-      for (int i = 0; i < segments.size(); ++i) {
-        QVector<GeoPoint> segment = segments[i];
-
-        if (samePoint(ring.back(), segment.front())) {
-          for (int j = 1; j < segment.size(); ++j)
-            ring.push_back(segment[j]);
-
-        } else if (samePoint(ring.back(), segment.back())) {
-          std::reverse(segment.begin(), segment.end());
-
-          for (int j = 1; j < segment.size(); ++j)
-            ring.push_back(segment[j]);
-
-        } else if (samePoint(ring.front(), segment.back())) {
-          // Вставляем в начало в обратном порядке.
-          for (int j = segment.size() - 2; j >= 0; --j)
-            ring.prepend(segment[j]);
-
-        } else if (samePoint(ring.front(), segment.front())) {
-          std::reverse(segment.begin(), segment.end());
-
-          for (int j = segment.size() - 2; j >= 0; --j)
-            ring.prepend(segment[j]);
-
-        } else {
-          continue;
-        }
-
-        segments.removeAt(i);
-        changed = true;
-        break;
-      }
-    }
-
-    if (ring.size() < 4 || !samePoint(ring.front(), ring.back()))
-      continue;
-
-    ring.removeLast();
-
-    if (ring.size() >= 3)
-      rings.push_back(std::move(ring));
-  }
-
-  return rings;
-}
-
-bool readGeometry(const QJsonObject &object, OSMFeature &feature) {
-  const QString osmType = object.value("type").toString();
-
-  if (osmType == "node") {
-
-    if (!object.contains("lat") || !object.contains("lon")) {
-      return false;
-    }
-
-    feature.geometryType = OSMGeometryType::Point;
-
-    feature.geometry.push_back(
-        {object.value("lat").toDouble(), object.value("lon").toDouble()});
-
-    return true;
-  }
-
-  if (osmType == "way") {
-
-    const QJsonArray geometry = object.value("geometry").toArray();
-
-    for (const QJsonValue &value : geometry) {
-
-      const QJsonObject point = value.toObject();
-
-      if (!point.contains("lat") || !point.contains("lon")) {
-        continue;
-      }
-
-      feature.geometry.push_back(
-          {point.value("lat").toDouble(), point.value("lon").toDouble()});
-    }
-
-    if (feature.geometry.isEmpty())
-      return false;
-
-    const bool closed =
-        feature.geometry.size() >= 4 &&
-        std::abs(feature.geometry.front().lat - feature.geometry.back().lat) <
-            1e-10 &&
-        std::abs(feature.geometry.front().lon - feature.geometry.back().lon) <
-            1e-10;
-
-    bool area = feature.tags.value("area").toString() == "yes" ||
-                (closed && (feature.tags.contains("building") ||
-                            feature.tags.contains("building:part") ||
-                            feature.tags.contains("landuse") ||
-                            feature.tags.contains("leisure") ||
-                            feature.tags.contains("natural") ||
-                            feature.tags.contains("water")));
-
-    if (area) {
-      feature.geometryType = OSMGeometryType::Polygon;
-
-      if (closed)
-        feature.geometry.pop_back();
-    } else {
-      feature.geometryType = OSMGeometryType::LineString;
-    }
-
-    return true;
-  }
-
-  // Relation пока не обрабатываем
-  return false;
-}
-
-} // namespace
-
-QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
-  QVector<OSMFeature> result;
-
-  result.reserve(elements.size());
-
-  // ID way, которые уже войдут в геометрию relation.
-  QSet<qint64> relationWayIds;
-
-  // Первый проход: собираем ID внешних way поддерживаемых relation.
-  for (const QJsonValue &value : elements) {
-    if (!value.isObject())
-      continue;
-
-    const QJsonObject object = value.toObject();
-
-    if (object.value("type").toString() != "relation")
-      continue;
-
-    const QJsonObject tags = object.value("tags").toObject();
-    const QString relationType = tags.value("type").toString();
-
-    if (relationType != "multipolygon" && relationType != "boundary" &&
-        relationType != "building") {
-      continue;
-    }
-
-    const QJsonArray members = object.value("members").toArray();
-
-    for (const QJsonValue &memberValue : members) {
-      const QJsonObject member = memberValue.toObject();
-
-      if (member.value("type").toString() != "way")
-        continue;
-
-      const QString role = member.value("role").toString();
-
-      const bool isOuter = role == "outer";
-      const bool isBuildingInner =
-          OSMClassifier::classify(tags) == OSMFeatureType::Building &&
-          role == "inner";
-
-      if (!isOuter && !isBuildingInner)
-        continue;
-      relationWayIds.insert(
-          static_cast<qint64>(member.value("ref").toDouble()));
-    }
-  }
-
-  // Второй проход: обрабатываем объекты.
-  for (const QJsonValue &value : elements) {
-    if (!value.isObject())
-      continue;
-
-    const QJsonObject object = value.toObject();
-
-    const QString osmType = object.value("type").toString();
-
-    // Не обрабатываем way повторно, если он уже вошёл в relation.
-    if (osmType == "way") {
-      const qint64 wayId = static_cast<qint64>(object.value("id").toDouble());
-
-      if (relationWayIds.contains(wayId))
-        continue;
-    }
-
-    OSMFeature feature;
-
-    feature.id = static_cast<qint64>(object.value("id").toDouble());
-
-    feature.tags = object.value("tags").toObject();
-
-    feature.type = OSMClassifier::classify(feature.tags);
-
-    if (feature.type == OSMFeatureType::Unknown)
-      continue;
-
-    // Relation обрабатываем отдельно.
-    if (osmType == "relation") {
-      const QString relationType = feature.tags.value("type").toString();
-
-      if (relationType != "multipolygon" && relationType != "boundary" &&
-          relationType != "building") {
-        continue;
-      }
-
-      // 1. Собираем внешние кольца relation.
-      const auto outerRings = readRings(object, "outer");
-
-      // 2. Внутренние кольца нужны только зданиям.
-      QVector<QVector<GeoPoint>> innerRings;
-
-      if (feature.type == OSMFeatureType::Building) {
-        innerRings = readRings(object, "inner");
-      }
-
-      // 3. Создаём отдельный OSMFeature для каждого внешнего кольца.
-      for (const auto &outer : outerRings) {
-        OSMFeature relationFeature = feature;
-
-        relationFeature.geometryType = OSMGeometryType::Polygon;
-        relationFeature.geometry = outer;
-
-        if (relationFeature.type == OSMFeatureType::Water) {
-          relationFeature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
-        }
-
-        if (relationFeature.type == OSMFeatureType::Building) {
-          relationFeature.heightMeters =
-              parseBuildingHeight(relationFeature.tags);
-          relationFeature.minHeightMeters = 0.0f;
-
-          const QString minLevel =
-              relationFeature.tags.value("building:min_level").toString();
-
-          if (!minLevel.isEmpty()) {
-            bool ok = false;
-            const float levels = minLevel.toFloat(&ok);
-
-            if (ok)
-              relationFeature.minHeightMeters = levels * 3.0f;
-          }
-
-          relationFeature.colors = getBuildingColors(relationFeature.tags);
-
-          // 4. Прикрепляем к зданию только те inner,
-          // которые находятся внутри текущего outer.
-          for (const auto &inner : innerRings) {
-            if (inner.isEmpty())
-              continue;
-
-            if (pointInRing(inner.first(), outer)) {
-              relationFeature.innerRings.push_back(inner);
-            }
-          }
-        }
-
-        result.push_back(std::move(relationFeature));
-      }
-
-      continue;
-    }
-
-    // Обычные node и way.
-    if (!readGeometry(object, feature))
-      continue;
-
-    if (feature.type == OSMFeatureType::Building) {
-      feature.heightMeters = parseBuildingHeight(feature.tags);
-      feature.minHeightMeters = 0.0f;
-
-      const QString minLevel =
-          feature.tags.value("building:min_level").toString();
-
-      if (!minLevel.isEmpty()) {
-        bool ok = false;
-        const float levels = minLevel.toFloat(&ok);
-
-        if (ok)
-          feature.minHeightMeters = levels * 3.0f;
-      }
-      feature.colors = getBuildingColors(feature.tags);
-    }
-
-    if (feature.type == OSMFeatureType::Road) {
-      feature.widthMeters = parseRoadWidth(feature.tags);
-
-      const QString highway = feature.tags.value("highway").toString();
-
-      if (highway == "footway" || highway == "path" || highway == "cycleway")
-        feature.colors = Colors(0, 0.5f, 0, 0, 0.5f, 0);
-      if (highway == "steps")
-        feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
-    }
-    if (feature.type == OSMFeatureType::Water) {
-      feature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
-    }
-
-    result.push_back(std::move(feature));
+    ClassifiedRoad road;
+    road.feature = feature;
+    road.category = category;
+    road.lanes = lanes;
+
+    result.append(road);
   }
 
   return result;
@@ -3283,563 +117,377 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
 #pragma once
 
 #include "osmfeature.hpp"
+#include "roadcategory.hpp"
 
-#include <QJsonArray>
 #include <QVector>
 
-class OSMDataParser {
+class RoadClassifier {
 public:
-  static QVector<OSMFeature> parse(const QJsonArray &elements);
+  struct ClassifiedRoad {
+    OSMFeature feature;
+    RoadCategory category = RoadCategory::Unknown;
+    int lanes = 0;
+  };
+
+  QVector<ClassifiedRoad> classify(const QVector<OSMFeature> &features) const;
+
+private:
+  RoadCategory classifyFeature(const OSMFeature &feature, int &lanes) const;
+
+  int getLanes(const QJsonObject &tags) const;
 };
+
+#include "roadgraphbuilder.hpp"
+
+#include <QJsonObject>
+#include <QJsonValue>
+#include <QtMath>
+
+RoadGraphBuilder::RoadGraphBuilder() = default;
+
+RoadGraphBuilder::RoadGraphBuilder(const Settings &settings)
+    : settings(settings) {}
+
+int RoadGraphBuilder::getLayer(const QJsonObject &tags) const {
+  bool ok = false;
+
+  int layer = tags.value("layer").toString().toInt(&ok);
+
+  if (!ok)
+    layer = static_cast<int>(tags.value("layer").toDouble(0));
+
+  return layer;
+}
+
+// -----------------------------------------------------------------------------
+// Distance (Haversine)
+// -----------------------------------------------------------------------------
+
+double RoadGraphBuilder::calculateDistance(const GeoPoint &a,
+                                           const GeoPoint &b) const {
+  constexpr double EarthRadius = 6371000.0;
+
+  double lat1 = qDegreesToRadians(a.lat);
+  double lat2 = qDegreesToRadians(b.lat);
+
+  double dLat = lat2 - lat1;
+  double dLon = qDegreesToRadians(b.lon - a.lon);
+
+  double h = qPow(qSin(dLat / 2.0), 2) +
+             qCos(lat1) * qCos(lat2) * qPow(qSin(dLon / 2.0), 2);
+
+  double c = 2.0 * qAtan2(qSqrt(h), qSqrt(1.0 - h));
+
+  return EarthRadius * c;
+}
+
+// -----------------------------------------------------------------------------
+// Node creation
+// -----------------------------------------------------------------------------
+
+quint32 RoadGraphBuilder::getOrCreateNode(RoadGraph &graph,
+                                          const GeoPoint &point, int layer) {
+  // Approximate coordinate quantization.
+  // Latitude degrees converted to meters.
+  constexpr double EarthRadius = 6371000.0;
+
+  double latMeters = qDegreesToRadians(point.lat) * EarthRadius;
+
+  double lonMeters = qDegreesToRadians(point.lon) * EarthRadius *
+                     qCos(qDegreesToRadians(point.lat));
+
+  double tolerance = qMax(settings.coordinateToleranceMeters, 0.01);
+
+  qint64 x = qRound64(lonMeters / tolerance);
+  qint64 y = qRound64(latMeters / tolerance);
+
+  // Search nearby cells to avoid missing points
+  // located on opposite sides of a quantization boundary.
+
+  for (int dx = -1; dx <= 1; ++dx) {
+    for (int dy = -1; dy <= 1; ++dy) {
+
+      QString key = QString("%1_%2_%3").arg(x + dx).arg(y + dy).arg(layer);
+
+      auto it = nodeLookup.constFind(key);
+
+      if (it == nodeLookup.constEnd())
+        continue;
+
+      quint32 id = it.value();
+
+      if (id >= static_cast<quint32>(graph.nodes.size()))
+        continue;
+
+      const RoadNode &node = graph.nodes[id];
+
+      GeoPoint existing;
+      existing.lat = node.lat;
+      existing.lon = node.lon;
+
+      if (calculateDistance(point, existing) <= tolerance)
+        return id;
+    }
+  }
+
+  quint32 id = graph.addNode(point.lat, point.lon);
+
+  QString key = QString("%1_%2_%3").arg(x).arg(y).arg(layer);
+
+  nodeLookup.insert(key, id);
+
+  return id;
+}
+
+// -----------------------------------------------------------------------------
+// Process feature
+// -----------------------------------------------------------------------------
+
+void RoadGraphBuilder::processFeature(
+    RoadGraph &graph, const RoadClassifier::ClassifiedRoad &road) {
+  const OSMFeature &feature = road.feature;
+
+  const QVector<GeoPoint> &geometry = feature.getGeometry();
+
+  if (geometry.size() < 2)
+    return;
+
+  const QJsonObject &tags = feature.getTags();
+
+  QString highway = tags.value("highway").toString();
+
+  QString name = tags.value("name").toString();
+
+  int layer = getLayer(tags);
+
+  QString oneway = tags.value("oneway").toString();
+
+  bool oneWay =
+      oneway == "yes" || oneway == "1" || oneway == "true" || oneway == "-1";
+
+  bool reverse = oneway == "-1";
+
+  QString bridgeTag = tags.value("bridge").toString();
+  QString tunnelTag = tags.value("tunnel").toString();
+
+  bool bridge = bridgeTag == "yes" || bridgeTag == "true";
+
+  bool tunnel = tunnelTag == "yes" || tunnelTag == "true";
+
+  for (int i = 0; i < geometry.size() - 1; ++i) {
+    const GeoPoint &a = geometry[i];
+    const GeoPoint &b = geometry[i + 1];
+
+    double length = calculateDistance(a, b);
+
+    if (length < 0.01)
+      continue;
+
+    quint32 from = getOrCreateNode(graph, a, layer);
+    quint32 to = getOrCreateNode(graph, b, layer);
+
+    if (from == to)
+      continue;
+
+    auto addRoadEdge = [&](quint32 edgeFrom, quint32 edgeTo, bool isReverse) {
+      quint32 edgeId = graph.addEdge(edgeFrom, edgeTo, length);
+
+      if (edgeId == UINT32_MAX)
+        return;
+
+      RoadEdge &edge = graph.edges[edgeId];
+
+      edge.featureId = feature.getId();
+      edge.highway = highway;
+      edge.name = name;
+
+      edge.layer = layer;
+
+      edge.oneWay = oneWay;
+      edge.isBridge = bridge;
+      edge.isTunnel = tunnel;
+
+      edge.category = road.category;
+      edge.lanes = road.lanes;
+
+      edge.isPedestrian = road.category == RoadCategory::Pedestrian;
+
+      edge.isReverse = isReverse;
+    };
+
+    if (reverse) {
+      addRoadEdge(to, from, true);
+    } else {
+      addRoadEdge(from, to, false);
+    }
+
+    if (!oneWay) {
+      addRoadEdge(to, from, true);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Build graph
+// -----------------------------------------------------------------------------
+
+RoadGraph
+RoadGraphBuilder::build(const QVector<RoadClassifier::ClassifiedRoad> &roads) {
+  RoadGraph graph;
+
+  nodeLookup.clear();
+
+  for (const RoadClassifier::ClassifiedRoad &road : roads) {
+    processFeature(graph, road);
+  }
+
+  return graph;
+}
 
 #pragma once
 
-#include <QJsonObject>
+#include "roadclassifier.hpp"
+#include "roadgraph.hpp"
+
+#include <QHash>
+#include <QString>
+
+class RoadGraphBuilder {
+public:
+  struct Settings {
+    double coordinateToleranceMeters = 1.0;
+  };
+
+  RoadGraphBuilder();
+  explicit RoadGraphBuilder(const Settings &settings);
+
+  RoadGraph build(const QVector<RoadClassifier::ClassifiedRoad> &roads);
+
+private:
+  Settings settings;
+
+  // Ключ координаты и слоя для поиска существующего узла.
+  QHash<QString, quint32> nodeLookup;
+
+  quint32 getOrCreateNode(RoadGraph &graph, const GeoPoint &point, int layer);
+
+  double calculateDistance(const GeoPoint &a, const GeoPoint &b) const;
+
+  int getLayer(const QJsonObject &tags) const;
+
+  void processFeature(RoadGraph &graph,
+                      const RoadClassifier::ClassifiedRoad &road);
+};
+
+#include "roadgraph.hpp"
+
+void RoadGraph::clear() {
+  nodes.clear();
+  edges.clear();
+}
+
+quint32 RoadGraph::addNode(double lat, double lon) {
+  quint32 id = static_cast<quint32>(nodes.size());
+
+  RoadNode node;
+  node.id = id;
+  node.lat = lat;
+  node.lon = lon;
+
+  nodes.append(node);
+
+  return id;
+}
+
+quint32 RoadGraph::addEdge(quint32 from, quint32 to, double length) {
+  if (from >= static_cast<quint32>(nodes.size()) ||
+      to >= static_cast<quint32>(nodes.size()) || from == to) {
+    return UINT32_MAX;
+  }
+
+  quint32 id = static_cast<quint32>(edges.size());
+
+  RoadEdge edge;
+  edge.id = id;
+  edge.from = from;
+  edge.to = to;
+  edge.length = length;
+
+  edges.append(edge);
+
+  nodes[from].edges.append(id);
+
+  return id;
+}
+
+int RoadGraph::nodeCount() const { return nodes.size(); }
+
+int RoadGraph::edgeCount() const { return edges.size(); }
+
+const QVector<quint32> &RoadGraph::getEdges(quint32 nodeId) const {
+  static const QVector<quint32> empty;
+
+  if (nodeId >= static_cast<quint32>(nodes.size()))
+    return empty;
+
+  return nodes[nodeId].edges;
+}
+
+#pragma once
+
+#include <QString>
 #include <QVector>
 #include <QtGlobal>
 
-struct GeoPoint {
+#include "roadcategory.hpp"
+
+struct RoadNode {
+  quint32 id = 0;
+
   double lat = 0.0;
   double lon = 0.0;
+
+  QVector<quint32> edges;
 };
 
-enum class OSMGeometryType { Point, LineString, Polygon };
+struct RoadEdge {
+  quint32 id = 0;
 
-enum class OSMFeatureType {
-  Unknown,
-  Building,
-  Road,
-  Water,
-  Vegetation,
-  Landuse,
-  Railway,
-  Amenity
+  quint32 from = 0;
+  quint32 to = 0;
+
+  qint64 featureId = 0;
+
+  double length = 0.0;
+
+  QString highway;
+  QString name;
+
+  int layer = 0;
+
+  bool oneWay = false;
+  bool isBridge = false;
+  bool isTunnel = false;
+  bool isPedestrian = false;
+  bool isReverse = false;
+
+  RoadCategory category = RoadCategory::Unknown;
+  int lanes = 0;
 };
 
-struct Colors {
-  float wallR = 1.0f;
-  float wallG = 1.0f;
-  float wallB = 1.0f;
-
-  float roofR = 1.0f;
-  float roofG = 1.0f;
-  float roofB = 1.0f;
-
-  Colors() = default;
-
-  Colors(float wr, float wg, float wb, float rr, float rg, float rb)
-      : wallR(wr), wallG(wg), wallB(wb), roofR(rr), roofG(rg), roofB(rb) {}
-};
-
-struct OSMFeature {
-  qint64 id = 0;
-
-  OSMFeatureType type = OSMFeatureType::Unknown;
-  OSMGeometryType geometryType = OSMGeometryType::Point;
-
-  QVector<GeoPoint> geometry;
-
-  // Внутренние кольца (отверстия), используются только зданиями.
-  QVector<QVector<GeoPoint>> innerRings;
-
-  // Все исходные теги OSM
-  QJsonObject tags;
-
-  // Параметры геометрии
-  float heightMeters = 0.0f;
-  float minHeightMeters = 0.0f;
-  float widthMeters = 0.0f;
-
-  Colors colors;
-};
-#include "projectserializer.hpp"
-
-#include <QDataStream>
-#include <QFile>
-#include <QJsonDocument>
-#include <QSaveFile>
-
-#include <cmath>
-#include <limits>
-
-namespace {
-
-constexpr char Magic[] = "OSM3D";
-constexpr quint16 FormatVersion = 1;
-
-constexpr quint64 MaxDemCells = 100'000'000;
-constexpr quint32 MaxFeatures = 1'000'000;
-constexpr quint32 MaxGeometryPoints = 10'000'000;
-constexpr quint32 MaxInnerRings = 100'000;
-constexpr quint32 MaxTagBytes = 64 * 1024 * 1024;
-constexpr quint32 MaxProjectionBytes = 16 * 1024 * 1024;
-
-void setError(QString *error, const QString &message) {
-  if (error)
-    *error = message;
-}
-
-void configureStream(QDataStream &stream) {
-  stream.setVersion(QDataStream::Qt_6_0);
-  stream.setByteOrder(QDataStream::LittleEndian);
-}
-
-bool writeRaw(QDataStream &stream, const QByteArray &data) {
-  if (data.isEmpty())
-    return true;
-
-  return stream.writeRawData(data.constData(), data.size()) == data.size();
-}
-
-bool readRaw(QDataStream &stream, quint32 size, QByteArray &data,
-             quint32 maxSize) {
-  if (size > maxSize)
-    return false;
-
-  data.resize(static_cast<qsizetype>(size));
-
-  if (size == 0)
-    return true;
-
-  return stream.readRawData(data.data(), static_cast<int>(size)) ==
-         static_cast<int>(size);
-}
-
-bool writePoints(QDataStream &out, const QVector<GeoPoint> &points) {
-  if (points.size() < 0 ||
-      static_cast<quint64>(points.size()) > MaxGeometryPoints) {
-    return false;
-  }
-
-  out << static_cast<quint32>(points.size());
-
-  for (const GeoPoint &point : points) {
-    if (!std::isfinite(point.lat) || !std::isfinite(point.lon))
-      return false;
-
-    out << point.lat << point.lon;
-  }
-
-  return out.status() == QDataStream::Ok;
-}
-
-bool readPoints(QDataStream &in, QVector<GeoPoint> &points) {
-  quint32 count = 0;
-  in >> count;
-
-  if (in.status() != QDataStream::Ok || count > MaxGeometryPoints) {
-    return false;
-  }
-
-  points.clear();
-  points.reserve(static_cast<qsizetype>(count));
-
-  for (quint32 i = 0; i < count; ++i) {
-    GeoPoint point;
-
-    in >> point.lat >> point.lon;
-
-    if (in.status() != QDataStream::Ok || !std::isfinite(point.lat) ||
-        !std::isfinite(point.lon)) {
-      return false;
-    }
-
-    points.push_back(point);
-  }
-
-  return true;
-}
-
-bool writeFeature(QDataStream &out, const OSMFeature &feature) {
-  const quint8 type = static_cast<quint8>(feature.type);
-  const quint8 geometryType = static_cast<quint8>(feature.geometryType);
-
-  if (type > static_cast<quint8>(OSMFeatureType::Amenity) ||
-      geometryType > static_cast<quint8>(OSMGeometryType::Polygon)) {
-    return false;
-  }
-
-  if (!std::isfinite(feature.heightMeters) ||
-      !std::isfinite(feature.minHeightMeters) ||
-      !std::isfinite(feature.widthMeters)) {
-    return false;
-  }
-
-  out << feature.id;
-  out << type;
-  out << geometryType;
-
-  if (!writePoints(out, feature.geometry))
-    return false;
-
-  if (static_cast<quint64>(feature.innerRings.size()) > MaxInnerRings) {
-    return false;
-  }
-
-  out << static_cast<quint32>(feature.innerRings.size());
-
-  for (const auto &ring : feature.innerRings) {
-    if (!writePoints(out, ring))
-      return false;
-  }
-
-  const QByteArray tags =
-      QJsonDocument(feature.tags).toJson(QJsonDocument::Compact);
-
-  if (static_cast<quint64>(tags.size()) > MaxTagBytes)
-    return false;
-
-  out << static_cast<quint32>(tags.size());
-
-  if (!writeRaw(out, tags))
-    return false;
-
-  out << feature.heightMeters;
-  out << feature.minHeightMeters;
-  out << feature.widthMeters;
-
-  out << feature.colors.wallR;
-  out << feature.colors.wallG;
-  out << feature.colors.wallB;
-
-  out << feature.colors.roofR;
-  out << feature.colors.roofG;
-  out << feature.colors.roofB;
-
-  return out.status() == QDataStream::Ok;
-}
-
-bool readFeature(QDataStream &in, OSMFeature &feature) {
-  quint8 type = 0;
-  quint8 geometryType = 0;
-
-  in >> feature.id;
-  in >> type;
-  in >> geometryType;
-
-  if (in.status() != QDataStream::Ok ||
-      type > static_cast<quint8>(OSMFeatureType::Amenity) ||
-      geometryType > static_cast<quint8>(OSMGeometryType::Polygon)) {
-    return false;
-  }
-
-  feature.type = static_cast<OSMFeatureType>(type);
-  feature.geometryType = static_cast<OSMGeometryType>(geometryType);
-
-  if (!readPoints(in, feature.geometry))
-    return false;
-
-  quint32 ringCount = 0;
-  in >> ringCount;
-
-  if (in.status() != QDataStream::Ok || ringCount > MaxInnerRings) {
-    return false;
-  }
-
-  feature.innerRings.clear();
-  feature.innerRings.reserve(static_cast<qsizetype>(ringCount));
-
-  for (quint32 i = 0; i < ringCount; ++i) {
-    QVector<GeoPoint> ring;
-
-    if (!readPoints(in, ring))
-      return false;
-
-    feature.innerRings.push_back(std::move(ring));
-  }
-
-  quint32 tagsSize = 0;
-  in >> tagsSize;
-
-  QByteArray tagsData;
-
-  if (in.status() != QDataStream::Ok ||
-      !readRaw(in, tagsSize, tagsData, MaxTagBytes)) {
-    return false;
-  }
-
-  QJsonParseError jsonError;
-  const QJsonDocument tagsDocument =
-      QJsonDocument::fromJson(tagsData, &jsonError);
-
-  if (jsonError.error != QJsonParseError::NoError || !tagsDocument.isObject()) {
-    return false;
-  }
-
-  feature.tags = tagsDocument.object();
-
-  in >> feature.heightMeters;
-  in >> feature.minHeightMeters;
-  in >> feature.widthMeters;
-
-  in >> feature.colors.wallR;
-  in >> feature.colors.wallG;
-  in >> feature.colors.wallB;
-
-  in >> feature.colors.roofR;
-  in >> feature.colors.roofG;
-  in >> feature.colors.roofB;
-
-  if (in.status() != QDataStream::Ok)
-    return false;
-
-  return std::isfinite(feature.heightMeters) &&
-         std::isfinite(feature.minHeightMeters) &&
-         std::isfinite(feature.widthMeters) &&
-         std::isfinite(feature.colors.wallR) &&
-         std::isfinite(feature.colors.wallG) &&
-         std::isfinite(feature.colors.wallB) &&
-         std::isfinite(feature.colors.roofR) &&
-         std::isfinite(feature.colors.roofG) &&
-         std::isfinite(feature.colors.roofB);
-}
-
-} // namespace
-
-bool ProjectSerializer::save(const QString &fileName, const DEMData &dem,
-                             const QVector<OSMFeature> &features,
-                             float verticalScale, QString *error) {
-
-  if (dem.width < 2 || dem.height < 2) {
-    setError(error, "DEM не загружена или имеет некорректный размер.");
-    return false;
-  }
-
-  const quint64 expectedCells =
-      static_cast<quint64>(dem.width) * static_cast<quint64>(dem.height);
-
-  if (expectedCells > MaxDemCells ||
-      dem.elevation.size() != static_cast<qsizetype>(expectedCells)) {
-    setError(error, "Некорректный массив высот DEM.");
-    return false;
-  }
-
-  if (!std::isfinite(verticalScale) || verticalScale <= 0.0f) {
-    setError(error, "Некорректный масштаб высот.");
-    return false;
-  }
-
-  if (static_cast<quint64>(features.size()) > MaxFeatures) {
-    setError(error, "Слишком много OSM-объектов.");
-    return false;
-  }
-
-  QSaveFile file(fileName);
-
-  if (!file.open(QIODevice::WriteOnly)) {
-    setError(error, "Не удалось создать файл проекта: " + file.errorString());
-    return false;
-  }
-
-  QDataStream out(&file);
-  configureStream(out);
-
-  if (out.writeRawData(Magic, sizeof(Magic) - 1) != sizeof(Magic) - 1) {
-    setError(error, "Ошибка записи заголовка проекта.");
-    return false;
-  }
-
-  out << FormatVersion;
-
-  out << static_cast<qint32>(dem.width);
-  out << static_cast<qint32>(dem.height);
-  out << expectedCells;
-
-  for (float elevation : dem.elevation)
-    out << elevation;
-
-  for (double value : dem.geoTransform)
-    out << value;
-
-  const QByteArray projection = dem.projectionWkt.toUtf8();
-
-  if (static_cast<quint64>(projection.size()) > MaxProjectionBytes) {
-    setError(error, "Слишком длинное описание проекции DEM.");
-    return false;
-  }
-
-  out << static_cast<quint32>(projection.size());
-
-  if (!writeRaw(out, projection)) {
-    setError(error, "Ошибка записи проекции DEM.");
-    return false;
-  }
-
-  out << dem.minElevation;
-  out << dem.maxElevation;
-
-  out << static_cast<quint32>(features.size());
-
-  for (const OSMFeature &feature : features) {
-    if (!writeFeature(out, feature)) {
-      setError(error, "Ошибка записи одного из OSM-объектов.");
-      return false;
-    }
-  }
-
-  out << verticalScale;
-
-  if (out.status() != QDataStream::Ok) {
-    setError(error, "Ошибка записи данных проекта.");
-    return false;
-  }
-
-  if (!file.commit()) {
-    setError(error, "Не удалось завершить запись файла: " + file.errorString());
-    return false;
-  }
-
-  return true;
-}
-
-bool ProjectSerializer::load(const QString &fileName, DEMData &dem,
-                             QVector<OSMFeature> &features,
-                             float &verticalScale, QString *error) {
-
-  QFile file(fileName);
-
-  if (!file.open(QIODevice::ReadOnly)) {
-    setError(error, "Не удалось открыть файл проекта: " + file.errorString());
-    return false;
-  }
-
-  QDataStream in(&file);
-  configureStream(in);
-
-  char magic[sizeof(Magic) - 1] = {};
-
-  if (in.readRawData(magic, sizeof(magic)) != sizeof(magic) ||
-      QByteArray(magic, sizeof(magic)) !=
-          QByteArray(Magic, sizeof(Magic) - 1)) {
-    setError(error, "Файл не является проектом OSM3D.");
-    return false;
-  }
-
-  quint16 version = 0;
-  in >> version;
-
-  if (in.status() != QDataStream::Ok || version != FormatVersion) {
-    setError(error, "Неподдерживаемая версия проекта.");
-    return false;
-  }
-
-  DEMData loadedDem;
-
-  qint32 width = 0;
-  qint32 height = 0;
-  quint64 cellCount = 0;
-
-  in >> width >> height >> cellCount;
-
-  if (in.status() != QDataStream::Ok || width < 2 || height < 2 ||
-      cellCount != static_cast<quint64>(width) * static_cast<quint64>(height) ||
-      cellCount > MaxDemCells) {
-    setError(error, "Некорректные размеры DEM в файле проекта.");
-    return false;
-  }
-
-  loadedDem.width = width;
-  loadedDem.height = height;
-  loadedDem.elevation.resize(static_cast<qsizetype>(cellCount));
-
-  for (float &elevation : loadedDem.elevation) {
-    in >> elevation;
-
-    if (in.status() != QDataStream::Ok || !std::isfinite(elevation)) {
-      setError(error, "Повреждён массив высот DEM.");
-      return false;
-    }
-  }
-
-  for (double &value : loadedDem.geoTransform) {
-    in >> value;
-
-    if (in.status() != QDataStream::Ok || !std::isfinite(value)) {
-      setError(error, "Повреждена геотрансформация DEM.");
-      return false;
-    }
-  }
-
-  quint32 projectionSize = 0;
-  in >> projectionSize;
-
-  QByteArray projection;
-
-  if (in.status() != QDataStream::Ok ||
-      !readRaw(in, projectionSize, projection, MaxProjectionBytes)) {
-    setError(error, "Повреждено описание проекции DEM.");
-    return false;
-  }
-
-  loadedDem.projectionWkt = QString::fromUtf8(projection);
-
-  in >> loadedDem.minElevation;
-  in >> loadedDem.maxElevation;
-
-  if (in.status() != QDataStream::Ok ||
-      !std::isfinite(loadedDem.minElevation) ||
-      !std::isfinite(loadedDem.maxElevation)) {
-    setError(error, "Некорректные минимальная или максимальная высоты DEM.");
-    return false;
-  }
-
-  quint32 featureCount = 0;
-  in >> featureCount;
-
-  if (in.status() != QDataStream::Ok || featureCount > MaxFeatures) {
-    setError(error, "Некорректное количество OSM-объектов.");
-    return false;
-  }
-
-  QVector<OSMFeature> loadedFeatures;
-  loadedFeatures.reserve(static_cast<qsizetype>(featureCount));
-
-  for (quint32 i = 0; i < featureCount; ++i) {
-    OSMFeature feature;
-
-    if (!readFeature(in, feature)) {
-      setError(error, "Повреждены данные OSM-объекта.");
-      return false;
-    }
-
-    loadedFeatures.push_back(std::move(feature));
-  }
-
-  float loadedVerticalScale = 0.0f;
-  in >> loadedVerticalScale;
-
-  if (in.status() != QDataStream::Ok || !std::isfinite(loadedVerticalScale) ||
-      loadedVerticalScale <= 0.0f) {
-    setError(error, "Некорректный масштаб высот в проекте.");
-    return false;
-  }
-
-  if (!file.atEnd()) {
-    setError(error, "В файле обнаружены лишние или повреждённые данные.");
-    return false;
-  }
-
-  // Обновляем переданные данные только после успешной загрузки всего файла.
-  dem = std::move(loadedDem);
-  features = std::move(loadedFeatures);
-  verticalScale = loadedVerticalScale;
-
-  return true;
-}#pragma once
-
-#include "demreader.hpp"
-#include "osmfeature.hpp"
-
-#include <QString>
-#include <QVector>
-
-class ProjectSerializer {
+class RoadGraph {
 public:
-  static bool save(const QString &fileName, const DEMData &dem,
-                   const QVector<OSMFeature> &features, float verticalScale,
-                   QString *error = nullptr);
+  QVector<RoadNode> nodes;
+  QVector<RoadEdge> edges;
 
-  static bool load(const QString &fileName, DEMData &dem,
-                   QVector<OSMFeature> &features, float &verticalScale,
-                   QString *error = nullptr);
+  void clear();
+
+  quint32 addNode(double lat, double lon);
+
+  quint32 addEdge(quint32 from, quint32 to, double length);
+
+  int nodeCount() const;
+  int edgeCount() const;
+
+  const QVector<quint32> &getEdges(quint32 nodeId) const;
 };

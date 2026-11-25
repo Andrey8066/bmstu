@@ -6,7 +6,6 @@
 #include <QSaveFile>
 
 #include <cmath>
-#include <limits>
 
 namespace {
 

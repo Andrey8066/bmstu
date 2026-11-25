@@ -48,6 +48,8 @@ public:
   float getVerticalScale() const;
   void setVerticalScale(float value);
 
+  void setHighlightedFeatures(const QSet<qint64> &ids);
+
 protected:
   void initializeGL() override;
   void resizeGL(int width, int height) override;
@@ -147,4 +149,6 @@ private:
   float verticalScaleCoefficient = 0.12f;
 
   QPoint lastMousePosition;
+
+  QSet<qint64> highlightedFeatureIds;
 };

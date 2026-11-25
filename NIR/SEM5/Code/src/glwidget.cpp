@@ -14,7 +14,6 @@
 #include <limits>
 #include <mapbox/earcut.hpp>
 #include <numeric>
-#include <unordered_map>
 #include <vector>
 
 namespace {
@@ -671,6 +670,17 @@ void GLWidget::appendBuilding(const OSMFeature &feature) {
 
   const Colors &color = feature.getColors();
 
+  const bool isRoadFeature = feature.hasType(OSMFeatureType::Road) ||
+                             feature.hasType(OSMFeatureType::PedestrianRoad) ||
+                             feature.hasType(OSMFeatureType::Bridge);
+
+  const bool isHighlighted =
+      isRoadFeature && highlightedFeatureIds.contains(feature.getId());
+
+  const float surfaceR = isHighlighted ? 1.0f : color.roofR;
+  const float surfaceG = isHighlighted ? 0.85f : color.roofG;
+  const float surfaceB = isHighlighted ? 0.05f : color.roofB;
+
   // Стены внешнего и внутренних контуров.
   if (!isRoof) {
     for (const auto &ring : sceneRings) {
@@ -766,6 +776,17 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
 
   const Colors &color = feature.getColors();
 
+  const bool isRoadFeature = feature.hasType(OSMFeatureType::Road) ||
+                             feature.hasType(OSMFeatureType::PedestrianRoad) ||
+                             feature.hasType(OSMFeatureType::Bridge);
+
+  const bool isHighlighted =
+      isRoadFeature && highlightedFeatureIds.contains(feature.getId());
+
+  const float surfaceR = isHighlighted ? 1.0f : color.roofR;
+  const float surfaceG = isHighlighted ? 0.85f : color.roofG;
+  const float surfaceB = isHighlighted ? 0.05f : color.roofB;
+
   // Обычные полигоны оставляем без изменений.
   if (!isManMadeBridge) {
     float groundSum = 0.0f;
@@ -778,8 +799,8 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
 
     for (const auto &triangle : triangles) {
       for (int index : triangle) {
-        addVertex(featureVertices, polygon[index], y, color.roofR, color.roofG,
-                  color.roofB);
+        addVertex(featureVertices, polygon[index], y, surfaceR, surfaceG,
+                  surfaceB);
       }
     }
 
@@ -1072,6 +1093,17 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
 
   const Colors &color = feature.getColors();
 
+  const bool isRoadFeature = feature.hasType(OSMFeatureType::Road) ||
+                             feature.hasType(OSMFeatureType::PedestrianRoad) ||
+                             feature.hasType(OSMFeatureType::Bridge);
+
+  const bool isHighlighted =
+      isRoadFeature && highlightedFeatureIds.contains(feature.getId());
+
+  const float surfaceR = isHighlighted ? 1.0f : color.roofR;
+  const float surfaceG = isHighlighted ? 0.85f : color.roofG;
+  const float surfaceB = isHighlighted ? 0.05f : color.roofB;
+
   // Размер одного пикселя DEM в координатах сцены.
   const float pixelSizeX =
       terrainSize.width / static_cast<float>(dem.width - 1);
@@ -1204,24 +1236,18 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
       }
 
       // Первый треугольник.
-      addVertex(featureVertices, aLeft, yALeft, color.roofR, color.roofG,
-                color.roofB);
+      addVertex(featureVertices, aLeft, yALeft, surfaceR, surfaceG, surfaceB);
 
-      addVertex(featureVertices, aRight, yARight, color.roofR, color.roofG,
-                color.roofB);
+      addVertex(featureVertices, aRight, yARight, surfaceR, surfaceG, surfaceB);
 
-      addVertex(featureVertices, bLeft, yBLeft, color.roofR, color.roofG,
-                color.roofB);
+      addVertex(featureVertices, bLeft, yBLeft, surfaceR, surfaceG, surfaceB);
 
       // Второй треугольник.
-      addVertex(featureVertices, aRight, yARight, color.roofR, color.roofG,
-                color.roofB);
+      addVertex(featureVertices, aRight, yARight, surfaceR, surfaceG, surfaceB);
 
-      addVertex(featureVertices, bRight, yBRight, color.roofR, color.roofG,
-                color.roofB);
+      addVertex(featureVertices, bRight, yBRight, surfaceR, surfaceG, surfaceB);
 
-      addVertex(featureVertices, bLeft, yBLeft, color.roofR, color.roofG,
-                color.roofB);
+      addVertex(featureVertices, bLeft, yBLeft, surfaceR, surfaceG, surfaceB);
     }
   }
 }
@@ -1278,6 +1304,17 @@ void GLWidget::appendPoint(const OSMFeature &feature, float sizeMeters,
   const float y = point.groundY + heightOffset;
 
   const Colors &color = feature.getColors();
+
+  const bool isRoadFeature = feature.hasType(OSMFeatureType::Road) ||
+                             feature.hasType(OSMFeatureType::PedestrianRoad) ||
+                             feature.hasType(OSMFeatureType::Bridge);
+
+  const bool isHighlighted =
+      isRoadFeature && highlightedFeatureIds.contains(feature.getId());
+
+  const float surfaceR = isHighlighted ? 1.0f : color.roofR;
+  const float surfaceG = isHighlighted ? 0.85f : color.roofG;
+  const float surfaceB = isHighlighted ? 0.05f : color.roofB;
 
   addVertex(featureVertices, a, y, color.roofR, color.roofG, color.roofB);
   addVertex(featureVertices, b, y, color.roofR, color.roofG, color.roofB);
@@ -1618,4 +1655,11 @@ GLWidget::TerrainSize GLWidget::calculateTerrainSize() const {
   result.height = static_cast<float>(2.0 * physicalHeight / maxDimension);
 
   return result;
+}
+
+void GLWidget::setHighlightedFeatures(const QSet<qint64> &ids) {
+  highlightedFeatureIds = ids;
+
+  rebuildFeatureMesh();
+  update();
 }
