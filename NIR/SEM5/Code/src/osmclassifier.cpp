@@ -13,11 +13,9 @@ OSMFeatureType OSMClassifier::classify(const QJsonObject &tags) {
         tags.value("bridge").toString() != "no") {
       return OSMFeatureType::Bridge;
     }
-    if (tags.value("highway").toString() != "footway" &&
-        tags.value("highway").toString() != "pedestrian" &&
-        tags.value("highway").toString() != "path" &&
-        tags.value("highway").toString() != "steps" &&
-        tags.value("highway").toString() != "corridor") {
+    QString highway = tags.value("highway").toString();
+    if (highway == "footway" || highway == "pedestrian" || highway == "path" ||
+        highway == "steps" || highway == "corridor") {
       return OSMFeatureType::PedestrianRoad;
     }
     return OSMFeatureType::Road;

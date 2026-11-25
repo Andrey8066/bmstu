@@ -459,18 +459,17 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
     }
 
     if (feature.type == OSMFeatureType::Road ||
-        feature.type == OSMFeatureType::PedestrianRoad ||
         feature.type == OSMFeatureType::Bridge) {
       feature.widthMeters = parseRoadWidth(feature.tags);
+    }
 
-      const QString highway = feature.tags.value("highway").toString();
+    if (feature.type == OSMFeatureType::PedestrianRoad) {
+      feature.widthMeters = parseRoadWidth(feature.tags);
+      QString highway = feature.tags.value("highway").toString();
+      feature.colors = Colors(0, 0.5f, 0, 0, 0.5f, 0);
 
-      if (feature.type == OSMFeatureType::PedestrianRoad) {
-        feature.colors = Colors(0, 0.5f, 0, 0, 0.5f, 0);
-
-        if (highway == "steps")
-          feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
-      }
+      if (highway == "steps")
+        feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
     }
     if (feature.type == OSMFeatureType::Water) {
       feature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
