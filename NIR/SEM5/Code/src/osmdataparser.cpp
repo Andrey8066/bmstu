@@ -227,9 +227,9 @@ bool readGeometry(const QJsonObject &object, OSMFeature &feature) {
       return false;
     }
 
-    feature.geometryType = OSMGeometryType::Point;
+    feature.setGeometryType(OSMGeometryType::Point);
 
-    feature.geometry.push_back(
+    feature.pushBackGeometry(
         {object.value("lat").toDouble(), object.value("lon").toDouble()});
 
     return true;
@@ -247,42 +247,41 @@ bool readGeometry(const QJsonObject &object, OSMFeature &feature) {
         continue;
       }
 
-      feature.geometry.push_back(
+      feature.pushBackGeometry(
           {point.value("lat").toDouble(), point.value("lon").toDouble()});
     }
 
-    if (feature.geometry.isEmpty())
+    if (feature.getGeometry().isEmpty())
       return false;
 
-    const bool closed =
-        feature.geometry.size() >= 4 &&
-        std::abs(feature.geometry.front().lat - feature.geometry.back().lat) <
-            1e-10 &&
-        std::abs(feature.geometry.front().lon - feature.geometry.back().lon) <
-            1e-10;
+    const bool closed = feature.getGeometrySize() >= 4 &&
+                        std::abs(feature.getGeometry().front().lat -
+                                 feature.getGeometry().back().lat) < 1e-10 &&
+                        std::abs(feature.getGeometry().front().lon -
+                                 feature.getGeometry().back().lon) < 1e-10;
 
-    const QString waterway = feature.tags.value("waterway").toString();
+    const QString waterway = feature.getTags().value("waterway").toString();
 
     const bool isWaterLine = waterway == "river" || waterway == "stream" ||
                              waterway == "canal" || waterway == "ditch" ||
                              waterway == "drain" || waterway == "brook";
 
     bool area =
-        !isWaterLine && (feature.tags.value("area").toString() == "yes" ||
-                         (closed && (feature.tags.contains("building") ||
-                                     feature.tags.contains("building:part") ||
-                                     feature.tags.contains("landuse") ||
-                                     feature.tags.contains("leisure") ||
-                                     feature.tags.contains("natural") ||
-                                     feature.tags.contains("water"))));
+        !isWaterLine && (feature.isTag("area", "yes") ||
+                         (closed && (feature.isTagsContains("building") ||
+                                     feature.isTagsContains("building:part") ||
+                                     feature.isTagsContains("landuse") ||
+                                     feature.isTagsContains("leisure") ||
+                                     feature.isTagsContains("natural") ||
+                                     feature.isTagsContains("water"))));
 
     if (area) {
-      feature.geometryType = OSMGeometryType::Polygon;
+      feature.setGeometryType(OSMGeometryType::Polygon);
 
       if (closed)
-        feature.geometry.pop_back();
+        feature.popBackGeometry();
     } else {
-      feature.geometryType = OSMGeometryType::LineString;
+      feature.setGeometryType(OSMGeometryType::LineString);
     }
 
     return true;
@@ -361,18 +360,18 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
 
     OSMFeature feature;
 
-    feature.id = static_cast<qint64>(object.value("id").toDouble());
+    feature.setId(object.value("id").toDouble());
 
-    feature.tags = object.value("tags").toObject();
+    feature.setTags(object.value("tags").toObject());
 
-    feature.type = OSMClassifier::classify(feature.tags);
+    feature.setType(OSMClassifier::classify(feature.getTags()));
 
     if (feature.hasType(OSMFeatureType::Unknown))
       continue;
 
     // Relation обрабатываем отдельно.
     if (osmType == "relation") {
-      const QString relationType = feature.tags.value("type").toString();
+      const QString relationType = feature.getTag("type");
 
       if (relationType != "multipolygon" && relationType != "boundary" &&
           relationType != "building") {
@@ -393,30 +392,30 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       for (const auto &outer : outerRings) {
         OSMFeature relationFeature = feature;
 
-        relationFeature.geometryType = OSMGeometryType::Polygon;
-        relationFeature.geometry = outer;
+        relationFeature.setGeometryType(OSMGeometryType::Polygon);
+        relationFeature.setGeometry(outer);
 
         if (relationFeature.hasType(OSMFeatureType::Water)) {
-          relationFeature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
+          relationFeature.setColors(Colors(0, 0, 0.5f, 0, 0, 0.5f));
         }
 
         if (relationFeature.hasType(OSMFeatureType::Building)) {
-          relationFeature.heightMeters =
-              parseBuildingHeight(relationFeature.tags);
-          relationFeature.minHeightMeters = 0.0f;
+          relationFeature.setHeightMeters(
+              parseBuildingHeight(relationFeature.getTags()));
+          relationFeature.setMinHeightMeters(0.0f);
 
-          const QString minLevel =
-              relationFeature.tags.value("building:min_level").toString();
+          const QString minLevel = relationFeature.getTag("building:min_level");
 
           if (!minLevel.isEmpty()) {
             bool ok = false;
             const float levels = minLevel.toFloat(&ok);
 
             if (ok)
-              relationFeature.minHeightMeters = levels * 3.0f;
+              relationFeature.setMinHeightMeters(levels * 3.0f);
           }
 
-          relationFeature.colors = getBuildingColors(relationFeature.tags);
+          relationFeature.setColors(
+              getBuildingColors(relationFeature.getTags()));
 
           // 4. Прикрепляем к зданию только те inner,
           // которые находятся внутри текущего outer.
@@ -425,7 +424,7 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
               continue;
 
             if (pointInRing(inner.first(), outer)) {
-              relationFeature.innerRings.push_back(inner);
+              relationFeature.pushBackInnerRings(inner);
             }
           }
         }
@@ -442,41 +441,40 @@ QVector<OSMFeature> OSMDataParser::parse(const QJsonArray &elements) {
       continue;
     }
     if (feature.hasType(OSMFeatureType::Building)) {
-      feature.heightMeters = parseBuildingHeight(feature.tags);
-      feature.minHeightMeters = 0.0f;
+      feature.setHeightMeters(parseBuildingHeight(feature.getTags()));
+      feature.setMinHeightMeters(0.0f);
 
-      const QString minLevel =
-          feature.tags.value("building:min_level").toString();
+      const QString minLevel = feature.getTag("building:min_level");
 
       if (!minLevel.isEmpty()) {
         bool ok = false;
         const float levels = minLevel.toFloat(&ok);
 
         if (ok)
-          feature.minHeightMeters = levels * 3.0f;
+          feature.setMinHeightMeters(levels * 3.0f);
       }
-      feature.colors = getBuildingColors(feature.tags);
+      feature.setColors(getBuildingColors(feature.getTags()));
     }
 
     if (feature.hasType(OSMFeatureType::Road) ||
         feature.hasType(OSMFeatureType::Bridge)) {
-      feature.widthMeters = parseRoadWidth(feature.tags);
+      feature.setWidthMeters(parseRoadWidth(feature.getTags()));
     }
 
     if (feature.hasType(OSMFeatureType::PedestrianRoad)) {
-      feature.widthMeters = parseRoadWidth(feature.tags);
-      QString highway = feature.tags.value("highway").toString();
-      feature.colors = Colors(0, 0.5f, 0, 0, 0.5f, 0);
+      feature.setWidthMeters(parseRoadWidth(feature.getTags()));
+      QString highway = feature.getTag("highway");
+      feature.setColors(Colors(0, 0.5f, 0, 0, 0.5f, 0));
 
       if (highway == "steps")
-        feature.colors = Colors(0.5f, 0, 0, 0.5f, 0, 0);
+        feature.setColors(Colors(0.5f, 0, 0, 0.5f, 0, 0));
     }
     if (feature.hasType(OSMFeatureType::Water)) {
-      feature.colors = Colors(0, 0, 0.5f, 0, 0, 0.5f);
-      if (feature.tags.contains("width")) {
-        QString width = feature.tags.value("width").toString();
+      feature.setColors(Colors(0, 0, 0.5f, 0, 0, 0.5f));
+      if (feature.isTagsContains("width")) {
+        QString width = feature.getTag("width");
         width.remove("m");
-        feature.widthMeters = width.toDouble();
+        feature.setWidthMeters(width.toDouble());
       }
     }
 

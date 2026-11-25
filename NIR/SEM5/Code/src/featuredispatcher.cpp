@@ -11,7 +11,7 @@ void FeatureDispatcher::dispatch(const OSMFeature &feature) {
     return;
   }
 
-  if (feature.geometry.isEmpty())
+  if (feature.getGeometry().isEmpty())
     return;
 
   // Здания
@@ -62,44 +62,44 @@ void FeatureDispatcher::dispatchAll(const QVector<OSMFeature> &features) {
 }
 
 void FeatureDispatcher::dispatchBuilding(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
+  if (feature.getGeometryType() == OSMGeometryType::Polygon)
     m_widget->addBuildingFeature(feature);
 }
 
 void FeatureDispatcher::dispatchRoad(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::LineString)
+  if (feature.getGeometryType() == OSMGeometryType::LineString)
     m_widget->addRoadFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::Polygon)
+  else if (feature.getGeometryType() == OSMGeometryType::Polygon)
     m_widget->addRoadAreaFeature(feature);
 }
 
 void FeatureDispatcher::dispatchWater(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
+  if (feature.getGeometryType() == OSMGeometryType::Polygon)
     m_widget->addWaterAreaFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::LineString)
+  else if (feature.getGeometryType() == OSMGeometryType::LineString)
     m_widget->addWaterLineFeature(feature);
 }
 
 void FeatureDispatcher::dispatchVegetation(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
+  if (feature.getGeometryType() == OSMGeometryType::Polygon)
     m_widget->addVegetationAreaFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::Point)
+  else if (feature.getGeometryType() == OSMGeometryType::Point)
     m_widget->addVegetationPointFeature(feature);
 }
 
 void FeatureDispatcher::dispatchLanduse(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Polygon)
+  if (feature.getGeometryType() == OSMGeometryType::Polygon)
     m_widget->addLanduseAreaFeature(feature);
 }
 
 void FeatureDispatcher::dispatchRailway(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::LineString)
+  if (feature.getGeometryType() == OSMGeometryType::LineString)
     m_widget->addRailwayFeature(feature);
 }
 
 void FeatureDispatcher::dispatchAmenity(const OSMFeature &feature) {
-  if (feature.geometryType == OSMGeometryType::Point)
+  if (feature.getGeometryType() == OSMGeometryType::Point)
     m_widget->addAmenityPointFeature(feature);
-  else if (feature.geometryType == OSMGeometryType::Polygon)
+  else if (feature.getGeometryType() == OSMGeometryType::Polygon)
     m_widget->addAmenityAreaFeature(feature);
 }

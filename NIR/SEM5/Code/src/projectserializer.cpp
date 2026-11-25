@@ -97,40 +97,40 @@ bool readPoints(QDataStream &in, QVector<GeoPoint> &points) {
 }
 
 bool writeFeature(QDataStream &out, const OSMFeature &feature) {
-  const quint8 type = static_cast<quint8>(feature.type);
-  const quint8 geometryType = static_cast<quint8>(feature.geometryType);
+  const quint8 type = static_cast<quint8>(feature.getType());
+  const quint8 geometryType = static_cast<quint8>(feature.getGeometryType());
 
   if (type > static_cast<quint8>(OSMFeatureType::Amenity) ||
       geometryType > static_cast<quint8>(OSMGeometryType::Polygon)) {
     return false;
   }
 
-  if (!std::isfinite(feature.heightMeters) ||
-      !std::isfinite(feature.minHeightMeters) ||
-      !std::isfinite(feature.widthMeters)) {
+  if (!std::isfinite(feature.getHeightMeters()) ||
+      !std::isfinite(feature.getMinHeightMeters()) ||
+      !std::isfinite(feature.getWidthMeters())) {
     return false;
   }
 
-  out << feature.id;
+  out << feature.getId();
   out << type;
   out << geometryType;
 
-  if (!writePoints(out, feature.geometry))
+  if (!writePoints(out, feature.getGeometry()))
     return false;
 
-  if (static_cast<quint64>(feature.innerRings.size()) > MaxInnerRings) {
+  if (static_cast<quint64>(feature.getInnerRings().size()) > MaxInnerRings) {
     return false;
   }
 
-  out << static_cast<quint32>(feature.innerRings.size());
+  out << static_cast<quint32>(feature.getInnerRings().size());
 
-  for (const auto &ring : feature.innerRings) {
+  for (const auto &ring : feature.getInnerRings()) {
     if (!writePoints(out, ring))
       return false;
   }
 
   const QByteArray tags =
-      QJsonDocument(feature.tags).toJson(QJsonDocument::Compact);
+      QJsonDocument(feature.getTags()).toJson(QJsonDocument::Compact);
 
   if (static_cast<quint64>(tags.size()) > MaxTagBytes)
     return false;
@@ -140,17 +140,17 @@ bool writeFeature(QDataStream &out, const OSMFeature &feature) {
   if (!writeRaw(out, tags))
     return false;
 
-  out << feature.heightMeters;
-  out << feature.minHeightMeters;
-  out << feature.widthMeters;
+  out << feature.getHeightMeters();
+  out << feature.getMinHeightMeters();
+  out << feature.getWidthMeters();
 
-  out << feature.colors.wallR;
-  out << feature.colors.wallG;
-  out << feature.colors.wallB;
+  out << feature.getColors().wallR;
+  out << feature.getColors().wallG;
+  out << feature.getColors().wallB;
 
-  out << feature.colors.roofR;
-  out << feature.colors.roofG;
-  out << feature.colors.roofB;
+  out << feature.getColors().roofR;
+  out << feature.getColors().roofG;
+  out << feature.getColors().roofB;
 
   return out.status() == QDataStream::Ok;
 }
@@ -158,8 +158,10 @@ bool writeFeature(QDataStream &out, const OSMFeature &feature) {
 bool readFeature(QDataStream &in, OSMFeature &feature) {
   quint8 type = 0;
   quint8 geometryType = 0;
+  qint64 id;
 
-  in >> feature.id;
+  in >> id;
+  feature.setId(id);
   in >> type;
   in >> geometryType;
 
@@ -169,10 +171,10 @@ bool readFeature(QDataStream &in, OSMFeature &feature) {
     return false;
   }
 
-  feature.type = static_cast<OSMFeatureType>(type);
-  feature.geometryType = static_cast<OSMGeometryType>(geometryType);
+  feature.setType(static_cast<OSMFeatureType>(type));
+  feature.setGeometryType(static_cast<OSMGeometryType>(geometryType));
 
-  if (!readPoints(in, feature.geometry))
+  if (!readPoints(in, feature.getGeometry()))
     return false;
 
   quint32 ringCount = 0;
@@ -182,8 +184,8 @@ bool readFeature(QDataStream &in, OSMFeature &feature) {
     return false;
   }
 
-  feature.innerRings.clear();
-  feature.innerRings.reserve(static_cast<qsizetype>(ringCount));
+  feature.clearInnerRings();
+  feature.reserveInnerRings(static_cast<qsizetype>(ringCount));
 
   for (quint32 i = 0; i < ringCount; ++i) {
     QVector<GeoPoint> ring;
@@ -191,7 +193,7 @@ bool readFeature(QDataStream &in, OSMFeature &feature) {
     if (!readPoints(in, ring))
       return false;
 
-    feature.innerRings.push_back(std::move(ring));
+    feature.pushBackInnerRings(std::move(ring));
   }
 
   quint32 tagsSize = 0;
@@ -212,32 +214,22 @@ bool readFeature(QDataStream &in, OSMFeature &feature) {
     return false;
   }
 
-  feature.tags = tagsDocument.object();
+  feature.setTags(tagsDocument.object());
 
-  in >> feature.heightMeters;
-  in >> feature.minHeightMeters;
-  in >> feature.widthMeters;
-
-  in >> feature.colors.wallR;
-  in >> feature.colors.wallG;
-  in >> feature.colors.wallB;
-
-  in >> feature.colors.roofR;
-  in >> feature.colors.roofG;
-  in >> feature.colors.roofB;
+  in >> feature;
 
   if (in.status() != QDataStream::Ok)
     return false;
 
-  return std::isfinite(feature.heightMeters) &&
-         std::isfinite(feature.minHeightMeters) &&
-         std::isfinite(feature.widthMeters) &&
-         std::isfinite(feature.colors.wallR) &&
-         std::isfinite(feature.colors.wallG) &&
-         std::isfinite(feature.colors.wallB) &&
-         std::isfinite(feature.colors.roofR) &&
-         std::isfinite(feature.colors.roofG) &&
-         std::isfinite(feature.colors.roofB);
+  return std::isfinite(feature.getHeightMeters()) &&
+         std::isfinite(feature.getMinHeightMeters()) &&
+         std::isfinite(feature.getWidthMeters()) &&
+         std::isfinite(feature.getColors().wallR) &&
+         std::isfinite(feature.getColors().wallG) &&
+         std::isfinite(feature.getColors().wallB) &&
+         std::isfinite(feature.getColors().roofR) &&
+         std::isfinite(feature.getColors().roofG) &&
+         std::isfinite(feature.getColors().roofB);
 }
 
 } // namespace

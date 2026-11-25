@@ -570,7 +570,7 @@ void GLWidget::addVertex(std::vector<Vertex> &target, const QVector2D &position,
 // -----------------------------------------------------------------------------
 
 void GLWidget::appendBuilding(const OSMFeature &feature) {
-  if (feature.geometry.size() < 3)
+  if (feature.getGeometry().size() < 3)
     return;
 
   // Преобразует географическое кольцо в координаты сцены.
@@ -598,14 +598,14 @@ void GLWidget::appendBuilding(const OSMFeature &feature) {
 
   std::vector<ScenePoint> outerScene;
 
-  if (!convertRing(feature.geometry, outerScene))
+  if (!convertRing(feature.getGeometry(), outerScene))
     return;
 
   // Все кольца: сначала outer, затем inner.
   std::vector<std::vector<ScenePoint>> sceneRings;
   sceneRings.push_back(outerScene);
 
-  for (const auto &innerGeo : feature.innerRings) {
+  for (const auto &innerGeo : feature.getInnerRings()) {
     std::vector<ScenePoint> innerScene;
 
     if (!convertRing(innerGeo, innerScene))
@@ -656,19 +656,20 @@ void GLWidget::appendBuilding(const OSMFeature &feature) {
                                   ? verticalScaleCoefficient / elevationRange
                                   : 0.001f;
 
-  const bool isRoof = feature.tags.value("building").toString() == "roof";
+  const bool isRoof = feature.isTag("building", "roof");
 
   const float buildingHeight =
-      feature.heightMeters > 0.0f ? feature.heightMeters : 6.0f;
+      feature.getHeightMeters() > 0.0f ? feature.getHeightMeters() : 6.0f;
 
-  const float baseBuildingY = baseY + feature.minHeightMeters * verticalScale;
+  const float baseBuildingY =
+      baseY + feature.getMinHeightMeters() * verticalScale;
 
   // Для building=roof верхняя поверхность находится
   // непосредственно на уровне building:min_level.
   const float roofY =
       isRoof ? baseBuildingY : baseBuildingY + buildingHeight * verticalScale;
 
-  const Colors &color = feature.colors;
+  const Colors &color = feature.getColors();
 
   // Стены внешнего и внутренних контуров.
   if (!isRoof) {
@@ -681,10 +682,10 @@ void GLWidget::appendBuilding(const OSMFeature &feature) {
 
         // Индивидуальная высота основания каждой вершины.
         const float bottomA =
-            a.groundY + feature.minHeightMeters * verticalScale;
+            a.groundY + feature.getMinHeightMeters() * verticalScale;
 
         const float bottomB =
-            b.groundY + feature.minHeightMeters * verticalScale;
+            b.groundY + feature.getMinHeightMeters() * verticalScale;
 
         const QVector2D &pa = a.position;
         const QVector2D &pb = b.position;
@@ -727,19 +728,18 @@ void GLWidget::appendBuilding(const OSMFeature &feature) {
 // -----------------------------------------------------------------------------
 
 void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
-  if (feature.geometry.size() < 3)
+  if (feature.getGeometrySize() < 3)
     return;
 
-  const bool isManMadeBridge =
-      feature.tags.value("man_made").toString() == "bridge";
+  const bool isManMadeBridge = feature.isTag("man_made", "bridge");
 
   std::vector<ScenePoint> scenePoints;
   std::vector<QVector2D> polygon;
 
-  scenePoints.reserve(feature.geometry.size());
-  polygon.reserve(feature.geometry.size());
+  scenePoints.reserve(feature.getGeometrySize());
+  polygon.reserve(feature.getGeometrySize());
 
-  for (const GeoPoint &geo : feature.geometry) {
+  for (const GeoPoint &geo : feature.getGeometry()) {
     ScenePoint point;
 
     if (!geoToScene(geo, point))
@@ -750,8 +750,8 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
   }
 
   // Убираем повторную последнюю точку замкнутого контура.
-  if (polygon.size() >= 2 &&
-      sameGeoPoint(feature.geometry.first(), feature.geometry.last())) {
+  if (polygon.size() >= 2 && sameGeoPoint(feature.getGeometry().first(),
+                                          feature.getGeometry().last())) {
     polygon.pop_back();
     scenePoints.pop_back();
   }
@@ -764,7 +764,7 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
   if (triangles.empty())
     return;
 
-  const Colors &color = feature.colors;
+  const Colors &color = feature.getColors();
 
   // Обычные полигоны оставляем без изменений.
   if (!isManMadeBridge) {
@@ -858,8 +858,8 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
       maxIndex = static_cast<int>(i);
   }
 
-  const double totalLength =
-      geoDistanceMeters(feature.geometry[minIndex], feature.geometry[maxIndex]);
+  const double totalLength = geoDistanceMeters(feature.getGeometry()[minIndex],
+                                               feature.getGeometry()[maxIndex]);
 
   const double rampLength = std::min(bridgeRampLength, totalLength * 0.25);
 
@@ -906,20 +906,20 @@ void GLWidget::appendPolygon(const OSMFeature &feature, float heightOffset) {
 
 void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
                           float heightOffset) {
-  if (feature.geometry.size() < 2)
+  if (feature.getGeometrySize() < 2)
     return;
 
   std::vector<ScenePoint> points;
-  points.reserve(feature.geometry.size());
+  points.reserve(feature.getGeometrySize());
 
   std::vector<double> bridgeAlong;
-  bridgeAlong.reserve(feature.geometry.size());
+  bridgeAlong.reserve(feature.getGeometrySize());
 
   double totalBridgeLength = 0.0;
   GeoPoint previousGeo;
   bool hasPreviousGeo = false;
 
-  for (const GeoPoint &geo : feature.geometry) {
+  for (const GeoPoint &geo : feature.getGeometry()) {
     ScenePoint point;
 
     if (!geoToScene(geo, point)) {
@@ -987,26 +987,18 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
 
   const bool isBridge = feature.hasType(OSMFeatureType::Bridge);
 
-  const bool isManMadeBridge =
-      feature.tags.value("man_made").toString() == "bridge";
+  const bool isManMadeBridge = feature.isTag("man_made", "bridge");
 
   if (isManMadeBridge) {
     qDebug() << "[MAN_MADE BRIDGE]"
              << "points:" << points.size()
              << "first:" << points.front().position
              << "last:" << points.back().position << "closed:"
-             << sameGeoPoint(feature.geometry.front(), feature.geometry.back());
+             << sameGeoPoint(feature.getGeometry().front(),
+                             feature.getGeometry().back());
   }
 
   const bool isRoadBridge = isBridge && !isManMadeBridge;
-
-  if (isBridge) {
-    qDebug() << "[BRIDGE]"
-             << "man_made =" << feature.tags.value("man_made").toString()
-             << "bridge =" << feature.tags.value("bridge").toString()
-             << "points =" << feature.geometry.size()
-             << "length =" << totalBridgeLength;
-  }
 
   constexpr double bridgeRampLength = 20.0;
 
@@ -1078,7 +1070,7 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
            bridgeHeightMeters * verticalScale;
   };
 
-  const Colors &color = feature.colors;
+  const Colors &color = feature.getColors();
 
   // Размер одного пикселя DEM в координатах сцены.
   const float pixelSizeX =
@@ -1240,12 +1232,12 @@ void GLWidget::appendLine(const OSMFeature &feature, float widthMeters,
 
 void GLWidget::appendPoint(const OSMFeature &feature, float sizeMeters,
                            float heightOffset) {
-  if (feature.geometry.isEmpty())
+  if (feature.getGeometry().isEmpty())
     return;
 
   ScenePoint point;
 
-  if (!geoToScene(feature.geometry.first(), point))
+  if (!geoToScene(feature.getGeometry().first(), point))
     return;
 
   const TerrainSize terrainSize = calculateTerrainSize();
@@ -1285,7 +1277,7 @@ void GLWidget::appendPoint(const OSMFeature &feature, float sizeMeters,
 
   const float y = point.groundY + heightOffset;
 
-  const Colors &color = feature.colors;
+  const Colors &color = feature.getColors();
 
   addVertex(featureVertices, a, y, color.roofR, color.roofG, color.roofB);
   addVertex(featureVertices, b, y, color.roofR, color.roofG, color.roofB);
@@ -1319,14 +1311,14 @@ void GLWidget::rebuildFeatureMesh() {
   int other = 0;
 
   for (const OSMFeature &feature : features) {
-    if (feature.geometry.isEmpty())
+    if (feature.getGeometry().isEmpty())
       continue;
 
     // Здания
     if (feature.hasType(OSMFeatureType::Building)) {
-      if (feature.geometryType == OSMGeometryType::Polygon)
+      if (feature.getGeometryType() == OSMGeometryType::Polygon)
         appendBuilding(feature);
-      else if (feature.geometryType == OSMGeometryType::Point)
+      else if (feature.getGeometryType() == OSMGeometryType::Point)
         appendPoint(feature, 5.0f);
 
       ++buildings;
@@ -1338,23 +1330,23 @@ void GLWidget::rebuildFeatureMesh() {
     const bool isBridge = feature.hasType(OSMFeatureType::Bridge);
 
     if (isRoad || isPedestrian || isBridge) {
-      const bool isManMadeBridge =
-          feature.tags.value("man_made").toString() == "bridge";
+      const bool isManMadeBridge = feature.isTag("man_made", "bridge");
 
       const bool isClosedManMadeBridge =
           isManMadeBridge &&
-          feature.geometryType == OSMGeometryType::LineString &&
-          feature.geometry.size() >= 4 &&
-          sameGeoPoint(feature.geometry.first(), feature.geometry.last());
+          feature.getGeometryType() == OSMGeometryType::LineString &&
+          feature.getGeometrySize() >= 4 &&
+          sameGeoPoint(feature.getGeometry().first(),
+                       feature.getGeometry().last());
 
       if (isClosedManMadeBridge) {
         // Замкнутый man_made=bridge — это площадка, а не линия.
         appendPolygon(feature, 0.0015f);
-      } else if (feature.geometryType == OSMGeometryType::Polygon) {
+      } else if (feature.getGeometryType() == OSMGeometryType::Polygon) {
         appendPolygon(feature, 0.0015f);
-      } else if (feature.geometryType == OSMGeometryType::LineString) {
-        const float width = feature.widthMeters > 0.0f
-                                ? static_cast<float>(feature.widthMeters)
+      } else if (feature.getGeometryType() == OSMGeometryType::LineString) {
+        const float width = feature.getWidthMeters() > 0.0f
+                                ? static_cast<float>(feature.getWidthMeters())
                                 : 4.0f;
 
         appendLine(feature, width, 0.0015f);
@@ -1372,10 +1364,10 @@ void GLWidget::rebuildFeatureMesh() {
 
     // Вода
     if (feature.hasType(OSMFeatureType::Water)) {
-      if (feature.geometryType == OSMGeometryType::Polygon) {
+      if (feature.getGeometryType() == OSMGeometryType::Polygon) {
         appendPolygon(feature, 0.0025f);
-      } else if (feature.geometryType == OSMGeometryType::LineString) {
-        const QString waterway = feature.tags.value("waterway").toString();
+      } else if (feature.getGeometryType() == OSMGeometryType::LineString) {
+        const QString waterway = feature.getTags().value("waterway").toString();
 
         float width = 5.0f;
 
@@ -1388,8 +1380,8 @@ void GLWidget::rebuildFeatureMesh() {
         else if (waterway == "ditch" || waterway == "drain")
           width = 1.5f;
 
-        if (feature.widthMeters > 0.0f)
-          width = static_cast<float>(feature.widthMeters);
+        if (feature.getWidthMeters() > 0.0f)
+          width = static_cast<float>(feature.getWidthMeters());
 
         appendLine(feature, width, 0.0025f);
       }
@@ -1399,9 +1391,9 @@ void GLWidget::rebuildFeatureMesh() {
 
     // Растительность
     if (feature.hasType(OSMFeatureType::Vegetation)) {
-      if (feature.geometryType == OSMGeometryType::Polygon)
+      if (feature.getGeometryType() == OSMGeometryType::Polygon)
         appendPolygon(feature, 0.001f);
-      else if (feature.geometryType == OSMGeometryType::Point)
+      else if (feature.getGeometryType() == OSMGeometryType::Point)
         appendPoint(feature, 4.0f, 0.001f);
 
       ++vegetation;
@@ -1409,7 +1401,7 @@ void GLWidget::rebuildFeatureMesh() {
 
     // Остальные территории
     if (feature.hasType(OSMFeatureType::Landuse)) {
-      if (feature.geometryType == OSMGeometryType::Polygon)
+      if (feature.getGeometryType() == OSMGeometryType::Polygon)
         appendPolygon(feature, 0.0008f);
 
       ++other;
@@ -1417,9 +1409,9 @@ void GLWidget::rebuildFeatureMesh() {
 
     // Железные дороги
     if (feature.hasType(OSMFeatureType::Railway)) {
-      if (feature.geometryType == OSMGeometryType::LineString) {
-        const float width = feature.widthMeters > 0.0f
-                                ? static_cast<float>(feature.widthMeters)
+      if (feature.getGeometryType() == OSMGeometryType::LineString) {
+        const float width = feature.getWidthMeters() > 0.0f
+                                ? static_cast<float>(feature.getWidthMeters())
                                 : 4.5f;
 
         appendLine(feature, width, 0.002f);
@@ -1430,9 +1422,9 @@ void GLWidget::rebuildFeatureMesh() {
 
     // Общественные объекты
     if (feature.hasType(OSMFeatureType::Amenity)) {
-      if (feature.geometryType == OSMGeometryType::Polygon)
+      if (feature.getGeometryType() == OSMGeometryType::Polygon)
         appendPolygon(feature, 0.0015f);
-      else if (feature.geometryType == OSMGeometryType::Point)
+      else if (feature.getGeometryType() == OSMGeometryType::Point)
         appendPoint(feature, 5.0f, 0.002f);
 
       ++other;
