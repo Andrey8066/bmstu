@@ -13,6 +13,10 @@ osm_loader: \
   CMakeFiles/osm_loader.dir/src/main.cpp.o \
   CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o \
   CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o \
+  CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o \
+  CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o \
+  CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o \
+  CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o \
   /usr/lib/libgdal.so \
   /usr/lib/libQt6Network.so.6.11.2 \
   /usr/lib/libQt6Sql.so.6.11.2 \
@@ -223,6 +227,14 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o:
 CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o:
 
 CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o:
+
+CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o:
 
 /usr/lib/libgdal.so:
 

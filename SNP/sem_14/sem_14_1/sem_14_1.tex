@@ -1,0 +1,113 @@
+% Шаблон документа для курса "Системы научных публикаций"
+% Семинар 14. LaTeX. Вставка и настройка библиографической информации
+\documentclass[a4paper,12pt]{article}
+
+%%% Работа с русским языком
+\usepackage{cmap}
+\usepackage{mathtext}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+
+\usepackage{extsizes}
+\usepackage{geometry}
+\geometry{top=25mm}
+\geometry{bottom=35mm}
+\geometry{left=35mm}
+\geometry{right=20mm}
+
+\usepackage{setspace}
+\usepackage{lastpage}
+\usepackage{soul}
+\usepackage{multicol}
+
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\hypersetup{
+  unicode=true,
+  pdftitle={Заголовок},
+  pdfauthor={Автор},
+  pdfsubject={Тема},
+  pdfcreator={Создатель},
+  pdfproducer={Производитель},
+  pdfkeywords={keyword1} {key2} {key3},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  filecolor=magenta,
+  urlcolor=blue
+}
+
+%%% Дополнительная работа с математикой
+\usepackage{amsfonts,amssymb,amsthm,mathtools}
+\usepackage{amsmath}
+\usepackage{icomma}
+
+\usepackage{euscript}
+\usepackage{mathrsfs}
+
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+{\hbox{$\mathsurround=0pt #1$}}{}}
+
+%%% Работа с таблицами
+\usepackage{array,tabularx,tabulary,booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{wrapfig}
+
+%%% Работа с рисунками
+\usepackage{graphicx}
+\graphicspath{{images/}{images2/}}
+\setlength\fboxsep{3pt}
+\setlength\fboxrule{1pt}
+
+\usepackage{cite}
+\usepackage{csquotes}
+
+%%% Заголовок
+\author{Соин Андрей Дмитриевич}
+\title{\LaTeX. Вставка и настройка библиографической информации}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Введение}
+Пример ссылок на источники:
+- на один источник: \cite{lvovsky};
+- на два источника не по порядку: \cite{kim,filimonov2012};
+- на три источника подряд: \cite{kim,philips,filimonov2012}.
+
+Ссылка на источник с меткой: \cite{lvovsky}.
+
+\section*{thebibliography}
+
+\addcontentsline{toc}{section}{Список использованных источников}
+
+\renewcommand{\refname}{Список использованных источников}
+
+\makeatletter
+\renewcommand{\@biblabel}[1]{#1.}
+\makeatother
+
+\begin{thebibliography}{9}
+
+  \bibitem{lvovsky} Львовский С. Набор и верстка в системе \LaTeX. — Litres, 2022.
+
+  \bibitem{kim} Ким Д. П. Теория автоматического управления. — Физматлит, 2003.
+
+  \bibitem{philips} Филипс Ч. Системы управления с обратной связью. — Лаборатория базовых знаний, 2001.
+
+  \bibitem{filimonov2012} Филимонов А. Б., Филимонов Н. Б. О проблематике синтеза координирующих систем автоматического управления // Известия Южного федерального университета. Технические науки. — 2012. — Т. 128. — № 3. — С. 172–180.
+
+  \bibitem{zhang2023} Zhang W. et al. Converted state equation Kalman filter for nonlinear maneuvering target tracking // Signal Processing. — 2023. — Vol. 202. — P. 108–741.
+
+\end{thebibliography}
+
+\end{document}

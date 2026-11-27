@@ -2,3 +2,4 @@
 #include "UVLADIE3JM/moc_mainwindow.cpp"
 #include "UVLADIE3JM/moc_opentopographyloader.cpp"
 #include "UVLADIE3JM/moc_osmdataloader.cpp"
+#include "UVLADIE3JM/moc_roadgraphwindow.cpp"

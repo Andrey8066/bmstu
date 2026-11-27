@@ -419,6 +419,102 @@ src/projectserializer.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/projectserializer.cpp.s
 .PHONY : src/projectserializer.cpp.s
 
+src/roadclassifier.o: src/roadclassifier.cpp.o
+.PHONY : src/roadclassifier.o
+
+# target to build an object file
+src/roadclassifier.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o
+.PHONY : src/roadclassifier.cpp.o
+
+src/roadclassifier.i: src/roadclassifier.cpp.i
+.PHONY : src/roadclassifier.i
+
+# target to preprocess a source file
+src/roadclassifier.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.i
+.PHONY : src/roadclassifier.cpp.i
+
+src/roadclassifier.s: src/roadclassifier.cpp.s
+.PHONY : src/roadclassifier.s
+
+# target to generate assembly for a file
+src/roadclassifier.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.s
+.PHONY : src/roadclassifier.cpp.s
+
+src/roadgraph.o: src/roadgraph.cpp.o
+.PHONY : src/roadgraph.o
+
+# target to build an object file
+src/roadgraph.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o
+.PHONY : src/roadgraph.cpp.o
+
+src/roadgraph.i: src/roadgraph.cpp.i
+.PHONY : src/roadgraph.i
+
+# target to preprocess a source file
+src/roadgraph.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraph.cpp.i
+.PHONY : src/roadgraph.cpp.i
+
+src/roadgraph.s: src/roadgraph.cpp.s
+.PHONY : src/roadgraph.s
+
+# target to generate assembly for a file
+src/roadgraph.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraph.cpp.s
+.PHONY : src/roadgraph.cpp.s
+
+src/roadgraphbuilder.o: src/roadgraphbuilder.cpp.o
+.PHONY : src/roadgraphbuilder.o
+
+# target to build an object file
+src/roadgraphbuilder.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o
+.PHONY : src/roadgraphbuilder.cpp.o
+
+src/roadgraphbuilder.i: src/roadgraphbuilder.cpp.i
+.PHONY : src/roadgraphbuilder.i
+
+# target to preprocess a source file
+src/roadgraphbuilder.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.i
+.PHONY : src/roadgraphbuilder.cpp.i
+
+src/roadgraphbuilder.s: src/roadgraphbuilder.cpp.s
+.PHONY : src/roadgraphbuilder.s
+
+# target to generate assembly for a file
+src/roadgraphbuilder.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.s
+.PHONY : src/roadgraphbuilder.cpp.s
+
+src/roadgraphwindow.o: src/roadgraphwindow.cpp.o
+.PHONY : src/roadgraphwindow.o
+
+# target to build an object file
+src/roadgraphwindow.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o
+.PHONY : src/roadgraphwindow.cpp.o
+
+src/roadgraphwindow.i: src/roadgraphwindow.cpp.i
+.PHONY : src/roadgraphwindow.i
+
+# target to preprocess a source file
+src/roadgraphwindow.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.i
+.PHONY : src/roadgraphwindow.cpp.i
+
+src/roadgraphwindow.s: src/roadgraphwindow.cpp.s
+.PHONY : src/roadgraphwindow.s
+
+# target to generate assembly for a file
+src/roadgraphwindow.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/osm_loader.dir/build.make CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.s
+.PHONY : src/roadgraphwindow.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -463,6 +559,18 @@ help:
 	@echo "... src/projectserializer.o"
 	@echo "... src/projectserializer.i"
 	@echo "... src/projectserializer.s"
+	@echo "... src/roadclassifier.o"
+	@echo "... src/roadclassifier.i"
+	@echo "... src/roadclassifier.s"
+	@echo "... src/roadgraph.o"
+	@echo "... src/roadgraph.i"
+	@echo "... src/roadgraph.s"
+	@echo "... src/roadgraphbuilder.o"
+	@echo "... src/roadgraphbuilder.i"
+	@echo "... src/roadgraphbuilder.s"
+	@echo "... src/roadgraphwindow.o"
+	@echo "... src/roadgraphwindow.i"
+	@echo "... src/roadgraphwindow.s"
 .PHONY : help
 
 

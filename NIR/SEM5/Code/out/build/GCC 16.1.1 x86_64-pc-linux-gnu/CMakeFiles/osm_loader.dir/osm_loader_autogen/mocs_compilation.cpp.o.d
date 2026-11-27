@@ -335,8 +335,11 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtNetwork/QSslPreSharedKeyAuthenticator \
  /usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
  /usr/include/qt6/QtCore/QMetaType /usr/include/qt6/QtCore/QObject \
- /usr/include/qt6/QtCore/QString /usr/include/qt6/QtCore/QJsonArray \
- /usr/include/qt6/QtCore/qjsonarray.h \
+ /usr/include/qt6/QtCore/QString \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/roadclassifier.hpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/osmfeature.hpp \
+ /usr/include/qt6/QtCore/QJsonObject \
+ /usr/include/qt6/QtCore/qjsonobject.h \
  /usr/include/qt6/QtCore/qjsonvalue.h \
  /usr/include/qt6/QtCore/qcborvalue.h \
  /usr/include/qt6/QtCore/qcborcommon.h \
@@ -344,6 +347,15 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtCore/quuid.h /usr/include/qt6/QtCore/qendian.h \
  /usr/include/qt6/QtCore/qjsondocument.h \
  /usr/include/qt6/QtCore/qjsonparseerror.h \
+ /usr/include/qt6/QtCore/QVector /usr/include/qt6/QtCore/qvector.h \
+ /usr/include/qt6/QtCore/QtGlobal /usr/include/qt6/QtCore/qcontainerfwd.h \
+ /usr/include/qt6/QtCore/qjsonvalue.h /usr/include/qt6/QtCore/qobject.h \
+ /usr/include/qt6/QtCore/qtypes.h \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/roadcategory.hpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/roadgraphbuilder.hpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/roadgraph.hpp \
+ /usr/include/qt6/QtCore/QHash /usr/include/qt6/QtCore/QJsonArray \
+ /usr/include/qt6/QtCore/qjsonarray.h \
  /usr/include/qt6/QtWidgets/QMainWindow \
  /usr/include/qt6/QtWidgets/qmainwindow.h \
  /usr/include/qt6/QtWidgets/qtwidgetsglobal.h \
@@ -370,7 +382,7 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtGui/qfontvariableaxis.h \
  /usr/include/qt6/QtWidgets/qsizepolicy.h \
  /usr/include/qt6/QtGui/qcursor.h /usr/include/qt6/QtGui/qbitmap.h \
- /usr/include/qt6/QtWidgets/qtabwidget.h \
+ /usr/include/qt6/QtWidgets/qtabwidget.h /usr/include/qt6/QtCore/QSet \
  /usr/include/qt6/QtNetwork/QSslError \
  /usr/include/qt6/QtCore/qtmochelpers.h \
  /usr/include/qt6/QtCore/qtmocconstants.h \
@@ -387,4 +399,6 @@ CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o: \
  /usr/include/qt6/QtCore/qtimer.h /usr/include/qt6/QtCore/qbasictimer.h \
  /usr/include/qt6/QtCore/qabstracteventdispatcher.h \
  /usr/include/qt6/QtCore/qeventloop.h \
- /usr/include/qt6/QtCore/qdeadlinetimer.h
+ /usr/include/qt6/QtCore/qdeadlinetimer.h \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/moc_roadgraphwindow.cpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC\ 16.1.1\ x86_64-pc-linux-gnu/osm_loader_autogen/UVLADIE3JM/../../../../../src/roadgraphwindow.hpp

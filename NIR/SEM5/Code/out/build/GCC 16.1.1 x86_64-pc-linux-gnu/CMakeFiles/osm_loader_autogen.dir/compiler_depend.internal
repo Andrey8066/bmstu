@@ -27,6 +27,15 @@
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmfeature.hpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.cpp
  /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadcategory.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.hpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.hpp
  /usr/bin/cmake
  /usr/include/alloca.h
  /usr/include/asm-generic/bitsperlong.h
@@ -302,17 +311,22 @@
  /usr/include/locale.h
  /usr/include/pthread.h
  /usr/include/qt6/QtCore/QFlags
+ /usr/include/qt6/QtCore/QHash
  /usr/include/qt6/QtCore/QIODevice
  /usr/include/qt6/QtCore/QJsonArray
+ /usr/include/qt6/QtCore/QJsonObject
  /usr/include/qt6/QtCore/QList
  /usr/include/qt6/QtCore/QMetaType
  /usr/include/qt6/QtCore/QObject
  /usr/include/qt6/QtCore/QRect
+ /usr/include/qt6/QtCore/QSet
  /usr/include/qt6/QtCore/QSharedDataPointer
  /usr/include/qt6/QtCore/QString
  /usr/include/qt6/QtCore/QTimer
  /usr/include/qt6/QtCore/QUrl
  /usr/include/qt6/QtCore/QVariant
+ /usr/include/qt6/QtCore/QVector
+ /usr/include/qt6/QtCore/QtGlobal
  /usr/include/qt6/QtCore/q17memory.h
  /usr/include/qt6/QtCore/q20bit.h
  /usr/include/qt6/QtCore/q20functional.h
@@ -380,6 +394,7 @@
  /usr/include/qt6/QtCore/qiterator.h
  /usr/include/qt6/QtCore/qjsonarray.h
  /usr/include/qt6/QtCore/qjsondocument.h
+ /usr/include/qt6/QtCore/qjsonobject.h
  /usr/include/qt6/QtCore/qjsonparseerror.h
  /usr/include/qt6/QtCore/qjsonvalue.h
  /usr/include/qt6/QtCore/qlatin1stringview.h
@@ -459,6 +474,7 @@
  /usr/include/qt6/QtCore/quuid.h
  /usr/include/qt6/QtCore/qvariant.h
  /usr/include/qt6/QtCore/qvarlengtharray.h
+ /usr/include/qt6/QtCore/qvector.h
  /usr/include/qt6/QtCore/qversiontagging.h
  /usr/include/qt6/QtCore/qxptype_traits.h
  /usr/include/qt6/QtCore/qyieldcpu.h

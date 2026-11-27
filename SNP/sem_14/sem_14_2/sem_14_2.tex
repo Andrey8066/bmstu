@@ -1,0 +1,107 @@
+% Шаблон документа для курса "Системы научных публикаций"
+% Семинар 14. LaTeX. Вставка и настройка библиографической информации
+\documentclass[a4paper,12pt]{article}
+
+%%% Работа с русским языком
+\usepackage{cmap}
+\usepackage{mathtext}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+
+\usepackage{extsizes}
+\usepackage{geometry}
+\geometry{top=25mm}
+\geometry{bottom=35mm}
+\geometry{left=35mm}
+\geometry{right=20mm}
+
+\usepackage{setspace}
+\usepackage{lastpage}
+\usepackage{soul}
+\usepackage{multicol}
+
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames,svgnames,table,rgb]{xcolor}
+\hypersetup{
+  unicode=true,
+  pdftitle={Заголовок},
+  pdfauthor={Автор},
+  pdfsubject={Тема},
+  pdfcreator={Создатель},
+  pdfproducer={Производитель},
+  pdfkeywords={keyword1} {key2} {key3},
+  colorlinks=true,
+  linkcolor=black,
+  citecolor=black,
+  filecolor=magenta,
+  urlcolor=blue
+}
+
+%%% Дополнительная работа с математикой
+\usepackage{amsfonts,amssymb,amsthm,mathtools}
+\usepackage{amsmath}
+\usepackage{icomma}
+
+\usepackage{euscript}
+\usepackage{mathrsfs}
+
+\DeclareMathOperator{\sgn}{\mathop{sgn}}
+
+\newcommand*{\hm}[1]{#1\nobreak\discretionary{}
+{\hbox{$\mathsurround=0pt #1$}}{}}
+
+\usepackage{array,tabularx,tabulary,booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{wrapfig}
+
+\usepackage{graphicx}
+\graphicspath{{images/}{images2/}}
+\setlength\fboxsep{3pt}
+\setlength\fboxrule{1pt}
+
+\usepackage{csquotes}
+
+\author{Соин Андрей Дмитриевич}
+\title{\LaTeX. Вставка и настройка библиографической информации}
+\date{\today}
+
+\usepackage{csquotes}
+
+\usepackage[backend=biber,
+  bibencoding=utf8,
+  sorting=ynt,
+  maxcitenames=2,
+style=numeric]{biblatex}
+\addbibresource{./my_bib.bib}
+
+\author{Соин Андрей Дмитриевич}
+\title{\LaTeX. Вставка и настройка библиографической информации. Пакет Bib\LaTeX}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Цитирование}
+
+Обычная ссылка: \cite{львовский2022набор}.
+
+Сноска: \footcite{ким2003теория}.
+
+Текстовая ссылка: \textcite{дорф2004современные} показал, что ...
+
+Несколько источников: \cite{ким2003теория,дорф2004современные,львовский2022набор}.
+
+\nocite{ljung2010perspectives}
+\nocite{ljung1977analysis}
+
+\addcontentsline{toc}{section}{Список использованных источников}
+
+\printbibliography[title={Список использованных источников}]
+
+\end{document}

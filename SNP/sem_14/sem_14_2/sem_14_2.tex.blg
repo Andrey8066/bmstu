@@ -1,0 +1,5 @@
+[0] Config.pm:329> INFO - This is Biber 2.22
+[1] Config.pm:332> INFO - Logfile is 'sem_14_2.tex.blg'
+[149] biber:342> INFO - === Пт ноя 27, 2026, 10:47:00
+[275] Utils.pm:480> ERROR - Cannot find 'sem_14_2.tex.bcf'!
+[276] Biber.pm:137> INFO - ERRORS: 1

@@ -64,5 +64,29 @@
   "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/third_party -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -isystem /usr/include/qt6/QtOpenGLWidgets -isystem /usr/include/qt6/QtOpenGL -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.cpp",
   "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.cpp",
   "output": "CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o"
+},
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/third_party -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -isystem /usr/include/qt6/QtOpenGLWidgets -isystem /usr/include/qt6/QtOpenGL -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp",
+  "output": "CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o"
+},
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/third_party -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -isystem /usr/include/qt6/QtOpenGLWidgets -isystem /usr/include/qt6/QtOpenGL -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp",
+  "output": "CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o"
+},
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/third_party -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -isystem /usr/include/qt6/QtOpenGLWidgets -isystem /usr/include/qt6/QtOpenGL -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp",
+  "output": "CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o"
+},
+{
+  "directory": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu",
+  "command": "/usr/bin/g++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_OPENGLWIDGETS_LIB -DQT_OPENGL_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -I\"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/osm_loader_autogen/include\" -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src -I/home/andrey/Documents/BMSTU/NIR/SEM5/Code/third_party -isystem /usr/include/qt6/QtCore -isystem /usr/include/qt6 -isystem /usr/lib/qt6/mkspecs/linux-g++ -isystem /usr/include/qt6/QtNetwork -isystem /usr/include/qt6/QtSql -isystem /usr/include/qt6/QtWidgets -isystem /usr/include/qt6/QtGui -isystem /usr/include/qt6/QtOpenGLWidgets -isystem /usr/include/qt6/QtOpenGL -g -std=gnu++17 -mno-direct-extern-access -o CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp",
+  "file": "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp",
+  "output": "CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o"
 }
 ]

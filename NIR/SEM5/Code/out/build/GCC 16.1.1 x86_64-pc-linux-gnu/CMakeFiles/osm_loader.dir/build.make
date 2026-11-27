@@ -232,6 +232,62 @@ CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.s"
 	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/opentopographyloader.cpp -o CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.s
 
+CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp
+CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o -MF CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o.d -o CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp
+
+CMakeFiles/osm_loader.dir/src/roadgraph.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/roadgraph.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp > CMakeFiles/osm_loader.dir/src/roadgraph.cpp.i
+
+CMakeFiles/osm_loader.dir/src/roadgraph.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/roadgraph.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp -o CMakeFiles/osm_loader.dir/src/roadgraph.cpp.s
+
+CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp
+CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o -MF CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o.d -o CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp
+
+CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp > CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.i
+
+CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp -o CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.s
+
+CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp
+CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o -MF CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o.d -o CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp
+
+CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp > CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.i
+
+CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp -o CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.s
+
+CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o: CMakeFiles/osm_loader.dir/flags.make
+CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o: /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp
+CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o: CMakeFiles/osm_loader.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o -MF CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o.d -o CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o -c /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp
+
+CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.i"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp > CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.i
+
+CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.s"
+	/usr/bin/g++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp -o CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.s
+
 # Object files for target osm_loader
 osm_loader_OBJECTS = \
 "CMakeFiles/osm_loader.dir/osm_loader_autogen/mocs_compilation.cpp.o" \
@@ -244,7 +300,11 @@ osm_loader_OBJECTS = \
 "CMakeFiles/osm_loader.dir/src/glwidget.cpp.o" \
 "CMakeFiles/osm_loader.dir/src/main.cpp.o" \
 "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o" \
-"CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o"
+"CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o" \
+"CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o"
 
 # External object files for target osm_loader
 osm_loader_EXTERNAL_OBJECTS =
@@ -260,6 +320,10 @@ osm_loader: CMakeFiles/osm_loader.dir/src/glwidget.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/src/main.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/src/opentopographyloader.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o
+osm_loader: CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o
 osm_loader: CMakeFiles/osm_loader.dir/build.make
 osm_loader: CMakeFiles/osm_loader.dir/compiler_depend.ts
 osm_loader: /usr/lib/libgdal.so
@@ -273,7 +337,7 @@ osm_loader: /usr/lib/libGLX.so
 osm_loader: /usr/lib/libOpenGL.so
 osm_loader: /usr/lib/libQt6Core.so.6.11.2
 osm_loader: CMakeFiles/osm_loader.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_13) "Linking CXX executable osm_loader"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir="/home/andrey/Documents/BMSTU/NIR/SEM5/Code/out/build/GCC 16.1.1 x86_64-pc-linux-gnu/CMakeFiles" --progress-num=$(CMAKE_PROGRESS_17) "Linking CXX executable osm_loader"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/osm_loader.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

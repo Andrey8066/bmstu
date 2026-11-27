@@ -29,6 +29,15 @@ add_executable(osm_loader
     src/projectserializer.hpp
     src/opentopographyloader.hpp
     src/opentopographyloader.cpp
+    src/roadgraph.cpp
+    src/roadgraph.hpp
+    src/roadgraphbuilder.cpp
+    src/roadgraphbuilder.hpp
+    src/roadcategory.hpp
+    src/roadclassifier.cpp
+    src/roadclassifier.hpp
+    src/roadgraphwindow.cpp
+    src/roadgraphwindow.hpp
 )
 
 # Подключение Qt

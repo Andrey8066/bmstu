@@ -390,8 +390,11 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: \
  /usr/include/qt6/QtNetwork/QSslPreSharedKeyAuthenticator \
  /usr/include/qt6/QtNetwork/qsslpresharedkeyauthenticator.h \
  /usr/include/qt6/QtCore/QMetaType /usr/include/qt6/QtCore/QObject \
- /usr/include/qt6/QtCore/QString /usr/include/qt6/QtCore/QJsonArray \
- /usr/include/qt6/QtCore/qjsonarray.h \
+ /usr/include/qt6/QtCore/QString \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.hpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmfeature.hpp \
+ /usr/include/qt6/QtCore/QJsonObject \
+ /usr/include/qt6/QtCore/qjsonobject.h \
  /usr/include/qt6/QtCore/qjsonvalue.h \
  /usr/include/qt6/QtCore/qcborvalue.h \
  /usr/include/qt6/QtCore/qcborcommon.h \
@@ -399,6 +402,15 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: \
  /usr/include/qt6/QtCore/quuid.h /usr/include/qt6/QtCore/qendian.h \
  /usr/include/qt6/QtCore/qjsondocument.h \
  /usr/include/qt6/QtCore/qjsonparseerror.h \
+ /usr/include/qt6/QtCore/QVector /usr/include/qt6/QtCore/qvector.h \
+ /usr/include/qt6/QtCore/QtGlobal /usr/include/qt6/QtCore/qcontainerfwd.h \
+ /usr/include/qt6/QtCore/qjsonvalue.h /usr/include/qt6/QtCore/qobject.h \
+ /usr/include/qt6/QtCore/qtypes.h \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadcategory.hpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.hpp \
+ /home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.hpp \
+ /usr/include/qt6/QtCore/QHash /usr/include/qt6/QtCore/QJsonArray \
+ /usr/include/qt6/QtCore/qjsonarray.h \
  /usr/include/qt6/QtWidgets/QMainWindow \
  /usr/include/qt6/QtWidgets/qmainwindow.h \
  /usr/include/qt6/QtWidgets/qwidget.h /usr/include/qt6/QtGui/qaction.h \
@@ -408,4 +420,4 @@ CMakeFiles/osm_loader.dir/src/main.cpp.o: \
  /usr/include/qt6/QtGui/qfontinfo.h \
  /usr/include/qt6/QtGui/qfontvariableaxis.h \
  /usr/include/qt6/QtWidgets/qsizepolicy.h \
- /usr/include/qt6/QtWidgets/qtabwidget.h
+ /usr/include/qt6/QtWidgets/qtabwidget.h /usr/include/qt6/QtCore/QSet

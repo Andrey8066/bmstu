@@ -723,6 +723,36 @@
 			"Mu",
 			"UVLADIE3JM/moc_projectserializer.cpp",
 			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadcategory.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_roadcategory.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_roadclassifier.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_roadgraph.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_roadgraphbuilder.cpp",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.hpp",
+			"Mu",
+			"UVLADIE3JM/moc_roadgraphwindow.cpp",
+			null
 		]
 	],
 	"HEADER_EXTENSIONS" : [ "h", "hh", "h++", "hm", "hpp", "hxx", "in", "txx" ],
@@ -833,6 +863,26 @@
 		],
 		[
 			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp",
+			"Mu",
+			null
+		],
+		[
+			"/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp",
 			"Mu",
 			null
 		]

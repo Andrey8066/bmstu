@@ -20,6 +20,10 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataloader.cpp" "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmdataloader.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/osmdataparser.cpp" "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/osmdataparser.cpp.o.d"
   "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/projectserializer.cpp" "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/projectserializer.cpp.o.d"
+  "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadclassifier.cpp" "CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/roadclassifier.cpp.o.d"
+  "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraph.cpp" "CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/roadgraph.cpp.o.d"
+  "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphbuilder.cpp" "CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/roadgraphbuilder.cpp.o.d"
+  "/home/andrey/Documents/BMSTU/NIR/SEM5/Code/src/roadgraphwindow.cpp" "CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o" "gcc" "CMakeFiles/osm_loader.dir/src/roadgraphwindow.cpp.o.d"
   "" "osm_loader" "gcc" "CMakeFiles/osm_loader.dir/link.d"
   )
 
